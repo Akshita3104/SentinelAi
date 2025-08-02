@@ -23,20 +23,25 @@
 - [ ] Split datasets for training, validation, and testing
 
 ## 4. AI/ML Model Development
-- [ ] Select suitable ML/DL models (e.g., Random Forest, SVM, CNN, RNN, Autoencoders)
-- [ ] Implement baseline anomaly detection models
-- [ ] Train models on labeled network traffic data
-- [ ] Evaluate model performance (accuracy, precision, recall, F1-score)
-- [ ] Optimize models using metaheuristics or hyperparameter tuning
-- [ ] Document model selection and evaluation process
+- [ ] Build a Flask microservice for anomaly detection using a pre-trained TensorFlow Autoencoder
+- [ ] Define input shape: src_ip, dst_ip, src_port, dst_port, protocol, QoS tag, packet rate, byte count, slice_id (encoded)
+- [ ] Implement REST API endpoint (`POST /predict`) for flow anomaly classification
+- [ ] Normalize input using sklearn scaler (persisted with model)
+- [ ] Log all predictions to MongoDB (`inference_logs`)
+- [ ] Test with both normal and attack flow samples (synthetic or pre-generated)
+- [ ] Containerize model for deployment (Docker)
+- [ ] Document model selection, evaluation, and integration process
 
-## 5. SDN Integration & Simulation
-- [ ] Set up SDN test environment (e.g., Mininet, OpenDaylight, Ryu)
-- [ ] Integrate trained AI models with SDN controller for real-time monitoring
-- [ ] Develop RESTful APIs for communication between modules
-- [ ] Simulate network attacks and normal traffic to test detection
-- [ ] Implement automated response mechanisms (e.g., flow rule updates, node isolation)
-- [ ] Log and visualize detection and response events
+## 5. Backend (SDN Integration, APIs & Orchestration)
+- [ ] Create FastAPI backend (Python 3.10+)
+- [ ] Implement Traffic Monitoring API: parse flow rules from OVS via Ryu, extract flow features, route to AI module, store stats in MongoDB
+- [ ] Implement AI Inference Trigger: `/api/analyze` endpoint, send flow data to model, return anomaly_score and decision, trigger self-healing
+- [ ] Implement Self-Healing Orchestrator: use Docker SDK to restart containers, update flow rules via Ryu REST API, log actions in MongoDB
+- [ ] Implement Real-Time Dashboard APIs: `/api/slice-status`, `/api/traffic-stats`, `/api/anomaly-events`, `/api/container-health`
+- [ ] Implement Attack Simulation Endpoint: `/api/simulate-attack?slice=...`
+- [ ] Ensure logging and persistence in MongoDB (traffic_logs, anomalies, containers, system_actions)
+- [ ] Enable CORS for frontend access
+- [ ] Simulate network attacks and normal traffic for end-to-end testing
 
 ## 6. Self-Healing Module Development
 - [ ] Design self-healing logic for automated recovery from attacks/failures
@@ -45,12 +50,19 @@
 - [ ] Integrate feedback and continuous learning mechanisms
 - [ ] Test self-healing in various failure/attack scenarios
 
-## 7. GUI Isolation & User Interface
-- [ ] Design GUI for monitoring, alerts, and manual overrides
-- [ ] Implement GUI isolation techniques to prevent compromise
-- [ ] Integrate GUI with backend (SDN controller and AI modules)
+## 7. Frontend (GUI Isolation & Dashboard)
+- [ ] Build responsive React.js dashboard (SENTINEL.AI-5G)
+- [ ] Implement Slice Health Visualization: status indicators (Green/Red/Yellow), live updates via WebSocket/polling (every 3s), slices: eMBB, URLLC, IoT
+- [ ] Implement Anomaly Alert Timeline: chronological list with timestamp, slice, score, action
+- [ ] Implement Traffic Statistics: real-time packet rate, bandwidth, anomaly frequency (Chart.js/Recharts)
+- [ ] Implement Container Monitoring: Docker status, restart count, recovery status
+- [ ] Implement Manual Attack Simulation Panel: button to trigger attack, dropdown for slice selection
+- [ ] Use Tailwind CSS for modern, minimal UI
+- [ ] Use React Query/Axios for API calls
+- [ ] Ensure GUI isolation: sandboxing, CSP, strict input validation
+- [ ] Integrate GUI with backend APIs
 - [ ] Provide visualization for network state, detected anomalies, and recovery actions
-- [ ] Conduct usability and security testing of the interface
+- [ ] Conduct usability and security testing
 
 ## 8. System Integration & End-to-End Testing
 - [ ] Integrate all modules (AI, SDN, self-healing, GUI)
