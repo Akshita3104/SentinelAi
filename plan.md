@@ -1,4 +1,13 @@
 # Project Plan: Sentinel AI - SDN Powered Self-Healing Security Framework
+Build a modular full-stack 5G security platform titled "SENTINEL.AI-5G" with the following architecture:
+
+- AI-driven anomaly detection of 5G slice traffic
+- SDN-based dynamic flow rerouting using Ryu Controller
+- Docker-based self-healing containers for slices
+- Real-time ReactJS dashboard
+- MongoDB-based persistent storage
+
+Divide system into 3 microservices: React frontend, FastAPI backend, and Flask AI model. Ensure seamless integration using REST APIs. Simulated traffic flows from Free5GC/OVS should be processed end-to-end. All traffic logs and anomalies must be visualized in the frontend. Implement attack simulation, anomaly score generation, and container isolation features.
 
 ## Notes
 - Project title: "Sentinel AI - An AI-driven SDN Powered, Self-Healing Security Framework with GUI Isolation".

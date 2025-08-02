@@ -1,0 +1,45 @@
+Build a Flask-based AI microservice for anomaly detection in a 5G slice network, using a pre-trained **TensorFlow Autoencoder**. It will be invoked by the backend to classify whether flow data is normal or anomalous.
+
+### Model Details:
+- Input shape: vector of flow features per sample:
+  - src_ip, dst_ip, src_port, dst_port
+  - protocol
+  - QoS tag
+  - packet rate
+  - byte count
+  - slice_id (encoded)
+- Output: 
+  - reconstruction error (anomaly_score)
+  - binary label: 0 (normal), 1 (anomalous)
+
+### API:
+- `POST /predict`
+  - Input JSON:
+    ```json
+    {
+      "flow": {
+        "src_ip": "10.0.0.1",
+        "dst_ip": "10.0.0.2",
+        "protocol": "UDP",
+        "packet_rate": 100,
+        "byte_count": 10240,
+        "slice_id": "IoT"
+      }
+    }
+    ```
+  - Output:
+    ```json
+    {
+      "anomaly_score": 0.325,
+      "decision": 0
+    }
+    ```
+
+### Features:
+- Flask REST API using `flask-cors`
+- Load pre-trained `.h5` model at startup
+- Normalize input using sklearn scaler (stored with model)
+- Log all predictions to MongoDB (`inference_logs`)
+- Lightweight, deployable in Docker
+
+Test with sample flows from both normal and attack scenarios (use pre-generated dataset or synthetic flow generator).

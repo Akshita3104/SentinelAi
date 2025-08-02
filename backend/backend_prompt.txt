@@ -1,0 +1,48 @@
+Create a Python backend using **FastAPI** to power the SENTINEL.AI-5G project. It should include:
+
+### Modules:
+
+1. **Traffic Monitoring API**:
+   - Parse flow rules received from Open vSwitch (OVS) via Ryu controller
+   - Extract flow features: src_ip, dst_ip, protocol, QoS tag, pkt_count, byte_count, slice_id
+   - Route this data to the AI anomaly detection module
+   - Store all flow stats and decisions in MongoDB
+
+2. **AI Inference Trigger**:
+   - POST endpoint `/api/analyze`
+   - Accepts flow data and sends it to the model endpoint
+   - Returns anomaly_score and decision
+   - If anomaly detected → trigger self-healing module
+
+3. **Self-Healing Orchestrator**:
+   - Uses Docker SDK (Python) to:
+     - Stop the affected slice container (e.g., `slice_embb`)
+     - Start a clean instance from image
+     - Log actions in MongoDB
+   - Update flow rules using Ryu REST API to reroute traffic
+
+4. **Real-Time Dashboard API**:
+   - `/api/slice-status`: current status of all slices (Healthy, Anomalous, Healing)
+   - `/api/traffic-stats`: recent traffic data from MongoDB
+   - `/api/anomaly-events`: list of anomaly detections
+   - `/api/container-health`: list of Docker containers with restart count, uptime, and health
+
+5. **Attack Simulation Endpoint**:
+   - `/api/simulate-attack?slice=embb`
+   - Starts traffic overload simulation using packet generation scripts
+
+6. **Logging & Persistence**:
+   - MongoDB collections:
+     - `traffic_logs`
+     - `anomalies`
+     - `containers`
+     - `system_actions`
+
+Use:
+- Python 3.10+
+- FastAPI
+- Pydantic for schemas
+- Docker SDK for orchestration
+- MongoDB for persistence
+- Ryu SDN Controller
+- Cross-Origin enabled for frontend access
