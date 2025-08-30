@@ -13,7 +13,7 @@ const detectDDoSCombined = async (req, res) => {
       return res.status(400).json({ error: 'Invalid IP address' });
     }
 
-    console.log(`🔄 Running COMBINED analysis for IP: ${ip}`);
+    console.log(`🔄 Running COMBINED analysis for IP: ${encodeURIComponent(ip)}`);
     
     // Prepare request payload
     const requestPayload = {
