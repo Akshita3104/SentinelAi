@@ -35,3 +35,21 @@
  * Running on http://127.0.0.1:5001
 2025-08-30 10:59:38,449 INFO: [33mPress CTRL+C to quit[0m
 2025-08-30 11:04:14,101 INFO: Flask server has stopped
+2025-08-30 12:43:35,487 INFO: \U0001f680 Starting AI-Driven Self-Healing Security Framework
+2025-08-30 12:43:35,489 DEBUG: Using proactor: IocpProactor
+2025-08-30 12:43:35,489 INFO: \U0001f680 Autonomous Security Framework started
+2025-08-30 12:43:35,489 INFO: Starting Flask API server on port 5001
+2025-08-30 12:43:35,490 INFO: \U0001f680 Starting AI-Driven Self-Healing Security Framework
+2025-08-30 12:43:35,491 INFO: \U0001f50d Starting autonomous slice monitoring
+2025-08-30 12:43:35,491 INFO: \U0001f504 Starting dynamic service restoration
+2025-08-30 12:43:35,491 INFO: \U0001f50d Starting continuous flow monitoring
+2025-08-30 12:43:35,491 INFO: \U0001f9e0 Starting real-time anomaly detection
+2025-08-30 12:43:35,492 INFO: \U0001f6e1\ufe0f Starting autonomous threat mitigation
+2025-08-30 12:43:35,492 INFO: \U0001f493 Starting network slice health monitoring
+2025-08-30 12:43:35,492 INFO: \U0001f504 Starting self-healing orchestrator
+2025-08-30 12:43:35,492 ERROR: Self-healing error: Object of type datetime is not JSON serializable
+2025-08-30 12:43:35,492 INFO: \U0001f4da Starting adaptive learning engine
+2025-08-30 12:43:35,521 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-08-30 12:43:35,521 INFO: [33mPress CTRL+C to quit[0m
+2025-08-30 12:47:20,660 INFO: Flask server has stopped

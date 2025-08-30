@@ -1,4 +1,4 @@
-# AI-Driven DDoS Detection System for 5G Networks
+# Sentinel AI - AI-Driven DDoS Detection System for 5G Networks
 
 An intelligent, real-time DDoS detection and mitigation system powered by machine learning and SDN (Software Defined Networking) for 5G network slices. This system provides autonomous threat detection, network slice management, and self-healing capabilities.
 
@@ -10,6 +10,8 @@ An intelligent, real-time DDoS detection and mitigation system powered by machin
 - **Autonomous Mitigation**: Automatic threat response and network healing
 - **Web Dashboard**: Real-time monitoring interface with live charts and alerts
 - **API Integration**: AbuseIPDB integration for IP reputation checking
+- **SDN Integration**: Software Defined Networking for dynamic flow control
+- **Self-Healing Framework**: Automated recovery and isolation mechanisms
 
 ## Research Background
 
@@ -22,7 +24,7 @@ This project is part of advanced research in cybersecurity, focusing on developi
 The system consists of three main components:
 
 ```
-5GNetwork/
+SentinelAi/
 │
 ├── backend/                    # Node.js API Server (Port 3000)
 │   ├── controllers/            # API request handlers
@@ -56,7 +58,12 @@ The system consists of three main components:
 │   │   ├── random_forest_min-max_scaling_model.pkl
 │   │   └── random_forest_min-max_scaling_scaler.pkl
 │   ├── logs/                   # Application logs
-│   └── requeriments.txt        # Python dependencies
+│   └── requirements.txt        # Python dependencies
+│
+├── README.md                   # Main project documentation
+├── LICENSE                     # Project license
+├── plan.md                     # Project planning document
+└── todo.md                     # Task tracking
 ```
 
 ## Prerequisites
@@ -100,7 +107,7 @@ npm install
 ### 4. Install Python ML Dependencies
 ```bash
 cd ../model
-pip install -r requeriments.txt
+pip install -r requirements.txt
 ```
 
 ### 5. Configure Environment Variables
@@ -133,7 +140,7 @@ npm install
 
 # Install Python dependencies
 cd model
-pip install -r requeriments.txt
+pip install -r requirements.txt
 ```
 
 ### Step 2: Start the Project (3 Terminals)
@@ -297,9 +304,9 @@ lsof -ti:3000 | xargs kill -9
 ```bash
 # Reinstall Python dependencies
 cd model
-pip install -r requeriments.txt
+pip install -r requirements.txt
 # Or try:
-pip3 install -r requeriments.txt
+pip3 install -r requirements.txt
 ```
 
 **❌ "Cannot resolve dependency" (npm)**
