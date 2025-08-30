@@ -1,4 +1,4 @@
-# Sentinel AI - AI-Driven DDoS Detection System for 5G Networks
+# Sentinel AI - AI-Driven DDoS Detection System for 5G Networks 
 
 An intelligent, real-time DDoS detection and mitigation system powered by machine learning and SDN (Software Defined Networking) for 5G network slices. This system provides autonomous threat detection, network slice management, and self-healing capabilities.
 
