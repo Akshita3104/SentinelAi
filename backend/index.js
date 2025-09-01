@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const detectionRoutes = require('./routes/detectionRoutes');
+const { router: detectionRoutes } = require('./routes/detectionRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;

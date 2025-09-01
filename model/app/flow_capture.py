@@ -1,12 +1,12 @@
 """
-Network Flow Capture and Analysis
-Real-time packet capture and flow feature extraction
+Network Flow Simulation and Analysis
+Simulated packet capture and flow feature extraction for demonstration
 """
 
-import pyshark
 import threading
 import time
 import logging
+import random
 from collections import defaultdict, deque
 from datetime import datetime, timedelta
 import numpy as np
@@ -29,6 +29,7 @@ class FlowCapture:
         self.flow_window = deque(maxlen=1000)  # Keep last 1000 flows
         self.logger = logging.getLogger(__name__)
         self.capture_active = False
+        self.simulation_active = False
         
     def extract_flow_features(self, flow_data):
         """Extract ML features from flow data"""
@@ -70,18 +71,16 @@ class FlowCapture:
         
         return features
     
-    def packet_callback(self, packet):
-        """Process captured packets"""
+    def generate_simulated_packet(self, target_ip):
+        """Generate simulated packet data for demonstration"""
         try:
-            if not hasattr(packet, 'ip'):
-                return
-                
-            src_ip = packet.ip.src
-            dst_ip = packet.ip.dst
+            # Generate random source IP
+            src_ip = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}"
+            dst_ip = target_ip
             flow_key = f"{src_ip}->{dst_ip}"
             
             current_time = datetime.now()
-            packet_size = int(packet.length)
+            packet_size = random.randint(64, 1500)  # Typical packet size range
             
             # Initialize flow if new
             if self.flows[flow_key]['start_time'] is None:
@@ -99,33 +98,46 @@ class FlowCapture:
             self.flows[flow_key]['last_seen'] = current_time
             self.flows[flow_key]['packet_sizes'].append(packet_size)
             
-            # Extract port and protocol information
-            if hasattr(packet, 'tcp'):
-                self.flows[flow_key]['protocols'].add('TCP')
-                self.flows[flow_key]['src_ports'].add(packet.tcp.srcport)
-                self.flows[flow_key]['dst_ports'].add(packet.tcp.dstport)
-            elif hasattr(packet, 'udp'):
-                self.flows[flow_key]['protocols'].add('UDP')
-                self.flows[flow_key]['src_ports'].add(packet.udp.srcport)
-                self.flows[flow_key]['dst_ports'].add(packet.udp.dstport)
-            elif hasattr(packet, 'icmp'):
-                self.flows[flow_key]['protocols'].add('ICMP')
+            # Simulate protocol information
+            protocols = ['TCP', 'UDP', 'ICMP']
+            protocol = random.choice(protocols)
+            self.flows[flow_key]['protocols'].add(protocol)
+            
+            if protocol == 'TCP':
+                src_port = random.randint(1024, 65535)
+                dst_port = random.choice([80, 443, 22, 21, 25])  # Common ports
+                self.flows[flow_key]['src_ports'].add(src_port)
+                self.flows[flow_key]['dst_ports'].add(dst_port)
+            elif protocol == 'UDP':
+                src_port = random.randint(1024, 65535)
+                dst_port = random.choice([53, 123, 161, 514])  # Common UDP ports
+                self.flows[flow_key]['src_ports'].add(src_port)
+                self.flows[flow_key]['dst_ports'].add(dst_port)
                 
         except Exception as e:
-            self.logger.error(f"Error processing packet: {e}")
+            self.logger.error(f"Error generating simulated packet: {e}")
     
-    def start_capture(self):
-        """Start packet capture"""
+    def start_capture(self, target_ip="192.168.1.100"):
+        """Start simulated packet capture"""
         try:
-            self.capture_active = True
-            self.logger.info(f"Starting packet capture on interface {self.interface}")
+            self.simulation_active = True
+            self.logger.info(f"⚠️  Real packet capture not available. Starting simulation mode for {target_ip}")
             
-            capture = pyshark.LiveCapture(interface=self.interface)
-            capture.apply_on_packets(self.packet_callback)
+            # Start simulation thread
+            def simulation_loop():
+                while self.simulation_active:
+                    # Generate multiple packets per iteration
+                    packet_count = random.randint(5, 25)
+                    for _ in range(packet_count):
+                        self.generate_simulated_packet(target_ip)
+                    time.sleep(0.5)  # Generate packets every 500ms
+            
+            simulation_thread = threading.Thread(target=simulation_loop, daemon=True)
+            simulation_thread.start()
             
         except Exception as e:
-            self.logger.error(f"Packet capture failed: {e}")
-            self.capture_active = False
+            self.logger.error(f"Simulation failed: {e}")
+            self.simulation_active = False
     
     def get_flow_statistics(self):
         """Get current flow statistics"""
@@ -159,6 +171,6 @@ class FlowCapture:
         self.logger.info(f"Cleaned up {len(flows_to_remove)} old flows")
     
     def stop_capture(self):
-        """Stop packet capture"""
-        self.capture_active = False
-        self.logger.info("Packet capture stopped")
+        """Stop simulated packet capture"""
+        self.simulation_active = False
+        self.logger.info("Simulation stopped")

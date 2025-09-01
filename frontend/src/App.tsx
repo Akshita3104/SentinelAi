@@ -25,6 +25,8 @@ function App() {
   const [mitigationStatus, setMitigationStatus] = useState('Idle');
   const [trafficData, setTrafficData] = useState('12,15,18,25,32,28,22,35,45,38,42,55,68,72,65,58,62,75,82,78');
   const [ipAddress, setIpAddress] = useState('192.168.1.100');
+  const [localIPs, setLocalIPs] = useState<any[]>([]);
+  const [isRealCapture, setIsRealCapture] = useState(false);
   const [isAutoMonitoring, setIsAutoMonitoring] = useState(false);
   const [networkInterface, setNetworkInterface] = useState('auto');
   const [capturedPackets, setCapturedPackets] = useState(0);
@@ -55,24 +57,16 @@ function App() {
   ]);
 
 
-  // Auto-detect user's IP address
-  const detectUserIP = async () => {
+  // Load local IPs from backend
+  const loadLocalIPs = async () => {
     try {
-      // Try to get local IP first
-      const response = await fetch('https://api.ipify.org?format=json');
-      const data = await response.json();
-      setIpAddress(data.ip);
-    } catch (error) {
-      // Fallback to local network detection
-      try {
-        const localResponse = await apiService.healthCheck();
-        if (localResponse) {
-          // Use a common local IP range as fallback
-          setIpAddress('192.168.1.' + Math.floor(Math.random() * 254 + 1));
-        }
-      } catch (e) {
-        console.log('Could not auto-detect IP, using default');
+      const ips = await apiService.getLocalIPs();
+      setLocalIPs(ips);
+      if (ips.length > 0) {
+        setIpAddress(ips[0].address);
       }
+    } catch (error) {
+      console.log('Could not load local IPs');
     }
   };
 
@@ -86,7 +80,16 @@ function App() {
     setIsAutoMonitoring(true);
     setErrorMessage('');
     
-    // Simulate real network traffic capture
+    // Always use simulation mode (real capture removed)
+    setErrorMessage('⚠️ Real packet capture requires system dependencies (npcap/tshark). Using simulation mode.');
+    setIsRealCapture(false);
+    
+    // Show simulation mode alert
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 5000);
+    
+    // Simulate network traffic capture (fallback or demo mode)
     const interval = setInterval(async () => {
       try {
         // Generate realistic network traffic patterns
@@ -163,8 +166,12 @@ function App() {
     setMonitoringInterval(interval);
   };
 
-  const stopAutoMonitoring = () => {
+  const stopAutoMonitoring = async () => {
     setIsAutoMonitoring(false);
+    
+    // Simulation mode - no real capture to stop
+    console.log('Simulation mode stopped');
+    
     if (monitoringInterval) {
       clearInterval(monitoringInterval);
       setMonitoringInterval(null);
@@ -188,8 +195,8 @@ function App() {
       }
     };
 
-    // Auto-detect IP address on startup
-    detectUserIP();
+    // Load local IPs on startup
+    loadLocalIPs();
     
     checkBackendHealth();
     // Check every 30 seconds
@@ -454,9 +461,25 @@ function App() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
               <div className="lg:col-span-2">
                 <div className="flex items-center justify-between mb-4">
-                  <label className="text-sm font-medium text-gray-400">
-                    Automatic Traffic Capture
-                  </label>
+                  <div>
+                    <label className="text-sm font-medium text-gray-400">
+                      Traffic Capture Mode
+                    </label>
+                    <div className="flex items-center gap-4 mt-2">
+                      <label className="flex items-center gap-2 text-sm text-green-400">
+                        <input
+                          type="radio"
+                          checked={true}
+                          readOnly
+                          className="text-green-600"
+                        />
+                        Simulation Mode
+                      </label>
+                      <span className="text-xs text-gray-500">
+                        (Real capture requires npcap/tshark)
+                      </span>
+                    </div>
+                  </div>
                   <button
                     onClick={startAutoMonitoring}
                     disabled={!backendConnected}
@@ -474,7 +497,7 @@ function App() {
                     ) : (
                       <>
                         <Activity className="w-4 h-4" />
-                        Start Auto Monitor
+                        Start Simulation Monitor
                       </>
                     )}
                   </button>
@@ -484,10 +507,10 @@ function App() {
                   <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
                     <div className="flex items-center gap-2 text-green-400 text-sm">
                       <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                      <span>Live monitoring active - Capturing network traffic from your machine</span>
+                      <span>Simulation mode active - Monitoring {ipAddress}</span>
                     </div>
                     <div className="text-xs text-green-300 mt-1">
-                      Packets captured: {capturedPackets.toLocaleString()} | Auto-detection enabled for traffic spikes
+                      Generating simulated network traffic | Packets: {capturedPackets.toLocaleString()}
                     </div>
                   </div>
                 )}
@@ -495,20 +518,24 @@ function App() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Your IP Address (Auto-detected)
+                      Local IP to Monitor
                     </label>
                     <div className="flex gap-2">
-                      <input
-                        type="text"
+                      <select
                         value={ipAddress}
                         onChange={(e) => setIpAddress(e.target.value)}
                         className="flex-1 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                        placeholder="IP Address..."
-                      />
+                      >
+                        {localIPs.map((ip, index) => (
+                          <option key={index} value={ip.address}>
+                            {ip.interface} - {ip.address}
+                          </option>
+                        ))}
+                      </select>
                       <button
-                        onClick={detectUserIP}
+                        onClick={loadLocalIPs}
                         className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all"
-                        title="Auto-detect IP"
+                        title="Refresh IPs"
                       >
                         <RefreshCw className="w-4 h-4" />
                       </button>

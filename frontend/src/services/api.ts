@@ -86,6 +86,39 @@ export const apiService = {
     }
   },
 
+  // Get all local machine IPs from backend
+  async getLocalIPs(): Promise<any[]> {
+    try {
+      const response = await apiClient.get('/local-ips');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get local IPs:', error);
+      return [];
+    }
+  },
+
+  // Start real packet capture
+  async startPacketCapture(targetIP: string, interfaceName: string): Promise<any> {
+    try {
+      const response = await apiClient.post('/start-capture', { targetIP, interfaceName });
+      return response.data;
+    } catch (error) {
+      console.error('Failed to start packet capture:', error);
+      throw error;
+    }
+  },
+
+  // Stop packet capture
+  async stopPacketCapture(): Promise<any> {
+    try {
+      const response = await apiClient.post('/stop-capture');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to stop packet capture:', error);
+      throw error;
+    }
+  },
+
   // Health check to verify backend connectivity
   async healthCheck(): Promise<boolean> {
     try {

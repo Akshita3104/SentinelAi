@@ -4,7 +4,7 @@ An intelligent, real-time DDoS detection and mitigation system powered by machin
 
 ## Features
 
-- **Real-time Network Monitoring**: Automatic traffic capture and analysis
+- **Simulated Network Monitoring**: Realistic traffic simulation and analysis
 - **AI-Powered Detection**: Machine learning models for DDoS attack detection
 - **5G Network Slice Management**: Support for eMBB, URLLC, and mMTC slices
 - **Autonomous Mitigation**: Automatic threat response and network healing
@@ -12,6 +12,7 @@ An intelligent, real-time DDoS detection and mitigation system powered by machin
 - **API Integration**: AbuseIPDB integration for IP reputation checking
 - **SDN Integration**: Software Defined Networking for dynamic flow control
 - **Self-Healing Framework**: Automated recovery and isolation mechanisms
+- **Zero Dependencies**: No system-level network capture requirements
 
 ## Research Background
 
@@ -74,15 +75,15 @@ Before running the project, ensure you have the following installed:
 - **Node.js** (v16 or higher) - [Download](https://nodejs.org/)
 - **Python** (v3.8 or higher) - [Download](https://python.org/)
 - **Git** - [Download](https://git-scm.com/)
-- **Wireshark/tshark** - [Download](https://wireshark.org/download.html)
 
 ### Verify Installation
 ```bash
 node --version
 python --version
 git --version
-tshark --version
 ```
+
+**Note**: Network capture dependencies (npcap, tshark, pyshark) have been removed. The system now uses simulation mode for demonstration purposes.
 
 ## Installation & Setup
 
@@ -252,10 +253,10 @@ npm run dev
 ## Using the System
 
 ### Automatic Network Monitoring
-1. Click **"Start Auto Monitor"** to begin live traffic capture
+1. Click **"Start Simulation Monitor"** to begin simulated traffic capture
 2. The system will automatically:
-   - Detect your IP address
-   - Capture network traffic patterns
+   - Generate realistic network traffic patterns
+   - Simulate various attack scenarios
    - Run DDoS detection on suspicious activity
    - Update all metrics in real-time
 
@@ -265,7 +266,7 @@ npm run dev
 3. Click **"Run Detection"** to analyze
 
 ### Features Available
-- **Real-time Traffic Monitoring**: Live network activity capture
+- **Simulated Traffic Monitoring**: Realistic network activity simulation
 - **AI-Powered Detection**: Machine learning threat analysis
 - **5G Network Slices**: eMBB, URLLC, mMTC slice management
 - **Automatic Mitigation**: Threat response and network healing
@@ -328,9 +329,10 @@ npm install
 - Ensure `.env` file exists in backend folder
 
 ### Performance Notes
-- The system simulates network traffic for demonstration
-- Real packet capture requires appropriate network permissions
+- The system uses simulation mode for safe demonstration
+- No special network permissions or system dependencies required
 - ML models are pre-trained for immediate use
+- Simulation generates realistic traffic patterns for testing
 
 ## System Architecture
 

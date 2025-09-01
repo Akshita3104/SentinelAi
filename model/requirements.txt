@@ -12,7 +12,7 @@ numpy==2.3.1
 packaging==25.0
 pathspec==0.12.1
 platformdirs==4.3.7
-pyshark==0.6
+# pyshark==0.6  # Removed - using simulation mode only
 PyYAML==6.0.2
 requests==2.32.3
 scikit-learn==1.4.2
