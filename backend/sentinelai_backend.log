@@ -7134,3 +7134,33 @@ TypeError: handle_websocket() missing 1 required positional argument: 'path'
 2025-09-03 18:03:13,218 - websockets.server - INFO - connection open
 2025-09-03 18:03:13,220 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 60822) on path: /
 2025-09-03 18:03:13,222 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 2
+2025-09-03 18:32:38,937 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-03 18:32:38,937 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-03 18:32:38,937 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-03 18:32:38,939 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-03 18:32:38,963 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-03 18:32:38,963 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.2
+2025-09-03 18:32:38,963 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.2
+2025-09-03 18:32:38,964 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-03 18:32:39,973 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 1
+2025-09-03 18:32:39,975 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 0
+2025-09-03 18:32:41,949 - websockets.server - INFO - connection open
+2025-09-03 18:32:41,950 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 65491) on path: /
+2025-09-03 18:32:41,950 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 1
+2025-09-03 18:32:42,526 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 18:32:48,216 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 0
+2025-09-03 18:32:48,537 - websockets.server - INFO - connection open
+2025-09-03 18:32:48,537 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 65505) on path: /
+2025-09-03 18:32:48,538 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 1
+2025-09-03 18:32:48,651 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 18:32:48,863 - websockets.server - INFO - connection open
+2025-09-03 18:32:48,864 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 65507) on path: /
+2025-09-03 18:32:48,864 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 2
+2025-09-03 18:32:52,506 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 1
+2025-09-03 18:32:52,506 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 0
+2025-09-03 18:32:59,558 - sentinelai.backend - INFO - Shutting down...
+2025-09-03 18:32:59,561 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-03 18:32:59,562 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-03 18:32:59,563 - websockets.server - INFO - server closing
+2025-09-03 18:32:59,564 - websockets.server - INFO - server closed
+2025-09-03 18:32:59,565 - sentinelai.backend - INFO - Server stopped
