@@ -1,48 +1,125 @@
-Create a Python backend using **FastAPI** to power the SENTINEL.AI-5G project. It should include:
+Create a high-performance Python backend using **FastAPI** to power the SentinelAI SDN DDoS Mitigation system. The backend will interface with the RYU SDN controller for network slicing and DDoS mitigation.
 
-### Modules:
+### Core Modules:
 
-1. **Traffic Monitoring API**:
-   - Parse flow rules received from Open vSwitch (OVS) via Ryu controller
-   - Extract flow features: src_ip, dst_ip, protocol, QoS tag, pkt_count, byte_count, slice_id
-   - Route this data to the AI anomaly detection module
-   - Store all flow stats and decisions in MongoDB
+1. **SDN Controller Interface**:
+   - REST API for RYU SDN controller communication
+   - Real-time flow statistics collection
+   - Network slice management
+   - Flow rule management
 
-2. **AI Inference Trigger**:
-   - POST endpoint `/api/analyze`
-   - Accepts flow data and sends it to the model endpoint
-   - Returns anomaly_score and decision
-   - If anomaly detected → trigger self-healing module
+2. **DDoS Detection Engine**:
+   - Real-time traffic analysis
+   - Multiple ML model integration
+   - Attack pattern recognition
+   - Confidence scoring
 
-3. **Self-Healing Orchestrator**:
-   - Uses Docker SDK (Python) to:
-     - Stop the affected slice container (e.g., `slice_embb`)
-     - Start a clean instance from image
-     - Log actions in MongoDB
-   - Update flow rules using Ryu REST API to reroute traffic
+3. **Network Slicing Manager**:
+   - Slice creation and configuration
+   - Resource allocation per slice
+   - Slice isolation controls
+   - Dynamic slice adjustment based on load
 
-4. **Real-Time Dashboard API**:
-   - `/api/slice-status`: current status of all slices (Healthy, Anomalous, Healing)
-   - `/api/traffic-stats`: recent traffic data from MongoDB
-   - `/api/anomaly-events`: list of anomaly detections
-   - `/api/container-health`: list of Docker containers with restart count, uptime, and health
+4. **Mitigation Controller**:
+   - Automatic attack blocking
+   - Rate limiting implementation
+   - Blacklist management
+   - Traffic redirection
 
-5. **Attack Simulation Endpoint**:
-   - `/api/simulate-attack?slice=embb`
-   - Starts traffic overload simulation using packet generation scripts
+### API Endpoints:
 
-6. **Logging & Persistence**:
-   - MongoDB collections:
-     - `traffic_logs`
-     - `anomalies`
-     - `containers`
-     - `system_actions`
+1. **Network Management**:
+   - `POST /api/slices` - Create new network slice
+   - `GET /api/slices` - List all slices
+   - `GET /api/slices/{slice_id}` - Get slice details
+   - `PUT /api/slices/{slice_id}` - Update slice configuration
+   - `DELETE /api/slices/{slice_id}` - Remove slice
 
-Use:
+2. **DDoS Detection**:
+   - `GET /api/ddos/status` - Current attack status
+   - `GET /api/ddos/detections` - Recent detections
+   - `POST /api/ddos/mitigate` - Manual mitigation trigger
+   - `GET /api/ddos/metrics` - Detection performance metrics
+  - `POST /api/detection/analyze` - Analyze network traffic
+  - `GET /api/detection/stats` - Get detection statistics
+  - `GET /api/detection/history` - Get detection history
+
+3. **Traffic Monitoring**:
+   - `GET /api/traffic/stats` - Current traffic statistics
+   - `GET /api/traffic/history` - Historical traffic data
+   - `GET /api/traffic/top-talkers` - Top traffic sources
+   - `GET /api/traffic/protocol-distribution` - Traffic by protocol
+  - `GET /api/traffic/flows` - Get active flows
+  - `GET /api/traffic/features` - Get extracted features
+
+4. **System Management**:
+   - `GET /api/system/status` - System health
+   - `GET /api/system/logs` - System logs
+   - `POST /api/system/update` - Update system configuration
+
+5. **Model Training Service**
+  - `POST /api/models/train` - Start training a new model
+  - `GET /api/models` - List available models
+  - `GET /api/models/{model_id}` - Get model details
+  - `DELETE /api/models/{model_id}` - Delete a model
+
+6. **Mitigation Service**
+  - `POST /api/mitigation/block` - Block an IP
+  - `GET /api/mitigation/rules` - List active rules
+  - `DELETE /api/mitigation/rules/{rule_id}` - Remove a rule
+
+### Technical Stack:
 - Python 3.10+
-- FastAPI
-- Pydantic for schemas
-- Docker SDK for orchestration
-- MongoDB for persistence
-- Ryu SDN Controller
-- Cross-Origin enabled for frontend access
+- FastAPI for REST API
+- WebSockets for real-time updates
+- SQLite for configuration storage
+- InfluxDB for time-series data
+- RYU SDN Controller
+- OpenFlow 1.3+
+
+### Data Models:
+1. **NetworkSlice**:
+   - id: str
+   - name: str
+   - bandwidth: int
+   - priority: int
+   - status: str
+   - created_at: datetime
+   - updated_at: datetime
+
+2. **DDoSDetection**:
+   - id: str
+   - timestamp: datetime
+   - slice_id: str
+   - attack_type: str
+   - source_ips: List[str]
+   - target_ips: List[str]
+   - severity: str
+   - status: str
+   - mitigation_actions: List[Dict]
+
+3. **TrafficFlow**:
+   - id: str
+   - timestamp: datetime
+   - slice_id: str
+   - src_ip: str
+   - dst_ip: str
+   - protocol: str
+   - bytes: int
+   - packets: int
+   - duration: float
+
+4. **Training Request**
+```json
+{
+  "model_type": "random_forest",
+  "dataset_path": "/path/to/dataset.csv",
+  "test_size": 0.2,
+  "random_state": 42
+}
+
+
+
+
+
+

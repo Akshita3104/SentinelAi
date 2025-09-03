@@ -1,35 +1,102 @@
-Create a responsive React.js frontend for a project titled "SENTINEL.AI-5G". The interface should serve as a real-time security dashboard for a 5G network slice management system. The dashboard must include:
+# SentinelAI - SDN DDoS Mitigation Frontend
 
-1. **Slice Health Visualization**:
-   - Status indicator for each slice (Green = Normal, Red = Compromised, Yellow = Healing)
-   - Use WebSocket or polling to fetch live status every 3 seconds
-   - Slices: eMBB, URLLC, IoT
+Create a responsive React.js frontend with TypeScript for real-time monitoring and control of DDoS detection and mitigation across network slices.
 
-2. **Anomaly Alert Timeline**:
-   - Chronological list of anomaly events detected by the AI
-   - Includes timestamp, slice ID, anomaly score, action taken
+## Core Features
 
-3. **Traffic Statistics**:
-   - Use Chart.js or Recharts to show:
-     - Real-time packet rate per slice
-     - Bandwidth usage
-     - Anomaly detection frequency
 
-4. **Container Monitoring**:
-   - Show Docker container status (running/stopped/restarting)
-   - Include restart count and recovery status
+### 1. Network Monitoring Dashboard
+- **Time-series Charts**: Traffic patterns and attack trends
+- **Attack Distribution**: Pie/bar charts of attack types
+- **Feature Importance**: Visualize which features influence detection most
+- **Topology Visualization**:
+  - Interactive SDN topology with switches and hosts
+  - Real-time status indicators (Normal/Under Attack)
+  - Color-coded health indicators
+- **Traffic Analysis**:
+  - Real-time traffic graphs (packet rate, volume, patterns)
+  - Protocol distribution visualization
+  - Top talkers analysis
 
-5. **Manual Attack Simulation Panel**:
-   - Button triggers dummy attack (calls backend API)
-   - Dropdown to select which slice to attack
+### 2. Attack Detection & Analysis
+- **Network Topology**: Interactive visualization of SDN switches and hosts
+- **Traffic Flow**: Real-time traffic visualization with D3.js or similar
+- **Attack Detection**: Color-coded alerts for detected attacks
+- **Performance Metrics**: CPU/Memory usage, packet processing rate
+- **Real-time Alerts**:
+   - Attack type classification (SYN Flood, UDP Flood, ICMP Flood, etc.)
+   - Source and target information
+  - Severity indicators and notifications
+- **Attack Visualization**:
+  - Time-series attack patterns
+  - Attack type distribution
+  - Geographic attack sources (if available)
 
-Design the UI with modern, minimal components using Tailwind CSS. Use React Query or Axios for all API calls. Ensure clear component separation and responsiveness.
+### 3. Model Management
+- **Data Upload**: Allow uploading network traffic datasets in CSV/PCAP format
+- **Model Selection**: Toggle between different ML models (Random Forest, SVM, etc.)
+- **Training Controls**: Start/stop training, view progress, and monitor metrics
+- **Model Evaluation**:
+  - Performance metrics (accuracy, precision, recall, F1-score)
+  - Feature importance visualization
+  - Confusion matrix
 
-APIs to connect to:
-- `/api/slice-status`
-- `/api/traffic-stats`
-- `/api/anomaly-events`
-- `/api/container-health`
-- `/api/simulate-attack?slice=`
+### 4. Mitigation Controls
+- **Manual Override**: Enable/disable automatic mitigation
+- **Threshold Adjustment**: Set confidence thresholds for attack detection
+- **Rule Management**: View and manage active mitigation rules
+- **Blacklist/Whitelist**: Manage blocked/allowed IPs
+- **Automated Protection**:
+  - Enable/disable auto-mitigation
+  - Confidence threshold configuration
+- **Manual Controls**:
+  - IP blacklisting/whitelisting
+  - Rate limiting configuration
+  - Rule management interface
+   - Slice isolation controls
 
-Use dummy data structures for initial state; real-time data will be populated by the backend.
+### 5. System Status
+- **Infrastructure Monitoring**:
+   - SDN controller status
+   - Switch connectivity
+  - Resource utilization (CPU, memory, network)
+- **Logs & Auditing**:
+  - Real-time log viewer
+  - Event history and filtering
+  - Export capabilities
+
+## Technical Implementation
+
+### Tech Stack
+- **Core**: React 18+ with Javascript
+- **State Management**: Redux Toolkit
+- **Styling**: Tailwind CSS + Headless UI
+- **Data Visualization**:
+  - D3.js for custom visualizations
+  - Recharts for standard charts
+  - React Flow for network topology
+- **Real-time Updates**: WebSocket
+- **API Client**: React Query
+
+### API Integration
+
+#### Model Management
+- `/api/models` - List available models
+- `/api/models/{model_id}` - Get model details
+- `/api/models/train` - Start model training
+- `/api/models/status` - Get training status
+- `/api/detection/status` - Get detection status
+- `/api/mitigation/rules` - Manage mitigation rules
+- `/api/traffic/stats` - Get traffic statistics
+- `/ws/updates` - WebSocket for real-time updates
+
+### UI/UX Guidelines:
+- Dark theme by default for better visibility
+- Clear visual hierarchy with important metrics highlighted
+- Interactive elements for drill-down analysis
+- Responsive layout that works on desktop and tablet
+- Real-time notifications for critical events
+
+
+
+
