@@ -18,13 +18,16 @@ from ml_detection import MLDetectionEngine
 from mitigation_engine import MitigationEngine
 from sdn_controller import SDNController
 from flow_capture import FlowCapture
+from performance_cache import performance_cache, performance_monitor, cache_result
 
 # Create optimized Flask app
 app = Flask(__name__)
 CORS(app, origins=['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'])
 
-# Optimize JSON responses
+# Optimize JSON responses and Flask performance
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
+app.config['JSON_SORT_KEYS'] = False
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 # Configure logging
 os.makedirs('logs', exist_ok=True)
@@ -55,11 +58,12 @@ def index():
     })
 
 @app.route('/predict', methods=['POST'])
+@performance_monitor
 def predict():
     start_time = time.time()
     try:
-        # Fast JSON parsing
-        data = request.get_json(force=True)
+        # Ultra-fast JSON parsing with minimal validation
+        data = request.get_json(force=True, cache=False)
         
         # Minimal validation for speed
         traffic = data.get("traffic")
@@ -70,6 +74,7 @@ def predict():
         ip_address = data.get('ip_address', '0.0.0.0')
         packet_data = data.get('packet_data', {})
         network_slice = data.get('network_slice', 'eMBB')
+        flow_features_data = data.get('flow_features', {})
         
         # Create flow features from traffic data
         flow_features = {
@@ -102,13 +107,16 @@ def predict():
         if detection_result['prediction'] in ['ddos', 'suspicious']:
             mitigation_result = mitigation_engine.execute_mitigation(detection_result, flow_features)
         
-        # Enhanced response with SDN integration
+        # Enhanced response with SDN integration and flow details
         response = {
             'prediction': detection_result['prediction'],
             'confidence': detection_result['confidence'],
             'threat_level': detection_result['threat_level'],
             'ddos_indicators': len([f for f in detection_result.get('confidence_factors', []) if 'detected' in f.lower()]),
             'confidence_factors': detection_result.get('confidence_factors', []),
+            'flow_analysis': {
+                'flows': flow_features_data.get('flows', [])
+            },
             'network_analysis': {
                 'max_traffic': max(traffic) if traffic else 0,
                 'avg_traffic': sum(traffic) / len(traffic) if traffic else 0,

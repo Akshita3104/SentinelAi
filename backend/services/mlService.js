@@ -3,22 +3,23 @@ const axios = require('axios');
 // Optimized axios instance with connection pooling and keep-alive
 const mlClient = axios.create({
   baseURL: process.env.ML_MODEL_URL?.replace('/predict', '') || 'http://localhost:5001',
-  timeout: 800, // Reduced to 800ms for sub-second response
+  timeout: 200, // Ultra-fast 200ms timeout
   headers: {
     'Connection': 'keep-alive',
     'Content-Type': 'application/json'
   },
   httpAgent: new (require('http').Agent)({
     keepAlive: true,
-    maxSockets: 10,
-    maxFreeSockets: 5,
-    timeout: 800
+    maxSockets: 20,
+    maxFreeSockets: 10,
+    timeout: 200,
+    keepAliveMsecs: 1000
   })
 });
 
 // Cache for health status to avoid repeated checks
 let healthCache = { status: null, timestamp: 0 };
-const HEALTH_CACHE_TTL = 5000; // 5 seconds
+const HEALTH_CACHE_TTL = 2000; // 2 seconds for faster updates
 
 const checkMLModelHealth = async () => {
   try {

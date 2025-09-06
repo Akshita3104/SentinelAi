@@ -112,8 +112,8 @@ router.post('/start-capture', (req, res) => {
     captureInstance.on('flowReady', async (flowFeatures) => {
       console.log('Real capture - Flow ready:', flowFeatures.total_packets, 'packets');
       
-      // Auto-detect DDoS if significant traffic
-      if (flowFeatures.total_packets > 10) {
+      // Auto-detect DDoS less frequently to avoid timeouts
+      if (flowFeatures.total_packets > 50 && flowFeatures.total_packets % 50 === 0) {
         try {
           const traffic = Array(20).fill(flowFeatures.packets_per_second || 10);
           const detectionRequest = {
@@ -123,7 +123,8 @@ router.post('/start-capture', (req, res) => {
               packet_rate: flowFeatures.packets_per_second || 100,
               avg_packet_size: flowFeatures.avg_packet_size || 1500
             },
-            network_slice: 'eMBB'
+            network_slice: 'eMBB',
+            flow_features: flowFeatures
           };
           
           console.log('🔍 Auto-running DDoS detection on real traffic...');
@@ -158,7 +159,29 @@ router.post('/start-capture', (req, res) => {
     });
     
     captureInstance.on('packetCount', (count) => {
-      console.log('Packets captured:', count);
+      console.log('Backend received packetCount event:', count);
+      // Emit real-time packet updates via WebSocket
+      const io = req.app?.get('io');
+      if (io) {
+        const flowData = captureInstance.flowWindow || [];
+        const recentPackets = flowData.slice(-20);
+        const recentTraffic = recentPackets.length > 0 ? recentPackets.map(p => p.size || 64).join(',') : '0';
+        
+        console.log('Emitting packet-update and traffic-data via WebSocket');
+        
+        io.emit('packet-update', {
+          packetCount: count,
+          timestamp: new Date().toISOString()
+        });
+        
+        io.emit('traffic-data', {
+          recentTraffic: recentTraffic,
+          packetCount: count,
+          timestamp: new Date().toISOString()
+        });
+      } else {
+        console.log('No WebSocket io available');
+      }
     });
     
     captureInstance.startCapture(targetIP, interfaceName);
@@ -195,14 +218,18 @@ router.get('/capture-status', (req, res) => {
   try {
     const flowData = captureInstance.flowWindow || [];
     const recentPackets = flowData.slice(-20);
-    const totalPackets = captureInstance.totalPackets || flowData.length;
+    const totalPackets = flowData.length;
+    const startTime = captureInstance.captureStartTime || Date.now();
+    const duration = (Date.now() - startTime) / 1000;
     
     res.json({
       isCapturing: captureInstance.isCapturing,
       mode: captureInstance.isCapturing ? 'real_capture' : 'idle',
       packetCount: totalPackets,
-      recentTraffic: recentPackets.length > 0 ? recentPackets.map(p => p.size || Math.floor(Math.random() * 100) + 10).join(',') : '0',
-      packetsPerSecond: Math.floor(totalPackets / Math.max(1, (Date.now() - (captureInstance.startTime || Date.now())) / 1000))
+      recentTraffic: recentPackets.length > 0 ? recentPackets.map(p => p.size || 64).join(',') : '0',
+      packetsPerSecond: Math.floor(totalPackets / Math.max(1, duration)),
+      totalBytes: flowData.reduce((sum, p) => sum + (p.size || 0), 0),
+      duration: Math.floor(duration)
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

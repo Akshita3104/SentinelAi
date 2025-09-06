@@ -7,6 +7,9 @@ interface AlertData {
   id: number;
   time: string;
   ip: string;
+  srcIP?: string;
+  dstIP?: string;
+  protocol?: string;
   slice: string;
   mlResult: string;
   abuseScore: number;
@@ -23,7 +26,7 @@ function App() {
   const [mlPrediction, setMlPrediction] = useState('Normal');
   const [abuseScore, setAbuseScore] = useState(15);
   const [mitigationStatus, setMitigationStatus] = useState('Idle');
-  const [trafficData, setTrafficData] = useState('12,15,18,25,32,28,22,35,45,38,42,55,68,72,65,58,62,75,82,78');
+  const [trafficData, setTrafficData] = useState('0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0');
   const [ipAddress, setIpAddress] = useState('192.168.1.100');
   const [localIPs, setLocalIPs] = useState<any[]>([]);
   const [isRealCapture, setIsRealCapture] = useState(false);
@@ -44,18 +47,8 @@ function App() {
   });
   const [networkAnalysis, setNetworkAnalysis] = useState<any>(null);
   const [detectionLogs, setDetectionLogs] = useState<string[]>([]);
-  const [alerts, setAlerts] = useState<AlertData[]>([
-    { id: 1, time: '14:32:15', ip: '203.45.67.89', slice: 'eMBB', mlResult: 'Normal', abuseScore: 8, action: 'None' },
-    { id: 2, time: '14:28:42', ip: '10.0.15.32', slice: 'URLLC', mlResult: 'Suspicious', abuseScore: 45, action: 'Rate-limit Applied' },
-    { id: 3, time: '14:25:18', ip: '172.16.254.1', slice: 'mMTC', mlResult: 'DDoS Detected', abuseScore: 85, action: 'Blackhole Route' },
-  ]);
-  const [detectionHistory, setDetectionHistory] = useState<DetectionData[]>([
-    { timestamp: '14:20', riskScore: 15 },
-    { timestamp: '14:25', riskScore: 45 },
-    { timestamp: '14:30', riskScore: 25 },
-    { timestamp: '14:35', riskScore: 65 },
-    { timestamp: '14:40', riskScore: 35 },
-  ]);
+  const [alerts, setAlerts] = useState<AlertData[]>([]);
+  const [detectionHistory, setDetectionHistory] = useState<DetectionData[]>([]);
 
 
   // Load local IPs from backend
@@ -81,6 +74,9 @@ function App() {
     setIsAutoMonitoring(true);
     setErrorMessage('');
     
+    // Add initial log
+    setDetectionLogs([`🚀 Network monitoring started at ${new Date().toLocaleTimeString()}`]);
+    
     // Force immediate update
     const initialTraffic = Math.floor(Math.random() * 50) + 10;
     setTrafficData(prev => {
@@ -103,151 +99,84 @@ function App() {
         await apiService.startPacketCapture(ipAddress, selectedIP.interface);
         setIsRealCapture(true);
         setErrorMessage(`✅ Real capture started on ${selectedIP.interface}`);
-        
         setTimeout(() => setErrorMessage(''), 3000);
-        return; // Exit early if real capture succeeds
-        
       } catch (error) {
-        console.log('Real capture failed:', error);
+        console.log('Real capture failed, using simulation:', error);
         setErrorMessage('⚠️ Real capture failed. Using simulation mode.');
         setIsRealCapture(false);
         setTimeout(() => setErrorMessage(''), 5000);
       }
     } else {
-      setErrorMessage('⚠️ No valid Ethernet/Wi-Fi interface selected. Using simulation.');
+      setErrorMessage('⚠️ No valid interface. Using simulation mode.');
       setIsRealCapture(false);
       setTimeout(() => setErrorMessage(''), 5000);
     }
     
-    // Start real-time packet monitoring if real capture is active
-    if (isRealCapture) {
-      const interval = setInterval(async () => {
+    // Start monitoring interval (real or simulation)
+    const interval = setInterval(async () => {
+      if (isRealCapture) {
         try {
           const status = await apiService.getCaptureStatus();
           console.log('Real capture status:', status);
           
           if (status.packetCount !== undefined) {
             setCapturedPackets(status.packetCount);
-            console.log('Updated packet count to:', status.packetCount);
-            
-            // Update traffic data with real capture
-            if (status.recentTraffic && status.recentTraffic !== '0') {
-              setTrafficData(status.recentTraffic);
-              console.log('Updated traffic data:', status.recentTraffic);
-            }
-            
-            // Auto-trigger detection on high traffic
-            if (status.packetsPerSecond > 20) {
-              console.log('High traffic detected, running DDoS analysis...');
-              await performDetection();
-            }
+          }
+          
+          if (status.recentTraffic && status.recentTraffic !== '0') {
+            setTrafficData(status.recentTraffic);
+          }
+          
+          if (status.packetsPerSecond > 20) {
+            await performDetection();
           }
         } catch (error) {
           console.error('Error getting capture status:', error);
         }
-      }, 250); // Reduced to 250ms for real capture
-      setMonitoringInterval(interval);
-    } else {
-      const interval = setInterval(async () => {
+      } else {
+        // Simulation mode
         try {
-          // Generate realistic network traffic patterns
-          const baseTraffic = Math.floor(Math.random() * 50) + 10;
-          const burstFactor = Math.random() > 0.8 ? Math.random() * 3 + 1 : 1;
-          const currentTraffic = Math.floor(baseTraffic * burstFactor);
-        
-          console.log('Updating traffic data:', currentTraffic); // Debug log
-        
-          // Update traffic data with new readings
+          const currentTraffic = Math.floor(Math.random() * 100) + 10;
+          
           setTrafficData(prev => {
             const currentData = prev.split(',').map(v => parseInt(v.trim()) || 0);
             const newData = [...currentData.slice(1), currentTraffic];
-            const newDataStr = newData.join(',');
-            console.log('New traffic data:', newDataStr);
-            return newDataStr;
+            return newData.join(',');
           });
-        
-          setCapturedPackets(prev => {
-            const newCount = prev + currentTraffic;
-            console.log('Captured packets:', newCount);
-            return newCount;
-          });
-        
-        // Update ML Prediction based on traffic patterns
-        const mlResult = currentTraffic > 90 ? 'DDoS Detected' : currentTraffic > 60 ? 'Suspicious' : 'Normal';
-        setMlPrediction(mlResult);
-        
-        // Update AbuseIPDB Score based on traffic and ML prediction
-        const abuseScore = currentTraffic > 90 ? Math.floor(Math.random() * 30) + 70 : 
-                          currentTraffic > 60 ? Math.floor(Math.random() * 40) + 30 : 
-                          Math.floor(Math.random() * 30) + 5;
-        setAbuseScore(abuseScore);
-        
-        // Update Mitigation Status based on threat level
-        const mitigation = mlResult === 'DDoS Detected' ? 'Blackhole Route' : 
-                          mlResult === 'Suspicious' ? 'Rate-limit Applied' : 'Idle';
-        setMitigationStatus(mitigation);
-        
-        // Generate automatic alerts for suspicious activity
-        if (Math.random() > 0.95 || currentTraffic > 90) { // 5% chance or high traffic
-          const newAlert = {
-            id: Date.now(),
-            time: new Date().toLocaleTimeString(),
-            ip: ipAddress,
-            slice: currentSlice,
-            mlResult: mlResult,
-            abuseScore: abuseScore,
-            action: mitigation === 'Idle' ? 'None' : mitigation
-          };
           
-          setAlerts(prev => [newAlert, ...prev.slice(0, 9)]);
-        }
-        
-        // Auto-detect potential DDoS patterns
-        const recentTraffic = trafficData.split(',').slice(-5).map(v => parseInt(v.trim()) || 0);
-        const avgRecent = recentTraffic.reduce((a, b) => a + b, 0) / recentTraffic.length;
-        
-        // Auto-update detection timeline with current traffic
-        const currentTime = new Date().toLocaleTimeString().slice(0, 5);
-        const riskScore = currentTraffic > 80 ? Math.min(100, currentTraffic + Math.floor(Math.random() * 20)) : Math.max(10, currentTraffic);
-        
-        // Update DDoS Risk Level in real-time
-        setDdosRisk(riskScore);
-        
-        setDetectionHistory(prev => {
-          const newDetection = { timestamp: currentTime, riskScore };
-          return [...prev.slice(1), newDetection];
-        });
-        
-        // If traffic spike detected, automatically run detection
-        if (currentTraffic > avgRecent * 2.5 && currentTraffic > 80) {
-          console.log('Traffic spike detected, running automatic DDoS detection...');
-          await performDetection();
-        }
-        
+          setCapturedPackets(prev => prev + currentTraffic);
+          
+          // Add detection logs
+          if (Math.random() > 0.8) {
+            const logMessage = `🔍 Simulation: Analyzing ${currentTraffic} packets/sec`;
+            setDetectionLogs(prev => [logMessage, ...prev.slice(0, 9)]);
+          }
+          
+          // Run ML detection periodically
+          if (Math.random() > 0.85) {
+            const detectionLog = `🤖 Running ML detection on traffic pattern`;
+            setDetectionLogs(prev => [detectionLog, ...prev.slice(0, 9)]);
+            await performDetection();
+          }
         } catch (error) {
-          console.error('Auto-monitoring error:', error);
+          console.error('Simulation error:', error);
         }
-      }, 500); // Reduced to 500ms for faster updates
-      
-      setMonitoringInterval(interval);
-    }
+      }
+    }, 500);
+    setMonitoringInterval(interval);
   };
 
   const stopAutoMonitoring = async () => {
     setIsAutoMonitoring(false);
     
-    // Stop real capture if active
-    if (isRealCapture) {
-      try {
-        await apiService.stopPacketCapture();
-        console.log('Real packet capture stopped');
-      } catch (error) {
-        console.error('Error stopping real capture:', error);
-      }
-      setIsRealCapture(false);
-    } else {
-      console.log('Simulation mode stopped');
+    // Stop real capture
+    try {
+      await apiService.stopPacketCapture();
+      console.log('Real packet capture stopped');
+    } catch (error) {
+      console.error('Error stopping real capture:', error);
     }
+    setIsRealCapture(false);
     
     if (monitoringInterval) {
       clearInterval(monitoringInterval);
@@ -272,11 +201,19 @@ function App() {
       }
     };
 
-    // Initialize WebSocket connection
+    // Initialize WebSocket connection with error handling
     let socket = null;
-    try {
-      socket = initializeWebSocket();
-      console.log('WebSocket initialization attempted');
+    const initWebSocket = async () => {
+      try {
+        // Check if backend is available first
+        const backendHealthy = await apiService.healthCheck();
+        if (!backendHealthy) {
+          console.log('Backend not available, skipping WebSocket');
+          return;
+        }
+        
+        socket = initializeWebSocket();
+        console.log('WebSocket initialization attempted');
       
       socket.on('connect', () => {
         console.log('✅ WebSocket connected successfully');
@@ -288,8 +225,8 @@ function App() {
         setBackendConnected(true);
       });
       
-      socket.on('realtime-update', (data) => {
-        console.log('Real-time update:', data);
+      socket.on('status-update', (data) => {
+        console.log('Status update:', data);
         setBackendConnected(true);
       });
       
@@ -308,11 +245,16 @@ function App() {
           setNetworkAnalysis(result.network_analysis);
         }
         
-        // Add to alerts
+        // Add to alerts with real packet details from latest captured packets
+        const latestPackets = captureInstance?.flowWindow?.slice(-5) || [];
+        const latestPacket = latestPackets[latestPackets.length - 1] || {};
         const newAlert = {
           id: Date.now(),
           time: new Date().toLocaleTimeString(),
           ip: data.ip,
+          srcIP: latestPacket.srcIP || data.ip,
+          dstIP: latestPacket.dstIP || 'N/A',
+          protocol: latestPacket.protocol || 'TCP',
           slice: result.network_slice || currentSlice,
           mlResult: result.prediction === 'ddos' ? 'DDoS Detected' : 
                    result.prediction === 'suspicious' ? 'Suspicious' : 'Normal',
@@ -322,19 +264,7 @@ function App() {
         setAlerts(prev => [newAlert, ...prev.slice(0, 9)]);
       });
       
-      socket.on('traffic-update', (data) => {
-        setTrafficData(prev => {
-          const currentData = prev.split(',').map(v => parseInt(v.trim()) || 0);
-          const newData = [...currentData.slice(1), data.live_traffic];
-          return newData.join(',');
-        });
-        setCapturedPackets(prev => prev + data.live_traffic);
-        setRealTimeMetrics(prev => ({
-          ...prev,
-          networkLoad: Math.floor(parseFloat(data.bandwidth_mbps) * 10),
-          responseTime: Date.now() % 1000
-        }));
-      });
+
       
       socket.on('detection-log', (data) => {
         console.log('Detection log:', data.message);
@@ -345,19 +275,35 @@ function App() {
         });
       });
       
-      socket.on('connect_error', () => {
-        console.log('WebSocket connection failed - using HTTP only');
-      });
-    } catch (error) {
-      console.log('WebSocket initialization failed - using HTTP only');
-    }
+        socket.on('packet-update', (data) => {
+          console.log('Frontend received packet-update:', data.packetCount);
+          setCapturedPackets(data.packetCount);
+        });
+        
+        socket.on('traffic-data', (data) => {
+          console.log('Frontend received traffic-data:', data.recentTraffic);
+          if (data.recentTraffic && data.recentTraffic !== '0') {
+            setTrafficData(data.recentTraffic);
+            console.log('Updated traffic data in UI:', data.recentTraffic);
+          }
+        });
+        
+        socket.on('connect_error', () => {
+          console.log('WebSocket connection failed - using HTTP only');
+        });
+      } catch (error) {
+        console.log('WebSocket initialization failed - using HTTP only');
+      }
+    };
+    
+    initWebSocket();
 
     // Load local IPs on startup
     loadLocalIPs();
     
     checkBackendHealth();
-    // Check every 30 seconds
-    const interval = setInterval(checkBackendHealth, 30000);
+    // Check every 10 seconds for faster connectivity detection
+    const interval = setInterval(checkBackendHealth, 10000);
     
     return () => {
       clearInterval(interval);
@@ -445,11 +391,14 @@ function App() {
       }
       setMitigationStatus(mitigation);
 
-      // Add new alert with real data
+      // Add new alert with real packet details
       const newAlert: AlertData = {
         id: alerts.length + 1,
         time: new Date().toLocaleTimeString(),
         ip: ipAddress,
+        srcIP: ipAddress,
+        dstIP: 'Manual Detection',
+        protocol: 'TCP',
         slice: currentSlice,
         mlResult: result.prediction === 'ddos' ? 'DDoS Detected' : result.prediction === 'normal' ? 'Normal' : 'Suspicious',
         abuseScore: result.abuseScore,
@@ -737,10 +686,9 @@ function App() {
                 </label>
                 <textarea
                   value={trafficData}
-                  onChange={(e) => !isAutoMonitoring && setTrafficData(e.target.value)}
-                  readOnly={isAutoMonitoring}
-                  className="w-full h-24 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white resize-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-xs font-mono"
-                  placeholder="Traffic data (auto-captured when monitoring is active)..."
+                  readOnly
+                  className="w-full h-24 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white resize-none text-xs font-mono"
+                  placeholder="Live traffic data (captured from real network)..."
                 />
                 <button
                   onClick={performDetection}
@@ -763,18 +711,22 @@ function App() {
             </div>
             
             {/* Live Detection Logs */}
-            {detectionLogs.length > 0 && (
-              <div className="mt-4">
-                <h4 className="text-sm font-medium text-gray-400 mb-2">Live Detection Logs</h4>
-                <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-3 max-h-32 overflow-y-auto">
-                  {detectionLogs.map((log, index) => (
+            <div className="mt-4">
+              <h4 className="text-sm font-medium text-gray-400 mb-2">Live Detection Logs</h4>
+              <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-3 max-h-32 overflow-y-auto">
+                {detectionLogs.length > 0 ? (
+                  detectionLogs.map((log, index) => (
                     <div key={index} className="text-xs text-green-400 font-mono mb-1">
                       {log}
                     </div>
-                  ))}
-                </div>
+                  ))
+                ) : (
+                  <div className="text-xs text-gray-500 font-mono">
+                    Waiting for detection events...
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Real-time Metrics Cards */}
@@ -884,28 +836,8 @@ function App() {
             </div>
           </div>
 
-          {/* Enhanced Detection History and Network Analysis */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
-            <div className="bg-gradient-to-br from-gray-800 to-gray-800/80 rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
-              <h3 className="text-lg font-semibold mb-6 flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-purple-400" />Detection Timeline</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={detectionHistory}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis dataKey="timestamp" stroke="#9ca3af" />
-                  <YAxis stroke="#9ca3af" />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#1f2937', 
-                      border: '1px solid #374151',
-                      borderRadius: '8px'
-                    }}
-                  />
-                  <Bar dataKey="riskScore" fill="#8b5cf6" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Enhanced Alerts with ML Model Results */}
+          {/* Enhanced Detection Results */}
+          <div className="mb-8">
             <div className="bg-gradient-to-br from-gray-800 to-gray-800/80 rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
               <h3 className="text-lg font-semibold mb-6 flex items-center gap-2"><Eye className="w-5 h-5 text-green-400" />Detection Results</h3>
               {lastDetectionResult && (
@@ -962,7 +894,10 @@ function App() {
                   <thead>
                     <tr className="text-left text-sm text-gray-400 border-b border-gray-700">
                       <th className="pb-3">Time</th>
-                      <th className="pb-3">IP</th>
+                      <th className="pb-3">Target IP</th>
+                      <th className="pb-3">Source IP</th>
+                      <th className="pb-3">Dest IP</th>
+                      <th className="pb-3">Protocol</th>
                       <th className="pb-3">Slice</th>
                       <th className="pb-3">Result</th>
                       <th className="pb-3">Score</th>
@@ -970,10 +905,13 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {alerts.slice(0, 6).map((alert, index) => (
+                    {alerts.slice(0, 10).map((alert, index) => (
                       <tr key={`alert-${alert.id}-${index}`} className="text-sm border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors">
                         <td className="py-3 text-gray-300">{alert.time}</td>
                         <td className="py-3 text-white font-mono text-xs">{alert.ip}</td>
+                        <td className="py-3 text-white font-mono text-xs">{alert.srcIP || 'N/A'}</td>
+                        <td className="py-3 text-white font-mono text-xs">{alert.dstIP || 'N/A'}</td>
+                        <td className="py-3 text-gray-300 text-xs">{alert.protocol || 'TCP'}</td>
                         <td className="py-3">
                           <span className={`px-2 py-1 rounded text-xs ${
                             alert.slice === 'eMBB' ? 'bg-blue-500/20 text-blue-400' :

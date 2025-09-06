@@ -4,25 +4,37 @@ require('dotenv').config();
 // Optimized clients with connection pooling
 const mlClient = axios.create({
   baseURL: process.env.ML_MODEL_URL?.replace('/predict', '') || 'http://localhost:5001',
-  timeout: 500, // Ultra-fast 500ms timeout
+  timeout: 150, // Ultra-fast 150ms timeout
   headers: { 'Content-Type': 'application/json', 'Connection': 'keep-alive' },
-  httpAgent: new (require('http').Agent)({ keepAlive: true, maxSockets: 10 })
+  httpAgent: new (require('http').Agent)({ 
+    keepAlive: true, 
+    maxSockets: 20, 
+    maxFreeSockets: 10,
+    timeout: 150,
+    keepAliveMsecs: 500
+  })
 });
 
 const abuseClient = axios.create({
   baseURL: process.env.ABUSEIPDB_URL?.replace('/check', '') || 'https://api.abuseipdb.com/api/v2',
-  timeout: 300, // Ultra-fast 300ms timeout
+  timeout: 200, // Ultra-fast 200ms timeout
   headers: { 
     'Key': process.env.ABUSEIPDB_API_KEY,
     'Accept': 'application/json',
     'Connection': 'keep-alive'
   },
-  httpsAgent: new (require('https').Agent)({ keepAlive: true, maxSockets: 5 })
+  httpsAgent: new (require('https').Agent)({ 
+    keepAlive: true, 
+    maxSockets: 10,
+    maxFreeSockets: 5,
+    timeout: 200,
+    keepAliveMsecs: 500
+  })
 });
 
 // Response cache for ultra-fast repeated requests
 const responseCache = new Map();
-const CACHE_TTL = 30000; // 30 seconds
+const CACHE_TTL = 10000; // 10 seconds for faster updates
 
 const detectDDoSCombined = async (req, res) => {
   const startTime = Date.now();

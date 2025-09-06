@@ -11,12 +11,13 @@ let socket: Socket | null = null;
 export const initializeWebSocket = () => {
   if (!socket) {
     socket = io(WEBSOCKET_URL, {
-      transports: ['polling', 'websocket'], // Use polling first, then websocket
+      transports: ['websocket', 'polling'],
       timeout: 5000,
       reconnection: true,
       reconnectionAttempts: 10,
-      reconnectionDelay: 1000,
-      forceNew: false
+      reconnectionDelay: 2000,
+      forceNew: false,
+      autoConnect: true
     });
     
     socket.on('connect', () => {
@@ -36,13 +37,29 @@ export const initializeWebSocket = () => {
 
 export const getSocket = () => socket;
 
-// Optimized axios instance
+// Ultra-optimized axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 800,
+  timeout: 2000, // Increased to 2 seconds for ML processing
   headers: {
     'Content-Type': 'application/json'
   }
+});
+
+// Add request interceptor for performance monitoring
+apiClient.interceptors.request.use((config) => {
+  config.metadata = { startTime: Date.now() };
+  return config;
+});
+
+apiClient.interceptors.response.use((response) => {
+  const duration = Date.now() - (response.config.metadata?.startTime || 0);
+  console.log(`API ${response.config.url}: ${duration}ms`);
+  return response;
+}, (error) => {
+  const duration = Date.now() - (error.config?.metadata?.startTime || 0);
+  console.log(`API ${error.config?.url} failed: ${duration}ms`);
+  return Promise.reject(error);
 });
 
 // Types for API requests and responses
@@ -166,10 +183,9 @@ export const apiService = {
   // Health check to verify backend connectivity
   async healthCheck(): Promise<boolean> {
     try {
-      const response = await axios.get('http://localhost:3000/');
+      const response = await axios.get('http://localhost:3000/', { timeout: 2000 });
       return response.status === 200;
     } catch (error) {
-      console.error('Backend health check failed:', error);
       return false;
     }
   },

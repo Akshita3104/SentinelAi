@@ -14,8 +14,10 @@ const io = new Server(server, {
 });
 
 const PORT = process.env.PORT || 3000;
+const { performanceMiddleware } = require('./middleware/performance');
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+app.use(performanceMiddleware);
 
 // Make io available to routes
 app.set('io', io);
@@ -61,7 +63,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// High-frequency real-time monitoring for sub-second updates
+// Ultra-high-frequency real-time monitoring for sub-second updates
 setInterval(() => {
   const trafficData = {
     timestamp: new Date().toISOString(),
@@ -74,7 +76,7 @@ setInterval(() => {
   
   io.emit('realtime-update', trafficData);
   io.emit('traffic-update', trafficData);
-}, 250); // Reduced to 250ms for 4x faster updates
+}, 100); // Ultra-fast 100ms updates for real-time performance
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

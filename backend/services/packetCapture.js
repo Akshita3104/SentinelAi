@@ -16,6 +16,7 @@ class PacketCapture extends EventEmitter {
     
     this.isCapturing = true;
     this.flowWindow = [];
+    this.captureStartTime = Date.now();
     
     const fields = [
       '-e', 'frame.time_epoch',
@@ -38,12 +39,17 @@ class PacketCapture extends EventEmitter {
     const args = [
       '-i', interfaceArg,
       '-f', `host ${targetIP}`,
-      '-l', // Line buffered output
+      '-l',
       '-T', 'fields',
-      ...fields,
-      '-E', 'separator=\t',
-      '-E', 'quote=n',
-      '-q' // Quiet mode
+      '-e', 'frame.time_epoch',
+      '-e', 'ip.src',
+      '-e', 'ip.dst',
+      '-e', '_ws.col.Protocol',
+      '-e', 'tcp.srcport',
+      '-e', 'tcp.dstport',
+      '-e', 'udp.srcport',
+      '-e', 'udp.dstport',
+      '-e', 'frame.len'
     ];
     
     console.log(`Starting tshark capture: ${this.tsharkPath} ${args.join(' ')}`);
@@ -55,9 +61,11 @@ class PacketCapture extends EventEmitter {
       });
       
       this.tsharkProcess.stdout.on('data', (data) => {
+        console.log('Raw tshark output:', data.toString());
         const lines = data.toString().split('\n');
         lines.forEach(line => {
           if (line.trim()) {
+            console.log('Raw packet line fields:', line.split('\t'));
             this.processPacketLine(line.trim(), targetIP);
           }
         });
@@ -86,10 +94,10 @@ class PacketCapture extends EventEmitter {
         this.isCapturing = false;
       });
       
-      // Process flows every 1 second for real-time updates
+      // Process flows every 200ms for ultra-fast real-time updates
       this.flowInterval = setInterval(() => {
         this.processFlows(targetIP);
-      }, 1000);
+      }, 200);
       
       console.log(`Real packet capture started for ${targetIP} on interface ${interfaceArg}`);
       
@@ -102,26 +110,27 @@ class PacketCapture extends EventEmitter {
 
   processPacketLine(line, targetIP) {
     const fields = line.split('\t');
-    if (fields.length < 9) return;
+    if (fields.length < 6) return;
     
     const packet = {
-      timestamp: parseFloat(fields[0]) * 1000,
-      srcIP: fields[1] || '',
-      dstIP: fields[2] || '',
-      srcPort: parseInt(fields[3] || fields[5] || '0'),
-      dstPort: parseInt(fields[4] || fields[6] || '0'),
-      protocol: parseInt(fields[7] || '0'),
-      size: parseInt(fields[8] || '0')
+      timestamp: parseFloat(fields[0]) * 1000 || Date.now(),
+      srcIP: fields[1]?.trim() || '',
+      dstIP: fields[2]?.trim() || '',
+      protocol: fields[3]?.trim() || 'TCP',
+      srcPort: parseInt(fields[4] || fields[6] || '0'),
+      dstPort: parseInt(fields[5] || fields[7] || '0'),
+      size: parseInt(fields[8] || '64')
     };
     
-    if (packet.srcIP && packet.dstIP) {
-      this.flowWindow.push(packet);
-      this.emit('packetCount', this.flowWindow.length);
-      
-      // Remove old packets
-      const cutoff = Date.now() - this.windowDuration;
-      this.flowWindow = this.flowWindow.filter(p => p.timestamp > cutoff);
-    }
+    console.log('Packet:', packet.srcIP, '->', packet.dstIP, packet.protocol, 'Ports:', packet.srcPort, '->', packet.dstPort);
+    
+    this.flowWindow.push(packet);
+    console.log('Added packet to flow:', packet.srcIP, '->', packet.dstIP, packet.protocol);
+    this.emit('packetCount', this.flowWindow.length);
+    
+    // Remove old packets
+    const cutoff = Date.now() - this.windowDuration;
+    this.flowWindow = this.flowWindow.filter(p => p.timestamp > cutoff);
   }
 
   processFlows(targetIP) {
@@ -203,7 +212,9 @@ class PacketCapture extends EventEmitter {
       flows: flows.map(f => ({
         src_ip: f.srcIP,
         dst_ip: f.dstIP,
-        protocol: f.protocol,
+        srcIP: f.srcIP,
+        dstIP: f.dstIP,
+        protocol: f.protocol === 6 ? 'TCP' : f.protocol === 17 ? 'UDP' : f.protocol === 1 ? 'ICMP' : (typeof f.protocol === 'string' ? f.protocol : 'TCP'),
         packets: f.packets.length,
         bytes: f.totalBytes
       }))
