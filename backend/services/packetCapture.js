@@ -1,63 +1,128 @@
+const { spawn } = require('child_process');
 const EventEmitter = require('events');
 
 class PacketCapture extends EventEmitter {
   constructor() {
     super();
     this.isCapturing = false;
+    this.tsharkProcess = null;
     this.flowWindow = [];
     this.windowDuration = 60000; // 60 seconds
-    this.simulationInterval = null;
+    this.tsharkPath = 'C:\\Program Files\\Wireshark\\tshark.exe';
   }
 
   startCapture(targetIP, interfaceName) {
     if (this.isCapturing) return;
     
-    console.log('⚠️  Real packet capture not available. Switching to simulation mode.');
-    this.emit('simulationMode', 'Real packet capture requires additional system dependencies. Using simulation mode instead.');
-    
     this.isCapturing = true;
     this.flowWindow = [];
     
-    // Start simulation mode
-    this.startSimulation(targetIP);
-  }
-
-  startSimulation(targetIP) {
-    // Generate simulated network traffic
-    this.simulationInterval = setInterval(() => {
-      this.generateSimulatedPackets(targetIP);
-      this.processFlows(targetIP);
-    }, 2000);
-  }
-
-  generateSimulatedPackets(targetIP) {
-    const timestamp = Date.now();
-    const packetCount = Math.floor(Math.random() * 50) + 10;
+    const fields = [
+      '-e', 'frame.time_epoch',
+      '-e', 'ip.src',
+      '-e', 'ip.dst',
+      '-e', 'tcp.srcport',
+      '-e', 'tcp.dstport', 
+      '-e', 'udp.srcport',
+      '-e', 'udp.dstport',
+      '-e', 'ip.proto',
+      '-e', 'frame.len'
+    ];
     
-    for (let i = 0; i < packetCount; i++) {
-      const packet = {
-        timestamp: timestamp + (i * 10),
-        srcIP: this.generateRandomIP(),
-        dstIP: targetIP,
-        srcPort: Math.floor(Math.random() * 65535),
-        dstPort: [80, 443, 22, 21, 25][Math.floor(Math.random() * 5)],
-        protocol: [6, 17, 1][Math.floor(Math.random() * 3)], // TCP, UDP, ICMP
-        size: Math.floor(Math.random() * 1500) + 64
-      };
-      
-      this.flowWindow.push(packet);
+    // Handle Windows interface names - use interface number or name
+    let interfaceArg = interfaceName;
+    if (interfaceName === 'auto') {
+      interfaceArg = 'any'; // Let tshark auto-select
     }
     
-    // Remove old packets
-    const cutoff = timestamp - this.windowDuration;
-    this.flowWindow = this.flowWindow.filter(p => p.timestamp > cutoff);
+    const args = [
+      '-i', interfaceArg,
+      '-f', `host ${targetIP}`,
+      '-l', // Line buffered output
+      '-T', 'fields',
+      ...fields,
+      '-E', 'separator=\t',
+      '-E', 'quote=n',
+      '-q' // Quiet mode
+    ];
+    
+    console.log(`Starting tshark capture: ${this.tsharkPath} ${args.join(' ')}`);
+    
+    try {
+      this.tsharkProcess = spawn(this.tsharkPath, args, {
+        stdio: ['pipe', 'pipe', 'pipe'],
+        windowsHide: true // Hide console window on Windows
+      });
+      
+      this.tsharkProcess.stdout.on('data', (data) => {
+        const lines = data.toString().split('\n');
+        lines.forEach(line => {
+          if (line.trim()) {
+            this.processPacketLine(line.trim(), targetIP);
+          }
+        });
+      });
+      
+      this.tsharkProcess.stderr.on('data', (data) => {
+        const errorMsg = data.toString();
+        console.error('tshark stderr:', errorMsg);
+        
+        // Check for common errors
+        if (errorMsg.includes('No such device exists') || 
+            errorMsg.includes('interface') || 
+            errorMsg.includes('permission')) {
+          this.emit('error', new Error(`Interface error: ${errorMsg}`));
+        }
+      });
+      
+      this.tsharkProcess.on('error', (error) => {
+        console.error('tshark process error:', error);
+        this.isCapturing = false;
+        this.emit('error', error);
+      });
+      
+      this.tsharkProcess.on('exit', (code) => {
+        console.log(`tshark process exited with code ${code}`);
+        this.isCapturing = false;
+      });
+      
+      // Process flows every 1 second for real-time updates
+      this.flowInterval = setInterval(() => {
+        this.processFlows(targetIP);
+      }, 1000);
+      
+      console.log(`Real packet capture started for ${targetIP} on interface ${interfaceArg}`);
+      
+    } catch (error) {
+      console.error('Capture start error:', error);
+      this.isCapturing = false;
+      this.emit('error', error);
+    }
   }
 
-  generateRandomIP() {
-    return `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+  processPacketLine(line, targetIP) {
+    const fields = line.split('\t');
+    if (fields.length < 9) return;
+    
+    const packet = {
+      timestamp: parseFloat(fields[0]) * 1000,
+      srcIP: fields[1] || '',
+      dstIP: fields[2] || '',
+      srcPort: parseInt(fields[3] || fields[5] || '0'),
+      dstPort: parseInt(fields[4] || fields[6] || '0'),
+      protocol: parseInt(fields[7] || '0'),
+      size: parseInt(fields[8] || '0')
+    };
+    
+    if (packet.srcIP && packet.dstIP) {
+      this.flowWindow.push(packet);
+      this.emit('packetCount', this.flowWindow.length);
+      
+      // Remove old packets
+      const cutoff = Date.now() - this.windowDuration;
+      this.flowWindow = this.flowWindow.filter(p => p.timestamp > cutoff);
+    }
   }
-
-
 
   processFlows(targetIP) {
     if (this.flowWindow.length === 0) return;
@@ -154,10 +219,30 @@ class PacketCapture extends EventEmitter {
 
   stopCapture() {
     this.isCapturing = false;
-    if (this.simulationInterval) {
-      clearInterval(this.simulationInterval);
-      this.simulationInterval = null;
+    
+    if (this.tsharkProcess) {
+      // Gracefully terminate tshark
+      this.tsharkProcess.kill('SIGTERM');
+      
+      // Force kill if not terminated within 3 seconds
+      setTimeout(() => {
+        if (this.tsharkProcess && !this.tsharkProcess.killed) {
+          this.tsharkProcess.kill('SIGKILL');
+        }
+      }, 3000);
+      
+      this.tsharkProcess = null;
     }
+    
+    if (this.flowInterval) {
+      clearInterval(this.flowInterval);
+      this.flowInterval = null;
+    }
+    
+    // Clear flow window
+    this.flowWindow = [];
+    
+    console.log('Packet capture stopped');
   }
 }
 

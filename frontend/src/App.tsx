@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, RefreshCw, User, Activity, Network, AlertTriangle, Settings, Eye, Loader2, Wifi, WifiOff } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, PieChart, Pie, Cell } from 'recharts';
-import { apiService, handleApiError, DetectionRequest, DetectionResponse } from './services/api';
+import { apiService, handleApiError, DetectionRequest, DetectionResponse, initializeWebSocket, getSocket } from './services/api';
 
 interface AlertData {
   id: number;
@@ -43,6 +43,7 @@ function App() {
     responseTime: 0
   });
   const [networkAnalysis, setNetworkAnalysis] = useState<any>(null);
+  const [detectionLogs, setDetectionLogs] = useState<string[]>([]);
   const [alerts, setAlerts] = useState<AlertData[]>([
     { id: 1, time: '14:32:15', ip: '203.45.67.89', slice: 'eMBB', mlResult: 'Normal', abuseScore: 8, action: 'None' },
     { id: 2, time: '14:28:42', ip: '10.0.15.32', slice: 'URLLC', mlResult: 'Suspicious', abuseScore: 45, action: 'Rate-limit Applied' },
@@ -80,31 +81,96 @@ function App() {
     setIsAutoMonitoring(true);
     setErrorMessage('');
     
-    // Always use simulation mode (real capture removed)
-    setErrorMessage('⚠️ Real packet capture requires system dependencies (npcap/tshark). Using simulation mode.');
-    setIsRealCapture(false);
+    // Force immediate update
+    const initialTraffic = Math.floor(Math.random() * 50) + 10;
+    setTrafficData(prev => {
+      const currentData = prev.split(',').map(v => parseInt(v.trim()) || 0);
+      const newData = [...currentData.slice(1), initialTraffic];
+      return newData.join(',');
+    });
+    setCapturedPackets(prev => prev + initialTraffic);
     
-    // Show simulation mode alert
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 5000);
+    // Try real packet capture first (only for Ethernet/Wi-Fi)
+    const selectedIP = localIPs.find(ip => ip.address === ipAddress);
+    const name = selectedIP?.interface.toLowerCase() || '';
+    const isVirtual = name.includes('vmware') || name.includes('bluetooth');
+    const isValidInterface = !isVirtual && ((name.includes('ethernet') && !name.includes('vmware')) || 
+                            name.includes('wi-fi') || name.includes('wifi') || 
+                            name.includes('wireless lan') || name.includes('wlan'));
     
-    // Simulate network traffic capture (fallback or demo mode)
-    const interval = setInterval(async () => {
+    if (selectedIP && isValidInterface) {
       try {
-        // Generate realistic network traffic patterns
-        const baseTraffic = Math.floor(Math.random() * 50) + 10;
-        const burstFactor = Math.random() > 0.8 ? Math.random() * 3 + 1 : 1; // 20% chance of burst
-        const currentTraffic = Math.floor(baseTraffic * burstFactor);
+        await apiService.startPacketCapture(ipAddress, selectedIP.interface);
+        setIsRealCapture(true);
+        setErrorMessage(`✅ Real capture started on ${selectedIP.interface}`);
         
-        // Update traffic data with new readings
-        setTrafficData(prev => {
-          const currentData = prev.split(',').map(v => parseInt(v.trim()) || 0);
-          const newData = [...currentData.slice(1), currentTraffic];
-          return newData.join(',');
-        });
+        setTimeout(() => setErrorMessage(''), 3000);
+        return; // Exit early if real capture succeeds
         
-        setCapturedPackets(prev => prev + currentTraffic);
+      } catch (error) {
+        console.log('Real capture failed:', error);
+        setErrorMessage('⚠️ Real capture failed. Using simulation mode.');
+        setIsRealCapture(false);
+        setTimeout(() => setErrorMessage(''), 5000);
+      }
+    } else {
+      setErrorMessage('⚠️ No valid Ethernet/Wi-Fi interface selected. Using simulation.');
+      setIsRealCapture(false);
+      setTimeout(() => setErrorMessage(''), 5000);
+    }
+    
+    // Start real-time packet monitoring if real capture is active
+    if (isRealCapture) {
+      const interval = setInterval(async () => {
+        try {
+          const status = await apiService.getCaptureStatus();
+          console.log('Real capture status:', status);
+          
+          if (status.packetCount !== undefined) {
+            setCapturedPackets(status.packetCount);
+            console.log('Updated packet count to:', status.packetCount);
+            
+            // Update traffic data with real capture
+            if (status.recentTraffic && status.recentTraffic !== '0') {
+              setTrafficData(status.recentTraffic);
+              console.log('Updated traffic data:', status.recentTraffic);
+            }
+            
+            // Auto-trigger detection on high traffic
+            if (status.packetsPerSecond > 20) {
+              console.log('High traffic detected, running DDoS analysis...');
+              await performDetection();
+            }
+          }
+        } catch (error) {
+          console.error('Error getting capture status:', error);
+        }
+      }, 250); // Reduced to 250ms for real capture
+      setMonitoringInterval(interval);
+    } else {
+      const interval = setInterval(async () => {
+        try {
+          // Generate realistic network traffic patterns
+          const baseTraffic = Math.floor(Math.random() * 50) + 10;
+          const burstFactor = Math.random() > 0.8 ? Math.random() * 3 + 1 : 1;
+          const currentTraffic = Math.floor(baseTraffic * burstFactor);
+        
+          console.log('Updating traffic data:', currentTraffic); // Debug log
+        
+          // Update traffic data with new readings
+          setTrafficData(prev => {
+            const currentData = prev.split(',').map(v => parseInt(v.trim()) || 0);
+            const newData = [...currentData.slice(1), currentTraffic];
+            const newDataStr = newData.join(',');
+            console.log('New traffic data:', newDataStr);
+            return newDataStr;
+          });
+        
+          setCapturedPackets(prev => {
+            const newCount = prev + currentTraffic;
+            console.log('Captured packets:', newCount);
+            return newCount;
+          });
         
         // Update ML Prediction based on traffic patterns
         const mlResult = currentTraffic > 90 ? 'DDoS Detected' : currentTraffic > 60 ? 'Suspicious' : 'Normal';
@@ -158,19 +224,30 @@ function App() {
           await performDetection();
         }
         
-      } catch (error) {
-        console.error('Auto-monitoring error:', error);
-      }
-    }, 2000); // Update every 2 seconds
-    
-    setMonitoringInterval(interval);
+        } catch (error) {
+          console.error('Auto-monitoring error:', error);
+        }
+      }, 500); // Reduced to 500ms for faster updates
+      
+      setMonitoringInterval(interval);
+    }
   };
 
   const stopAutoMonitoring = async () => {
     setIsAutoMonitoring(false);
     
-    // Simulation mode - no real capture to stop
-    console.log('Simulation mode stopped');
+    // Stop real capture if active
+    if (isRealCapture) {
+      try {
+        await apiService.stopPacketCapture();
+        console.log('Real packet capture stopped');
+      } catch (error) {
+        console.error('Error stopping real capture:', error);
+      }
+      setIsRealCapture(false);
+    } else {
+      console.log('Simulation mode stopped');
+    }
     
     if (monitoringInterval) {
       clearInterval(monitoringInterval);
@@ -195,15 +272,100 @@ function App() {
       }
     };
 
+    // Initialize WebSocket connection
+    let socket = null;
+    try {
+      socket = initializeWebSocket();
+      console.log('WebSocket initialization attempted');
+      
+      socket.on('connect', () => {
+        console.log('✅ WebSocket connected successfully');
+        setBackendConnected(true);
+      });
+      
+      socket.on('status', (data) => {
+        console.log('Backend status:', data);
+        setBackendConnected(true);
+      });
+      
+      socket.on('realtime-update', (data) => {
+        console.log('Real-time update:', data);
+        setBackendConnected(true);
+      });
+      
+      socket.on('detection-result', (data) => {
+        console.log('Detection result received:', data);
+        const result = data.result;
+        
+        // Update UI with real detection results
+        setLastDetectionResult(result);
+        setMlPrediction(result.prediction === 'ddos' ? 'DDoS Detected' : 
+                       result.prediction === 'suspicious' ? 'Suspicious' : 'Normal');
+        setAbuseScore(result.abuseScore || 0);
+        setDdosRisk(Math.floor(result.confidence * 100));
+        
+        if (result.network_analysis) {
+          setNetworkAnalysis(result.network_analysis);
+        }
+        
+        // Add to alerts
+        const newAlert = {
+          id: Date.now(),
+          time: new Date().toLocaleTimeString(),
+          ip: data.ip,
+          slice: result.network_slice || currentSlice,
+          mlResult: result.prediction === 'ddos' ? 'DDoS Detected' : 
+                   result.prediction === 'suspicious' ? 'Suspicious' : 'Normal',
+          abuseScore: result.abuseScore || 0,
+          action: result.slice_recommendation?.action || 'None'
+        };
+        setAlerts(prev => [newAlert, ...prev.slice(0, 9)]);
+      });
+      
+      socket.on('traffic-update', (data) => {
+        setTrafficData(prev => {
+          const currentData = prev.split(',').map(v => parseInt(v.trim()) || 0);
+          const newData = [...currentData.slice(1), data.live_traffic];
+          return newData.join(',');
+        });
+        setCapturedPackets(prev => prev + data.live_traffic);
+        setRealTimeMetrics(prev => ({
+          ...prev,
+          networkLoad: Math.floor(parseFloat(data.bandwidth_mbps) * 10),
+          responseTime: Date.now() % 1000
+        }));
+      });
+      
+      socket.on('detection-log', (data) => {
+        console.log('Detection log:', data.message);
+        // Add to detection logs
+        setDetectionLogs(prev => {
+          const newLogs = [data.message, ...prev.slice(0, 9)];
+          return newLogs;
+        });
+      });
+      
+      socket.on('connect_error', () => {
+        console.log('WebSocket connection failed - using HTTP only');
+      });
+    } catch (error) {
+      console.log('WebSocket initialization failed - using HTTP only');
+    }
+
     // Load local IPs on startup
     loadLocalIPs();
     
     checkBackendHealth();
     // Check every 30 seconds
     const interval = setInterval(checkBackendHealth, 30000);
+    
     return () => {
       clearInterval(interval);
-      stopAutoMonitoring(); // Clean up monitoring on unmount
+      stopAutoMonitoring();
+      const currentSocket = getSocket();
+      if (currentSocket) {
+        currentSocket.disconnect();
+      }
     };
   }, []);
 
@@ -466,17 +628,19 @@ function App() {
                       Traffic Capture Mode
                     </label>
                     <div className="flex items-center gap-4 mt-2">
-                      <label className="flex items-center gap-2 text-sm text-green-400">
-                        <input
-                          type="radio"
-                          checked={true}
-                          readOnly
-                          className="text-green-600"
-                        />
-                        Simulation Mode
+                      <label className={`flex items-center gap-2 text-sm ${
+                        isRealCapture ? 'text-blue-400' : 'text-green-400'
+                      }`}>
+                        <div className={`w-3 h-3 rounded-full ${
+                          isRealCapture ? 'bg-blue-400' : 'bg-green-400'
+                        }`}></div>
+                        {isRealCapture ? 'Real Capture Mode' : 'Simulation Mode'}
                       </label>
                       <span className="text-xs text-gray-500">
-                        (Real capture requires npcap/tshark)
+                        {isRealCapture 
+                          ? '(Using Wireshark/tshark)' 
+                          : '(Install Wireshark for real capture)'
+                        }
                       </span>
                     </div>
                   </div>
@@ -486,7 +650,7 @@ function App() {
                     className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 ${
                       isAutoMonitoring 
                         ? 'bg-red-600 hover:bg-red-700 text-white' 
-                        : 'bg-green-600 hover:bg-green-700 text-white'
+                        : 'bg-blue-600 hover:bg-blue-700 text-white'
                     } disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     {isAutoMonitoring ? (
@@ -497,64 +661,72 @@ function App() {
                     ) : (
                       <>
                         <Activity className="w-4 h-4" />
-                        Start Simulation Monitor
+                        Start Network Monitor
                       </>
                     )}
                   </button>
                 </div>
                 
                 {isAutoMonitoring && (
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 mb-4">
-                    <div className="flex items-center gap-2 text-green-400 text-sm">
-                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                      <span>Simulation mode active - Monitoring {ipAddress}</span>
+                  <div className={`border rounded-lg p-3 mb-4 ${
+                    isRealCapture 
+                      ? 'bg-blue-500/10 border-blue-500/30' 
+                      : 'bg-green-500/10 border-green-500/30'
+                  }`}>
+                    <div className={`flex items-center gap-2 text-sm ${
+                      isRealCapture ? 'text-blue-400' : 'text-green-400'
+                    }`}>
+                      <div className={`w-2 h-2 rounded-full animate-pulse ${
+                        isRealCapture ? 'bg-blue-400' : 'bg-green-400'
+                      }`}></div>
+                      <span>
+                        {isRealCapture 
+                          ? `Real capture active - Monitoring ${ipAddress}` 
+                          : `Simulation mode active - Monitoring ${ipAddress}`
+                        }
+                      </span>
                     </div>
-                    <div className="text-xs text-green-300 mt-1">
-                      Generating simulated network traffic | Packets: {capturedPackets.toLocaleString()}
+                    <div className={`text-xs mt-1 ${
+                      isRealCapture ? 'text-blue-300' : 'text-green-300'
+                    }`}>
+                      {isRealCapture 
+                        ? `Capturing live network traffic via Wireshark | Packets: ${capturedPackets.toLocaleString()}` 
+                        : `Generating simulated network traffic | Packets: ${capturedPackets.toLocaleString()}`
+                      }
                     </div>
                   </div>
                 )}
                 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Local IP to Monitor
-                    </label>
-                    <div className="flex gap-2">
-                      <select
-                        value={ipAddress}
-                        onChange={(e) => setIpAddress(e.target.value)}
-                        className="flex-1 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
-                      >
-                        {localIPs.map((ip, index) => (
-                          <option key={index} value={ip.address}>
-                            {ip.interface} - {ip.address}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        onClick={loadLocalIPs}
-                        className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all"
-                        title="Refresh IPs"
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">
-                      Network Slice
-                    </label>
-                    <select 
-                      value={currentSlice} 
-                      onChange={(e) => setCurrentSlice(e.target.value)}
-                      disabled={isLoading}
-                      className="w-full bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50"
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
+                    Local IP to Monitor
+                  </label>
+                  <div className="flex gap-2">
+                    <select
+                      value={ipAddress}
+                      onChange={(e) => setIpAddress(e.target.value)}
+                      className="flex-1 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
                     >
-                      <option value="eMBB">eMBB - Enhanced Mobile Broadband</option>
-                      <option value="URLLC">URLLC - Ultra-Reliable Low Latency</option>
-                      <option value="mMTC">mMTC - Massive Machine Type Comms</option>
+                      {localIPs.filter(ip => {
+                        const name = ip.interface.toLowerCase();
+                        const isVirtual = name.includes('vmware') || name.includes('bluetooth');
+                        const isValid = (name.includes('ethernet') && !name.includes('vmware')) || 
+                                       name.includes('wi-fi') || name.includes('wifi') || 
+                                       name.includes('wireless lan') || name.includes('wlan');
+                        return !isVirtual && isValid;
+                      }).map((ip, index) => (
+                        <option key={index} value={ip.address}>
+                          {ip.address}
+                        </option>
+                      ))}
                     </select>
+                    <button
+                      onClick={loadLocalIPs}
+                      className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-all"
+                      title="Refresh IPs"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -565,9 +737,9 @@ function App() {
                 </label>
                 <textarea
                   value={trafficData}
-                  onChange={(e) => setTrafficData(e.target.value)}
-                  disabled={isAutoMonitoring}
-                  className="w-full h-24 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white resize-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all disabled:opacity-50 text-xs font-mono"
+                  onChange={(e) => !isAutoMonitoring && setTrafficData(e.target.value)}
+                  readOnly={isAutoMonitoring}
+                  className="w-full h-24 bg-gray-700/80 border border-gray-600 rounded-xl px-4 py-3 text-white resize-none focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all text-xs font-mono"
                   placeholder="Traffic data (auto-captured when monitoring is active)..."
                 />
                 <button
@@ -589,6 +761,20 @@ function App() {
                 </button>
               </div>
             </div>
+            
+            {/* Live Detection Logs */}
+            {detectionLogs.length > 0 && (
+              <div className="mt-4">
+                <h4 className="text-sm font-medium text-gray-400 mb-2">Live Detection Logs</h4>
+                <div className="bg-gray-900/50 border border-gray-600 rounded-lg p-3 max-h-32 overflow-y-auto">
+                  {detectionLogs.map((log, index) => (
+                    <div key={index} className="text-xs text-green-400 font-mono mb-1">
+                      {log}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Real-time Metrics Cards */}
@@ -784,8 +970,8 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {alerts.slice(0, 6).map((alert) => (
-                      <tr key={alert.id} className="text-sm border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors">
+                    {alerts.slice(0, 6).map((alert, index) => (
+                      <tr key={`alert-${alert.id}-${index}`} className="text-sm border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors">
                         <td className="py-3 text-gray-300">{alert.time}</td>
                         <td className="py-3 text-white font-mono text-xs">{alert.ip}</td>
                         <td className="py-3">

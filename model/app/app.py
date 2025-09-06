@@ -7,58 +7,64 @@ from datetime import datetime
 import threading
 import time
 import asyncio
+import json
 
-# Import autonomous framework
+# Import modules
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from autonomous_security_framework import AutonomousSecurityFramework
-from network_slice_manager import NetworkSliceManager
+from ml_detection import MLDetectionEngine
+from mitigation_engine import MitigationEngine
 from sdn_controller import SDNController
+from flow_capture import FlowCapture
 
-# Create a Flask application instance
+# Create optimized Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app, origins=['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174'])
+
+# Optimize JSON responses
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 # Configure logging
-logging.basicConfig(filename='logs/server.log', level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s: %(message)s')
+os.makedirs('logs', exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s: %(message)s',
+    handlers=[
+        logging.FileHandler('logs/server.log'),
+        logging.StreamHandler()
+    ]
+)
 
-# Initialize autonomous framework
-autonomous_framework = AutonomousSecurityFramework()
-slice_manager = NetworkSliceManager(autonomous_framework.sdn_controller)
-
-# Start autonomous operation
-autonomous_thread = None
+# Initialize components
+sdn_controller = SDNController()
+ml_engine = MLDetectionEngine()
+mitigation_engine = MitigationEngine(sdn_controller)
+flow_capture = FlowCapture()
 
 @app.route('/', methods=['GET'])
 def index():
     app.logger.info("Received request at '/' route")
-    status = autonomous_framework.get_autonomous_status()
     return jsonify({
-        'message': 'AI-Driven Self-Healing Security Framework Active',
-        'autonomous_status': status,
-        'slice_status': slice_manager.get_slice_status(),
+        'message': 'AI-Driven DDoS Detection ML Model Active',
+        'status': 'running',
+        'ml_engine': 'loaded',
+        'sdn_controller': 'connected',
         'timestamp': datetime.now().isoformat()
     })
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    start_time = time.time()
     try:
-        # Get JSON input
+        # Fast JSON parsing
         data = request.get_json(force=True)
-        app.logger.debug(f"Received request data: {data}")
-
-        # Validate input
-        if not data or "traffic" not in data:
-            app.logger.error("Invalid input: 'traffic' field missing")
+        
+        # Minimal validation for speed
+        traffic = data.get("traffic")
+        if not traffic or not isinstance(traffic, list):
             return jsonify({"error": "Invalid input, expected 'traffic' array"}), 400
-
-        traffic = data["traffic"]
-        if not isinstance(traffic, list) or not all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in traffic):
-            app.logger.error(f"Invalid traffic data: {traffic}, must be an array of numbers")
-            return jsonify({"error": "Invalid traffic data: must be an array of numbers"}), 400
 
         # Extract additional data
         ip_address = data.get('ip_address', '0.0.0.0')
@@ -183,34 +189,19 @@ def get_sdn_status():
         app.logger.error(f"Error getting SDN status: {e}")
         return jsonify({"error": str(e)}), 500
 
-def start_autonomous_framework():
-    """Start autonomous security framework"""
-    global autonomous_thread
-    
-    def run_autonomous():
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-        # Start all autonomous processes
-        tasks = [
-            autonomous_framework.start_autonomous_operation(),
-            slice_manager.autonomous_slice_monitoring(),
-            slice_manager.dynamic_service_restoration()
-        ]
-        
-        loop.run_until_complete(asyncio.gather(*tasks))
-    
-    if not autonomous_thread or not autonomous_thread.is_alive():
-        autonomous_thread = threading.Thread(target=run_autonomous, daemon=True)
-        autonomous_thread.start()
-        app.logger.info("🚀 Autonomous Security Framework started")
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({
+        'status': 'healthy',
+        'ml_engine': 'loaded',
+        'timestamp': datetime.now().isoformat(),
+        'version': '2.0.0'
+    }), 200
 
 if __name__ == '__main__':
-    app.logger.info("🚀 Starting AI-Driven Self-Healing Security Framework")
-    
-    # Start autonomous framework
-    start_autonomous_framework()
-    
+    app.logger.info("🚀 Starting AI-Driven DDoS Detection ML Model")
+    app.logger.info("ML Engine initialized successfully")
     app.logger.info("Starting Flask API server on port 5001")
     app.run(host='127.0.0.1', port=5001, debug=False)
     app.logger.info("Flask server has stopped")

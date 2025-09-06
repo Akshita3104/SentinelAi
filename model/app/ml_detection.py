@@ -58,37 +58,42 @@ class MLDetectionEngine:
         """Initialize default models if pre-trained models not available"""
         self.logger.info("Initializing default models")
         
-        # Create synthetic training data for demonstration
+        # Create synthetic training data
         np.random.seed(42)
         n_samples = 1000
         
-        # Normal traffic features
-        normal_data = np.random.normal(0, 1, (n_samples//2, len(self.feature_columns)))
+        # Generate realistic network traffic features
+        normal_data = np.random.normal([60, 100, 150000, 1.67, 2500, 1500, 200, 64, 1518, 0.1, 0.05, 1, 1, 1, 1, 0, 0], 
+                                     [30, 50, 75000, 0.5, 1000, 300, 100, 32, 500, 0.05, 0.02, 0, 0, 0, 0, 0, 0], 
+                                     (n_samples//2, len(self.feature_columns)))
         normal_labels = np.zeros(n_samples//2)
         
-        # Attack traffic features (higher values)
-        attack_data = np.random.normal(2, 1.5, (n_samples//2, len(self.feature_columns)))
+        # Attack traffic (higher rates, larger packets)
+        attack_data = np.random.normal([30, 5000, 7500000, 166.67, 250000, 1500, 0, 1500, 1500, 0.006, 0, 1, 10, 1, 1, 0, 0],
+                                     [15, 2000, 3000000, 50, 100000, 0, 0, 0, 0, 0.002, 0, 0, 5, 0, 0, 0, 0],
+                                     (n_samples//2, len(self.feature_columns)))
         attack_labels = np.ones(n_samples//2)
         
-        # Combine data
+        # Ensure non-negative values
+        normal_data = np.abs(normal_data)
+        attack_data = np.abs(attack_data)
+        
         X = np.vstack([normal_data, attack_data])
         y = np.hstack([normal_labels, attack_labels])
         
-        # Train models
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        # Scale features
-        X_train_scaled = self.scaler.fit_transform(X_train)
+        # Fit scaler and transform data
+        self.scaler.fit(X)
+        X_scaled = self.scaler.transform(X)
         
         # Train Random Forest
         self.rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-        self.rf_model.fit(X_train_scaled, y_train)
+        self.rf_model.fit(X_scaled, y)
         
-        # Train Isolation Forest on normal traffic only
-        normal_indices = y_train == 0
-        self.isolation_forest.fit(X_train_scaled[normal_indices])
+        # Train Isolation Forest
+        normal_indices = y == 0
+        self.isolation_forest.fit(X_scaled[normal_indices])
         
-        self.logger.info("Default models initialized")
+        self.logger.info("Default models initialized with fitted scaler")
     
     def preprocess_features(self, flow_features):
         """Preprocess flow features for ML prediction"""
@@ -99,15 +104,21 @@ class MLDetectionEngine:
             else:
                 df = pd.DataFrame(flow_features)
             
-            # Ensure all required columns exist
+            # Ensure all required columns exist with defaults
+            defaults = {
+                'duration': 60, 'total_packets': 100, 'total_bytes': 150000,
+                'packets_per_second': 1.67, 'bytes_per_second': 2500, 'avg_packet_size': 1500,
+                'std_packet_size': 200, 'min_packet_size': 64, 'max_packet_size': 1518,
+                'avg_iat': 0.1, 'std_iat': 0.05, 'unique_src_ports': 1,
+                'unique_dst_ports': 1, 'unique_protocols': 1, 'is_tcp': 1, 'is_udp': 0, 'is_icmp': 0
+            }
+            
             for col in self.feature_columns:
                 if col not in df.columns:
-                    df[col] = 0
+                    df[col] = defaults.get(col, 0)
             
             # Select and order features
             df = df[self.feature_columns]
-            
-            # Handle missing values
             df = df.fillna(0)
             
             # Convert boolean columns to int
@@ -124,13 +135,22 @@ class MLDetectionEngine:
     def detect_ddos(self, flow_features):
         """Detect DDoS attacks using ensemble of ML models"""
         try:
+            # Ensure models are initialized
+            if self.rf_model is None:
+                self.initialize_default_models()
+            
             # Preprocess features
             X = self.preprocess_features(flow_features)
             if X is None:
                 return self.create_default_response("preprocessing_error")
             
-            # Scale features
-            X_scaled = self.scaler.transform(X)
+            # Scale features (with fallback)
+            try:
+                X_scaled = self.scaler.transform(X)
+            except Exception:
+                # If scaler not fitted, reinitialize models
+                self.initialize_default_models()
+                X_scaled = self.scaler.transform(X)
             
             # Random Forest prediction
             rf_prediction = None
@@ -154,11 +174,26 @@ class MLDetectionEngine:
                 rf_prediction, rf_confidence, if_prediction, if_score, flow_features
             )
             
+            # Generate confidence factors
+            confidence_factors = []
+            if rf_prediction == 'ddos':
+                confidence_factors.append(f"Random Forest detected DDoS with {rf_confidence:.2f} confidence")
+            if if_prediction == 'anomaly':
+                confidence_factors.append(f"Isolation Forest detected anomaly (score: {if_score:.3f})")
+            
+            # Add flow-based indicators
+            if isinstance(flow_features, dict):
+                if flow_features.get('packets_per_second', 0) > 1000:
+                    confidence_factors.append("High packet rate detected")
+                if flow_features.get('bytes_per_second', 0) > 1000000:
+                    confidence_factors.append("High bandwidth utilization detected")
+            
             # Create detailed response
             response = {
                 'prediction': final_prediction,
                 'confidence': confidence,
                 'threat_level': threat_level,
+                'confidence_factors': confidence_factors,
                 'model_predictions': {
                     'random_forest': {
                         'prediction': rf_prediction,

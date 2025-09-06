@@ -1,41 +1,57 @@
 const axios = require('axios');
 require('dotenv').config();
 
+// Optimized clients with connection pooling
+const mlClient = axios.create({
+  baseURL: process.env.ML_MODEL_URL?.replace('/predict', '') || 'http://localhost:5001',
+  timeout: 500, // Ultra-fast 500ms timeout
+  headers: { 'Content-Type': 'application/json', 'Connection': 'keep-alive' },
+  httpAgent: new (require('http').Agent)({ keepAlive: true, maxSockets: 10 })
+});
+
+const abuseClient = axios.create({
+  baseURL: process.env.ABUSEIPDB_URL?.replace('/check', '') || 'https://api.abuseipdb.com/api/v2',
+  timeout: 300, // Ultra-fast 300ms timeout
+  headers: { 
+    'Key': process.env.ABUSEIPDB_API_KEY,
+    'Accept': 'application/json',
+    'Connection': 'keep-alive'
+  },
+  httpsAgent: new (require('https').Agent)({ keepAlive: true, maxSockets: 5 })
+});
+
+// Response cache for ultra-fast repeated requests
+const responseCache = new Map();
+const CACHE_TTL = 30000; // 30 seconds
+
 const detectDDoSCombined = async (req, res) => {
+  const startTime = Date.now();
   try {
     const { traffic, ip, packet_data, network_slice } = req.body;
+    const io = req.app.get('io');
 
-    // Validate input
-    if (!Array.isArray(traffic) || !traffic.every(num => typeof num === 'number' && !isNaN(num))) {
-      return res.status(400).json({ error: 'Invalid traffic data: must be an array of numbers' });
-    }
-    if (!ip || !ip.match(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/)) {
-      return res.status(400).json({ error: 'Invalid IP address' });
+    // Ultra-fast validation
+    if (!Array.isArray(traffic) || !ip?.match(/^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/)) {
+      return res.status(400).json({ error: 'Invalid input data' });
     }
 
-    console.log(`🔄 Running COMBINED analysis for IP: ${encodeURIComponent(ip)}`);
-    
-    // Prepare request payload
-    const requestPayload = {
-      traffic,
-      ip_address: ip,
-      packet_data: packet_data || {},
-      network_slice: network_slice || 'eMBB'
-    };
+    // Check cache first
+    const cacheKey = `${ip}-${JSON.stringify(traffic.slice(-5))}`; // Cache based on IP and last 5 traffic points
+    const cached = responseCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return res.json({ ...cached.data, cached: true, response_time: Date.now() - startTime });
+    }
 
-    // Call local ML model and AbuseIPDB simultaneously
+    // ULTRA-FAST PARALLEL PROCESSING
     const [mlModelResult, abuseResult] = await Promise.allSettled([
-      // Local ML Model
-      axios.post(process.env.ML_MODEL_URL, requestPayload, { timeout: 5000 }),
-      
-      // AbuseIPDB
-      axios.get(process.env.ABUSEIPDB_URL, {
-        params: { ipAddress: ip, maxAgeInDays: 90 },
-        headers: {
-          Key: process.env.ABUSEIPDB_API_KEY,
-          Accept: 'application/json',
-        },
-        timeout: 5000,
+      mlClient.post('/predict', {
+        traffic,
+        ip_address: ip,
+        packet_data: packet_data || {},
+        network_slice: network_slice || 'eMBB'
+      }),
+      abuseClient.get('/check', {
+        params: { ipAddress: ip, maxAgeInDays: 90 }
       })
     ]);
 
@@ -64,6 +80,15 @@ const detectDDoSCombined = async (req, res) => {
     const bestResponse = selectBestResponse(mlResponse, abuseScore, traffic, ip, network_slice);
     
     console.log(`🎯 BEST MODEL SELECTED: ${bestResponse.selected_model} with confidence ${bestResponse.confidence}`);
+    
+    // Emit real-time detection result
+    if (io) {
+      io.emit('detection-result', {
+        ip,
+        result: bestResponse,
+        timestamp: new Date().toISOString()
+      });
+    }
     
     res.json(bestResponse);
   } catch (error) {

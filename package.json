@@ -1,0 +1,13 @@
+{
+  "name": "sentinelai-performance",
+  "version": "1.0.0",
+  "description": "Performance monitoring for SentinelAI",
+  "main": "performance-monitor.js",
+  "scripts": {
+    "test:performance": "node performance-monitor.js",
+    "test:continuous": "node performance-monitor.js --continuous"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

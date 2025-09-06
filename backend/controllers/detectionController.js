@@ -1,11 +1,35 @@
 const axios = require('axios');
 require('dotenv').config();
 
+// Optimized axios instances with connection pooling
+const mlClient = axios.create({
+  baseURL: process.env.ML_MODEL_URL?.replace('/predict', '') || 'http://localhost:5001',
+  timeout: 600,
+  headers: { 'Content-Type': 'application/json', 'Connection': 'keep-alive' },
+  httpAgent: new (require('http').Agent)({ keepAlive: true, maxSockets: 5 })
+});
+
+const abuseClient = axios.create({
+  baseURL: process.env.ABUSEIPDB_URL?.replace('/check', '') || 'https://api.abuseipdb.com/api/v2',
+  timeout: 400,
+  headers: { 
+    'Key': process.env.ABUSEIPDB_API_KEY,
+    'Accept': 'application/json',
+    'Connection': 'keep-alive'
+  },
+  httpsAgent: new (require('https').Agent)({ keepAlive: true, maxSockets: 3 })
+});
+
+// IP cache to avoid repeated AbuseIPDB calls
+const ipCache = new Map();
+const IP_CACHE_TTL = 300000;
+
 const detectDDoS = async (req, res) => {
+  const startTime = Date.now();
   try {
     const { traffic, ip, packet_data, network_slice } = req.body;
 
-    // Validate input
+    // Fast input validation
     if (!Array.isArray(traffic) || !traffic.every(num => typeof num === 'number' && !isNaN(num))) {
       return res.status(400).json({ error: 'Invalid traffic data: must be an array of numbers' });
     }
@@ -13,32 +37,45 @@ const detectDDoS = async (req, res) => {
       return res.status(400).json({ error: 'Invalid IP address' });
     }
 
-    // Log ML model URL for debugging
-    console.log(`🤖 Calling ML Model at: ${process.env.ML_MODEL_URL}`);
-    console.log(`🔍 Calling AbuseIPDB for IP: ${ip}`);
-
-    // STEP 1: Call ML model for traffic pattern analysis
-    let mlResponse = {};
-    try {
-      const mlPayload = {
+    // PARALLEL PROCESSING: Call both ML model and AbuseIPDB simultaneously
+    const [mlResponse, abuseResult] = await Promise.allSettled([
+      mlClient.post('/predict', {
         traffic,
         ip_address: ip,
         packet_data: packet_data || {},
         network_slice: network_slice || 'eMBB'
-      };
-      
-      const response = await axios.post(process.env.ML_MODEL_URL, mlPayload, { timeout: 5000 });
-      console.log('✅ ML model response received:', response.data.prediction);
-      mlResponse = response.data;
-    } catch (mlError) {
-      console.error(`❌ ML model error at ${process.env.ML_MODEL_URL}:`, mlError.message);
-      // Fallback response structure
-      mlResponse = {
+      }),
+      (async () => {
+        const cached = ipCache.get(ip);
+        if (cached && Date.now() - cached.timestamp < IP_CACHE_TTL) {
+          return cached.data;
+        }
+        
+        const response = await abuseClient.get('/check', {
+          params: { ipAddress: ip, maxAgeInDays: 90 }
+        });
+        
+        const result = {
+          score: response.data.data.abuseConfidenceScore || 0,
+          status: (response.data.data.abuseConfidenceScore || 0) > 25 ? 'suspicious' : 'clean'
+        };
+        
+        ipCache.set(ip, { data: result, timestamp: Date.now() });
+        return result;
+      })()
+    ]);
+
+    // Process ML response
+    let mlData = {};
+    if (mlResponse.status === 'fulfilled') {
+      mlData = mlResponse.value.data;
+    } else {
+      mlData = {
         prediction: 'normal',
         confidence: 0.5,
         threat_level: 'LOW',
         ddos_indicators: 0,
-        confidence_factors: ['ML model unavailable - using fallback analysis'],
+        confidence_factors: ['ML model unavailable'],
         network_analysis: {
           max_traffic: Math.max(...traffic),
           avg_traffic: traffic.reduce((a, b) => a + b, 0) / traffic.length,
@@ -47,37 +84,18 @@ const detectDDoS = async (req, res) => {
           burst_ratio: 1,
           packet_rate: packet_data?.packet_rate || 0
         },
-        slice_recommendation: {
-          action: 'NORMAL',
-          priority: 'LOW'
-        }
+        slice_recommendation: { action: 'NORMAL', priority: 'LOW' }
       };
-      console.warn('⚠️ Using fallback ML analysis');
     }
 
-    // STEP 2: Call AbuseIPDB for IP reputation analysis
-    let abuseScore = 0;
-    let abuseIPStatus = 'unknown';
-    try {
-      const abuseResponse = await axios.get(process.env.ABUSEIPDB_URL, {
-        params: { ipAddress: ip, maxAgeInDays: 90 },
-        headers: {
-          Key: process.env.ABUSEIPDB_API_KEY,
-          Accept: 'application/json',
-        },
-        timeout: 5000,
-      });
-      abuseScore = abuseResponse.data.data.abuseConfidenceScore || 0;
-      abuseIPStatus = abuseScore > 25 ? 'suspicious' : 'clean';
-      console.log(`✅ AbuseIPDB response: ${abuseScore}% confidence (${abuseIPStatus})`);
-    } catch (abuseError) {
-      console.error('❌ AbuseIPDB error:', abuseError.message);
-      abuseScore = 0;
-      abuseIPStatus = 'unavailable';
-      console.warn('⚠️ Continuing without AbuseIPDB data');
+    // Process AbuseIPDB response
+    let abuseScore = 0, abuseIPStatus = 'unknown';
+    if (abuseResult.status === 'fulfilled') {
+      abuseScore = abuseResult.value.score;
+      abuseIPStatus = abuseResult.value.status;
     }
 
-    // STEP 3: Combine both ML model and AbuseIPDB results for final decision
+    // FAST DECISION LOGIC: Combine results
     const mlPrediction = mlResponse.prediction || 'normal';
     const mlThreatDetected = mlPrediction === 'ddos';
     const ipThreatDetected = abuseScore > parseInt(process.env.ABUSE_SCORE_THRESHOLD, 10);

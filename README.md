@@ -75,6 +75,7 @@ Before running the project, ensure you have the following installed:
 - **Node.js** (v16 or higher) - [Download](https://nodejs.org/)
 - **Python** (v3.8 or higher) - [Download](https://python.org/)
 - **Git** - [Download](https://git-scm.com/)
+- **Wireshark** (optional, for real packet capture) - [Download](https://www.wireshark.org/download.html)
 
 ### Verify Installation
 ```bash
@@ -83,7 +84,16 @@ python --version
 git --version
 ```
 
-**Note**: Network capture dependencies (npcap, tshark, pyshark) have been removed. The system now uses simulation mode for demonstration purposes.
+### Optional: Verify Wireshark Installation
+```bash
+# Run the check script
+check-wireshark.bat
+
+# Or manually check
+tshark --version
+```
+
+**Note**: The system supports both real packet capture (via Wireshark/tshark) and simulation mode. Real capture requires Wireshark installation with npcap.
 
 ## Installation & Setup
 
@@ -252,9 +262,21 @@ npm run dev
 
 ## Using the System
 
-### Automatic Network Monitoring
-1. Click **"Start Simulation Monitor"** to begin simulated traffic capture
-2. The system will automatically:
+### Real Packet Capture (Recommended)
+1. Install Wireshark with npcap driver
+2. Run as Administrator (required for packet capture)
+3. Select an Ethernet or Wi-Fi IP address from the dropdown
+4. Click **"Start Network Monitor"** - system will attempt real capture first
+5. The system will:
+   - Capture live network traffic using Wireshark/tshark
+   - Analyze real packet flows and patterns
+   - Detect actual DDoS attacks and anomalies
+   - Apply real-time mitigation strategies
+
+### Simulation Mode (Fallback)
+1. If real capture fails, system automatically falls back to simulation
+2. Click **"Start Network Monitor"** to begin simulated traffic capture
+3. The system will automatically:
    - Generate realistic network traffic patterns
    - Simulate various attack scenarios
    - Run DDoS detection on suspicious activity
@@ -266,7 +288,9 @@ npm run dev
 3. Click **"Run Detection"** to analyze
 
 ### Features Available
-- **Simulated Traffic Monitoring**: Realistic network activity simulation
+- **Real Packet Capture**: Live network traffic analysis via Wireshark
+- **Ethernet/Wi-Fi Filtering**: Only monitors wired and wireless interfaces
+- **Simulated Traffic Monitoring**: Realistic network activity simulation (fallback)
 - **AI-Powered Detection**: Machine learning threat analysis
 - **5G Network Slices**: eMBB, URLLC, mMTC slice management
 - **Automatic Mitigation**: Threat response and network healing
@@ -328,21 +352,46 @@ npm install
 - Check for error messages in backend terminal
 - Ensure `.env` file exists in backend folder
 
+**❌ Real Packet Capture Issues**
+```bash
+# Check Wireshark installation
+check-wireshark.bat
+
+# Run as Administrator (required for packet capture)
+# Right-click Command Prompt -> "Run as administrator"
+
+# Check if npcap is installed
+# Should be installed with Wireshark
+```
+
+**❌ "Interface error" or "No such device"**
+- Ensure you're running as Administrator
+- Check that the selected IP is from Ethernet or Wi-Fi interface
+- Verify Wireshark is properly installed with npcap driver
+- Try selecting a different network interface
+
+**❌ "Permission denied" for packet capture**
+- Run the entire application as Administrator
+- Ensure npcap driver is properly installed
+- Check Windows Firewall settings
+
 ### Performance Notes
-- The system uses simulation mode for safe demonstration
-- No special network permissions or system dependencies required
+- **Real Capture Mode**: Analyzes live network traffic for accurate detection
+- **Simulation Mode**: Safe fallback when real capture is unavailable
+- **Interface Filtering**: Only Ethernet and Wi-Fi interfaces are monitored
 - ML models are pre-trained for immediate use
-- Simulation generates realistic traffic patterns for testing
+- Real capture requires Administrator privileges on Windows
 
 ## System Architecture
 
 ### Data Flow
-1. **Network Traffic** → Captured by monitoring system
-2. **Feature Extraction** → Traffic patterns analyzed
-3. **ML Detection** → AI models classify threats
-4. **API Integration** → AbuseIPDB reputation check
-5. **Mitigation Engine** → Automatic threat response
-6. **Dashboard** → Real-time visualization
+1. **Network Traffic** → Real capture via Wireshark/tshark or simulation
+2. **Interface Filtering** → Only Ethernet/Wi-Fi traffic processed
+3. **Feature Extraction** → Traffic patterns analyzed
+4. **ML Detection** → AI models classify threats
+5. **API Integration** → AbuseIPDB reputation check
+6. **Mitigation Engine** → Automatic threat response
+7. **Dashboard** → Real-time visualization
 
 ### Network Slices
 - **eMBB**: Enhanced Mobile Broadband

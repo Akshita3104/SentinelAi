@@ -1,15 +1,48 @@
 import axios from 'axios';
+import { io, Socket } from 'socket.io-client';
 
 // Backend API base URL
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const WEBSOCKET_URL = 'http://localhost:3000';
 
-// Create axios instance with default config
+// WebSocket connection
+let socket: Socket | null = null;
+
+export const initializeWebSocket = () => {
+  if (!socket) {
+    socket = io(WEBSOCKET_URL, {
+      transports: ['polling', 'websocket'], // Use polling first, then websocket
+      timeout: 5000,
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
+      forceNew: false
+    });
+    
+    socket.on('connect', () => {
+      console.log('WebSocket connected');
+    });
+    
+    socket.on('disconnect', () => {
+      console.log('WebSocket disconnected');
+    });
+    
+    socket.on('connect_error', (error) => {
+      console.log('WebSocket connection failed:', error.message);
+    });
+  }
+  return socket;
+};
+
+export const getSocket = () => socket;
+
+// Optimized axios instance
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 800,
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 // Types for API requests and responses
@@ -116,6 +149,17 @@ export const apiService = {
     } catch (error) {
       console.error('Failed to stop packet capture:', error);
       throw error;
+    }
+  },
+
+  // Get capture status
+  async getCaptureStatus(): Promise<any> {
+    try {
+      const response = await apiClient.get('/capture-status');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get capture status:', error);
+      return { isCapturing: false, mode: 'idle' };
     }
   },
 
