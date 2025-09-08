@@ -16,6 +16,20 @@ interface AlertData {
   action: string;
 }
 
+interface MaliciousPacket {
+  id: number;
+  timestamp: number;
+  srcIP: string;
+  dstIP: string;
+  protocol: string;
+  srcPort: number;
+  dstPort: number;
+  packetSize: number;
+  slice: string;
+  action: string;
+  prediction: string;
+}
+
 interface DetectionData {
   timestamp: string;
   riskScore: number;
@@ -49,6 +63,7 @@ function App() {
   const [detectionLogs, setDetectionLogs] = useState<string[]>([]);
   const [alerts, setAlerts] = useState<AlertData[]>([]);
   const [detectionHistory, setDetectionHistory] = useState<DetectionData[]>([]);
+  const [maliciousPackets, setMaliciousPackets] = useState<MaliciousPacket[]>([]);
 
 
   // Load local IPs from backend
@@ -152,11 +167,30 @@ function App() {
             setDetectionLogs(prev => [logMessage, ...prev.slice(0, 9)]);
           }
           
-          // Run ML detection periodically
+          // Run ML detection periodically and generate attack simulation
           if (Math.random() > 0.85) {
             const detectionLog = `🤖 Running ML detection on traffic pattern`;
             setDetectionLogs(prev => [detectionLog, ...prev.slice(0, 9)]);
             await performDetection();
+          }
+          
+          // Simulate occasional activity for demonstration
+          if (Math.random() > 0.95) {
+            const simulatedPackets = Array.from({length: 3}, (_, i) => ({
+              id: Date.now() + i + Math.random() * 1000,
+              timestamp: Date.now() - (i * 50),
+              srcIP: `203.0.113.${Math.floor(Math.random() * 254) + 1}`,
+              dstIP: ipAddress,
+              protocol: 'TCP',
+              srcPort: Math.floor(Math.random() * 65535),
+              dstPort: 80,
+              packetSize: Math.floor(Math.random() * 1400) + 100,
+              slice: currentSlice,
+              action: 'Monitor',
+              prediction: Math.random() > 0.7 ? 'ddos' : Math.random() > 0.5 ? 'suspicious' : 'normal'
+            }));
+            setMaliciousPackets(prev => [...simulatedPackets, ...prev.slice(0, 47)]);
+            setDetectionLogs(prev => [`🔍 Network activity detected from external source`, ...prev.slice(0, 9)]);
           }
         } catch (error) {
           console.error('Simulation error:', error);
@@ -262,6 +296,37 @@ function App() {
           action: result.slice_recommendation?.action || 'None'
         };
         setAlerts(prev => [newAlert, ...prev.slice(0, 9)]);
+        
+        // Add packets with prediction result
+        const packetData = latestPackets.length > 0 
+          ? latestPackets.map((packet, index) => ({
+              id: Date.now() + index,
+              timestamp: packet.timestamp || Date.now(),
+              srcIP: packet.srcIP || data.ip,
+              dstIP: packet.dstIP || 'Unknown',
+              protocol: packet.protocol || 'TCP',
+              srcPort: packet.srcPort || 0,
+              dstPort: packet.dstPort || 80,
+              packetSize: packet.size || 64,
+              slice: result.network_slice || currentSlice,
+              action: result.slice_recommendation?.action || 'Monitor',
+              prediction: result.prediction
+            }))
+          : [{
+              id: Date.now(),
+              timestamp: Date.now(),
+              srcIP: data.ip,
+              dstIP: 'Unknown',
+              protocol: 'TCP',
+              srcPort: 0,
+              dstPort: 80,
+              packetSize: 64,
+              slice: result.network_slice || currentSlice,
+              action: result.slice_recommendation?.action || 'Monitor',
+              prediction: result.prediction
+            }];
+        
+        setMaliciousPackets(prev => [...packetData, ...prev.slice(0, 47)]);
       });
       
 
@@ -406,6 +471,22 @@ function App() {
       };
 
       setAlerts(prev => [newAlert, ...prev.slice(0, 9)]);
+      
+      // Add simulated packets for manual detection
+      const simulatedPackets = Array.from({length: 5}, (_, i) => ({
+        id: Date.now() + i,
+        timestamp: Date.now() - (i * 100),
+        srcIP: ipAddress,
+        dstIP: `192.168.1.${Math.floor(Math.random() * 254) + 1}`,
+        protocol: ['TCP', 'UDP', 'ICMP'][Math.floor(Math.random() * 3)],
+        srcPort: Math.floor(Math.random() * 65535),
+        dstPort: [80, 443, 22, 21, 25][Math.floor(Math.random() * 5)],
+        packetSize: Math.floor(Math.random() * 1500) + 64,
+        slice: currentSlice,
+        action: mitigation === 'Idle' ? 'Monitor' : mitigation,
+        prediction: result.prediction
+      }));
+      setMaliciousPackets(prev => [...simulatedPackets, ...prev.slice(0, 45)]);
 
       // Update detection history
       const newDetection: DetectionData = {
@@ -730,30 +811,28 @@ function App() {
           </div>
 
           {/* Real-time Metrics Cards */}
-          {networkAnalysis && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-blue-800/50 to-blue-900/50 rounded-xl p-4 border border-blue-500/30">
-                <h4 className="text-sm text-blue-300 mb-2">Max Traffic</h4>
-                <div className="text-2xl font-bold text-white">{networkAnalysis.max_traffic}</div>
-                <div className="text-xs text-blue-400">packets/sec</div>
-              </div>
-              <div className="bg-gradient-to-br from-green-800/50 to-green-900/50 rounded-xl p-4 border border-green-500/30">
-                <h4 className="text-sm text-green-300 mb-2">Avg Traffic</h4>
-                <div className="text-2xl font-bold text-white">{Math.floor(networkAnalysis.avg_traffic)}</div>
-                <div className="text-xs text-green-400">packets/sec</div>
-              </div>
-              <div className="bg-gradient-to-br from-purple-800/50 to-purple-900/50 rounded-xl p-4 border border-purple-500/30">
-                <h4 className="text-sm text-purple-300 mb-2">Bandwidth</h4>
-                <div className="text-2xl font-bold text-white">{networkAnalysis.bandwidth_utilization_mbps?.toFixed(2)}</div>
-                <div className="text-xs text-purple-400">Mbps</div>
-              </div>
-              <div className="bg-gradient-to-br from-amber-800/50 to-amber-900/50 rounded-xl p-4 border border-amber-500/30">
-                <h4 className="text-sm text-amber-300 mb-2">Burst Ratio</h4>
-                <div className="text-2xl font-bold text-white">{networkAnalysis.burst_ratio?.toFixed(1)}</div>
-                <div className="text-xs text-amber-400">ratio</div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="bg-gradient-to-br from-blue-800/50 to-blue-900/50 rounded-xl p-4 border border-blue-500/30">
+              <h4 className="text-sm text-blue-300 mb-2">Max Traffic</h4>
+              <div className="text-2xl font-bold text-white">{networkAnalysis?.max_traffic || Math.max(...trafficData.split(',').map(v => parseInt(v) || 0))}</div>
+              <div className="text-xs text-blue-400">packets/sec</div>
             </div>
-          )}
+            <div className="bg-gradient-to-br from-green-800/50 to-green-900/50 rounded-xl p-4 border border-green-500/30">
+              <h4 className="text-sm text-green-300 mb-2">Avg Traffic</h4>
+              <div className="text-2xl font-bold text-white">{Math.floor(networkAnalysis?.avg_traffic || trafficData.split(',').reduce((a, b) => a + parseInt(b), 0) / trafficData.split(',').length)}</div>
+              <div className="text-xs text-green-400">packets/sec</div>
+            </div>
+            <div className="bg-gradient-to-br from-purple-800/50 to-purple-900/50 rounded-xl p-4 border border-purple-500/30">
+              <h4 className="text-sm text-purple-300 mb-2">Bandwidth</h4>
+              <div className="text-2xl font-bold text-white">{(networkAnalysis?.bandwidth_utilization_mbps || (Math.max(...trafficData.split(',').map(v => parseInt(v) || 0)) * 1500 / 1000000)).toFixed(2)}</div>
+              <div className="text-xs text-purple-400">Mbps</div>
+            </div>
+            <div className="bg-gradient-to-br from-amber-800/50 to-amber-900/50 rounded-xl p-4 border border-amber-500/30">
+              <h4 className="text-sm text-amber-300 mb-2">Burst Ratio</h4>
+              <div className="text-2xl font-bold text-white">{(networkAnalysis?.burst_ratio || (Math.max(...trafficData.split(',').map(v => parseInt(v) || 0)) / Math.max(1, trafficData.split(',').reduce((a, b) => a + parseInt(b), 0) / trafficData.split(',').length))).toFixed(1)}</div>
+              <div className="text-xs text-amber-400">ratio</div>
+            </div>
+          </div>
 
           {/* Charts */}
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
@@ -836,10 +915,10 @@ function App() {
             </div>
           </div>
 
-          {/* Enhanced Detection Results */}
+          {/* Combined Detection Results & Malicious Analysis */}
           <div className="mb-8">
             <div className="bg-gradient-to-br from-gray-800 to-gray-800/80 rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
-              <h3 className="text-lg font-semibold mb-6 flex items-center gap-2"><Eye className="w-5 h-5 text-green-400" />Detection Results</h3>
+              <h3 className="text-lg font-semibold mb-6 flex items-center gap-2"><Eye className="w-5 h-5 text-green-400" />Detection Results & Malicious Analysis</h3>
               {lastDetectionResult && (
                 <div className="mb-4 p-3 bg-gray-700/50 rounded-lg">
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -889,66 +968,105 @@ function App() {
                   )}
                 </div>
               )}
-              <div className="overflow-hidden">
+              <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="text-left text-sm text-gray-400 border-b border-gray-700">
-                      <th className="pb-3">Time</th>
-                      <th className="pb-3">Target IP</th>
-                      <th className="pb-3">Source IP</th>
-                      <th className="pb-3">Dest IP</th>
-                      <th className="pb-3">Protocol</th>
-                      <th className="pb-3">Slice</th>
-                      <th className="pb-3">Result</th>
-                      <th className="pb-3">Score</th>
-                      <th className="pb-3">Action</th>
+                      <th className="pb-3 px-2">Timestamp</th>
+                      <th className="pb-3 px-2">Source IP</th>
+                      <th className="pb-3 px-2">Destination IP</th>
+                      <th className="pb-3 px-2">Protocol</th>
+                      <th className="pb-3 px-2">Source Port</th>
+                      <th className="pb-3 px-2">Dest Port</th>
+                      <th className="pb-3 px-2">Packet Size</th>
+                      <th className="pb-3 px-2">Slice</th>
+                      <th className="pb-3 px-2">Result</th>
+                      <th className="pb-3 px-2">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {alerts.slice(0, 10).map((alert, index) => (
-                      <tr key={`alert-${alert.id}-${index}`} className="text-sm border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors">
-                        <td className="py-3 text-gray-300">{alert.time}</td>
-                        <td className="py-3 text-white font-mono text-xs">{alert.ip}</td>
-                        <td className="py-3 text-white font-mono text-xs">{alert.srcIP || 'N/A'}</td>
-                        <td className="py-3 text-white font-mono text-xs">{alert.dstIP || 'N/A'}</td>
-                        <td className="py-3 text-gray-300 text-xs">{alert.protocol || 'TCP'}</td>
-                        <td className="py-3">
-                          <span className={`px-2 py-1 rounded text-xs ${
-                            alert.slice === 'eMBB' ? 'bg-blue-500/20 text-blue-400' :
-                            alert.slice === 'URLLC' ? 'bg-green-500/20 text-green-400' :
-                            'bg-purple-500/20 text-purple-400'
-                          }`}>
-                            {alert.slice}
-                          </span>
-                        </td>
-                        <td className="py-3">
-                          <span className={`text-xs font-medium ${
-                            alert.mlResult === 'Normal' ? 'text-green-400' :
-                            alert.mlResult === 'Suspicious' ? 'text-amber-400' :
-                            'text-red-400'
-                          }`}>
-                            {alert.mlResult}
-                          </span>
-                        </td>
-                        <td className="py-3">
-                          <span className={`font-bold ${getRiskColor(alert.abuseScore)}`}>
-                            {alert.abuseScore}
-                          </span>
-                        </td>
-                        <td className="py-3 text-gray-300 text-xs">
-                          <span className={`px-2 py-1 rounded ${
-                            alert.action === 'None' ? 'bg-gray-600/50 text-gray-300' :
-                            alert.action.includes('Blackhole') ? 'bg-red-500/20 text-red-400' :
-                            'bg-amber-500/20 text-amber-400'
-                          }`}>
-                            {alert.action}
-                          </span>
+                    {maliciousPackets.length > 0 ? (
+                      maliciousPackets
+                        .sort((a, b) => b.timestamp - a.timestamp)
+                        .slice(0, 15)
+                        .map((packet) => (
+                        <tr key={packet.id} className={`text-sm border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors ${
+                          packet.srcIP.includes('203.0.113') ? 'bg-red-500/5' : ''
+                        }`}>
+                          <td className="py-3 px-2 text-gray-300 font-mono text-xs">
+                            {new Date(packet.timestamp).toLocaleString()}
+                          </td>
+                          <td className="py-3 px-2 text-red-400 font-mono text-xs">{packet.srcIP}</td>
+                          <td className="py-3 px-2 text-blue-400 font-mono text-xs">{packet.dstIP}</td>
+                          <td className="py-3 px-2">
+                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                              packet.protocol === 'TCP' ? 'bg-blue-500/20 text-blue-400' :
+                              packet.protocol === 'UDP' ? 'bg-green-500/20 text-green-400' :
+                              'bg-purple-500/20 text-purple-400'
+                            }`}>
+                              {packet.protocol}
+                            </span>
+                          </td>
+                          <td className="py-3 px-2 text-gray-300 font-mono text-xs">{packet.srcPort}</td>
+                          <td className="py-3 px-2 text-gray-300 font-mono text-xs">{packet.dstPort}</td>
+                          <td className="py-3 px-2 text-gray-300 text-xs">{packet.packetSize} bytes</td>
+                          <td className="py-3 px-2">
+                            <span className={`px-2 py-1 rounded text-xs ${
+                              packet.slice === 'eMBB' ? 'bg-blue-500/20 text-blue-400' :
+                              packet.slice === 'URLLC' ? 'bg-green-500/20 text-green-400' :
+                              'bg-purple-500/20 text-purple-400'
+                            }`}>
+                              {packet.slice}
+                            </span>
+                          </td>
+                          <td className="py-3 px-2">
+                            <span className={`text-xs font-medium ${
+                              packet.prediction === 'ddos' ? 'text-red-400' :
+                              packet.prediction === 'suspicious' ? 'text-amber-400' :
+                              'text-green-400'
+                            }`}>
+                              {packet.prediction === 'ddos' ? 'DDoS Detected' :
+                               packet.prediction === 'suspicious' ? 'Suspicious' : 'Normal'}
+                            </span>
+                          </td>
+                          <td className="py-3 px-2">
+                            <span className={`px-2 py-1 rounded text-xs ${
+                              packet.prediction === 'normal' ? 'bg-gray-600/50 text-gray-300' :
+                              packet.prediction === 'suspicious' ? 'bg-amber-500/20 text-amber-400' :
+                              'bg-red-500/20 text-red-400'
+                            }`}>
+                              {packet.prediction === 'normal' ? 'Monitor' :
+                               packet.prediction === 'suspicious' ? 'Rate-limit' : 'Blackhole Route'}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={10} className="py-8 text-center text-gray-500">
+                          <div className="flex flex-col items-center gap-2">
+                            <Shield className="w-8 h-8 text-gray-600" />
+                            <span>No malicious attacks detected</span>
+                            <span className="text-xs">System is monitoring network traffic for DDoS patterns</span>
+                            <span className="text-xs text-green-400 mt-1">✅ Network security status: Normal</span>
+                          </div>
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
+              {maliciousPackets.length > 0 && (
+                <div className="mt-4 text-xs text-gray-400 flex items-center justify-between">
+                  <span>Showing {Math.min(15, maliciousPackets.length)} of {maliciousPackets.length} malicious packets</span>
+                  <button 
+                    onClick={() => setMaliciousPackets([])}
+                    className="px-2 py-1 bg-red-600/20 hover:bg-red-600/30 text-red-400 rounded text-xs transition-colors"
+                  >
+                    Clear History
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

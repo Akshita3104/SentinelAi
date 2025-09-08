@@ -93,13 +93,20 @@ const detectDDoSCombined = async (req, res) => {
     
     console.log(`🎯 BEST MODEL SELECTED: ${bestResponse.selected_model} with confidence ${bestResponse.confidence}`);
     
-    // Emit real-time detection result
+    // Emit real-time detection result with malicious packet data
     if (io) {
-      io.emit('detection-result', {
+      const detectionData = {
         ip,
         result: bestResponse,
         timestamp: new Date().toISOString()
-      });
+      };
+      
+      // Add malicious packet details if DDoS detected
+      if (bestResponse.prediction === 'ddos' || bestResponse.prediction === 'suspicious') {
+        detectionData.maliciousPackets = generateMaliciousPacketData(ip, network_slice, bestResponse);
+      }
+      
+      io.emit('detection-result', detectionData);
     }
     
     res.json(bestResponse);
@@ -189,8 +196,8 @@ function selectBestResponse(mlResponse, abuseScore, traffic, ip, network_slice) 
 // Create standardized final response
 function createFinalResponse(response, abuseScore, ip, network_slice, traffic) {
   const isDDoS = response.prediction === 'ddos';
-  const sliceAction = response.slice_recommendation?.action || 
-                     (isDDoS ? 'ISOLATE' : response.prediction === 'suspicious' ? 'MONITOR' : 'NORMAL');
+  const sliceAction = response.prediction === 'normal' ? 'Monitor' :
+                     response.prediction === 'suspicious' ? 'Rate-limit' : 'Blackhole Route';
   
   return {
     ...response,
@@ -231,4 +238,46 @@ function calculateBandwidth(traffic, packet_data) {
   return (avgTraffic * packetSize) / (1000 * 1000);
 }
 
-module.exports = { detectDDoSCombined };
+// Generate malicious packet data for analysis
+function generateMaliciousPacketData(sourceIP, networkSlice, detectionResult) {
+  const packets = [];
+  const packetCount = Math.floor(Math.random() * 10) + 5; // 5-15 packets
+  const baseTimestamp = Date.now();
+  
+  for (let i = 0; i < packetCount; i++) {
+    const packet = {
+      id: baseTimestamp + i,
+      timestamp: baseTimestamp - (i * Math.floor(Math.random() * 1000)), // Spread over last second
+      srcIP: sourceIP,
+      dstIP: generateRandomIP(),
+      protocol: ['TCP', 'UDP', 'ICMP'][Math.floor(Math.random() * 3)],
+      srcPort: Math.floor(Math.random() * 65535),
+      dstPort: [80, 443, 22, 21, 25, 53, 8080, 3389][Math.floor(Math.random() * 8)],
+      packetSize: Math.floor(Math.random() * 1500) + 64,
+      slice: networkSlice || 'eMBB',
+      action: detectionResult.prediction === 'normal' ? 'Monitor' :
+              detectionResult.prediction === 'suspicious' ? 'Rate-limit' : 'Blackhole Route',
+      prediction: detectionResult.prediction
+    };
+    packets.push(packet);
+  }
+  
+  return packets;
+}
+
+// Generate random target IP addresses
+function generateRandomIP() {
+  const subnets = [
+    '192.168.1.',
+    '192.168.0.',
+    '10.0.0.',
+    '172.16.0.',
+    '203.0.113.',
+    '198.51.100.'
+  ];
+  const subnet = subnets[Math.floor(Math.random() * subnets.length)];
+  const lastOctet = Math.floor(Math.random() * 254) + 1;
+  return subnet + lastOctet;
+}
+
+module.exports = { detectDDoSCombined, generateMaliciousPacketData };

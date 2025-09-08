@@ -10031,3 +10031,101 @@ NameError: name 'ml_engine' is not defined
 2025-09-07 02:23:19,567 INFO: 127.0.0.1 - - [07/Sep/2025 02:23:19] "POST /predict HTTP/1.1" 200 -
 2025-09-07 02:23:20,560 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.95)
 2025-09-07 02:23:20,561 INFO: 127.0.0.1 - - [07/Sep/2025 02:23:20] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:34:40,346 INFO: ML Engine initialized successfully
+2025-09-08 21:34:40,346 INFO: Starting Flask API server on port 5001
+2025-09-08 21:34:40,421 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-09-08 21:34:40,425 INFO: [33mPress CTRL+C to quit[0m
+2025-09-08 21:35:28,194 INFO: Initializing default models
+2025-09-08 21:35:31,667 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (1.00)
+2025-09-08 21:35:31,814 INFO: 127.0.0.1 - - [08/Sep/2025 21:35:31] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:35:32,043 INFO: Default models initialized with fitted scaler
+2025-09-08 21:35:32,269 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 21:35:32,294 INFO: 127.0.0.1 - - [08/Sep/2025 21:35:32] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:35:37,126 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 21:35:37,133 INFO: 127.0.0.1 - - [08/Sep/2025 21:35:37] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:35:49,142 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 21:35:49,175 INFO: 127.0.0.1 - - [08/Sep/2025 21:35:49] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:39:42,620 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.95)
+2025-09-08 21:39:42,625 INFO: 127.0.0.1 - - [08/Sep/2025 21:39:42] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:39:44,457 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.95)
+2025-09-08 21:39:44,460 INFO: 127.0.0.1 - - [08/Sep/2025 21:39:44] "POST /predict HTTP/1.1" 200 -
+2025-09-08 21:39:47,466 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.95)
+2025-09-08 21:39:47,471 INFO: 127.0.0.1 - - [08/Sep/2025 21:39:47] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:01:26,393 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:01:26,396 INFO: 127.0.0.1 - - [08/Sep/2025 22:01:26] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:01:35,370 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:01:35,372 INFO: 127.0.0.1 - - [08/Sep/2025 22:01:35] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:01:42,872 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:01:42,874 INFO: 127.0.0.1 - - [08/Sep/2025 22:01:42] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:01:56,871 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:01:56,873 INFO: 127.0.0.1 - - [08/Sep/2025 22:01:56] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:01:59,360 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:01:59,360 INFO: 127.0.0.1 - - [08/Sep/2025 22:01:59] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:02:01,862 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:02:01,863 INFO: 127.0.0.1 - - [08/Sep/2025 22:02:01] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:02:06,367 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:02:06,368 INFO: 127.0.0.1 - - [08/Sep/2025 22:02:06] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:02:07,936 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:02:07,943 INFO: 127.0.0.1 - - [08/Sep/2025 22:02:07] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:02:10,916 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:02:10,918 INFO: 127.0.0.1 - - [08/Sep/2025 22:02:10] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:02:11,358 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:02:11,359 INFO: 127.0.0.1 - - [08/Sep/2025 22:02:11] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:29,156 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:06:29,157 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:29] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:31,313 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:06:31,317 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:31] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:35,090 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:06:35,091 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:35] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:36,288 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:06:36,289 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:36] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:36,324 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:06:36,326 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:36] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:42,206 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:06:42,207 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:42] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:42,345 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:06:42,348 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:42] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:48,327 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:06:48,328 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:48] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:49,957 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:06:49,958 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:49] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:54,469 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:06:54,470 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:54] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:06:54,820 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:06:54,821 INFO: 127.0.0.1 - - [08/Sep/2025 22:06:54] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:03,974 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:03,975 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:03] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:12,127 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.93)
+2025-09-08 22:09:12,128 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:12] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:15,990 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:15,991 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:15] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:16,488 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:16,489 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:16] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:18,549 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:18,550 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:18] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:20,489 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:20,490 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:20] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:22,471 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:22,472 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:22] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:23,473 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:23,473 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:23] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:09:24,489 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:09:24,490 INFO: 127.0.0.1 - - [08/Sep/2025 22:09:24] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:16:36,101 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:16:36,102 INFO: 127.0.0.1 - - [08/Sep/2025 22:16:36] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:16:39,593 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:16:39,594 INFO: 127.0.0.1 - - [08/Sep/2025 22:16:39] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:16:45,098 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.83)
+2025-09-08 22:16:45,099 INFO: 127.0.0.1 - - [08/Sep/2025 22:16:45] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:24:09,219 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:24:09,219 INFO: 127.0.0.1 - - [08/Sep/2025 22:24:09] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:24:09,718 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:24:09,719 INFO: 127.0.0.1 - - [08/Sep/2025 22:24:09] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:24:11,928 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:24:11,929 INFO: 127.0.0.1 - - [08/Sep/2025 22:24:11] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:24:17,719 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:24:17,720 INFO: 127.0.0.1 - - [08/Sep/2025 22:24:17] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:24:19,220 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
+2025-09-08 22:24:19,222 INFO: 127.0.0.1 - - [08/Sep/2025 22:24:19] "POST /predict HTTP/1.1" 200 -
+2025-09-08 22:24:58,515 INFO: Flask server has stopped
