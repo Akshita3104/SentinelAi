@@ -7164,3 +7164,614 @@ TypeError: handle_websocket() missing 1 required positional argument: 'path'
 2025-09-03 18:32:59,563 - websockets.server - INFO - server closing
 2025-09-03 18:32:59,564 - websockets.server - INFO - server closed
 2025-09-03 18:32:59,565 - sentinelai.backend - INFO - Server stopped
+2025-09-03 21:39:06,459 - websockets.server - INFO - connection open
+2025-09-03 21:39:06,467 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53725) on path: /
+2025-09-03 21:39:06,469 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 1
+2025-09-03 21:39:09,349 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 21:39:22,970 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 0
+2025-09-03 21:39:23,287 - websockets.server - INFO - connection open
+2025-09-03 21:39:23,288 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53753) on path: /
+2025-09-03 21:39:23,290 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 1
+2025-09-03 21:39:23,403 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 21:39:23,610 - websockets.server - INFO - connection open
+2025-09-03 21:39:23,612 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53755) on path: /
+2025-09-03 21:39:23,613 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 2
+2025-09-03 21:39:39,269 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-03 21:39:39,270 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-03 21:39:39,271 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-03 21:39:39,271 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-03 21:39:39,326 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-03 21:39:39,326 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.2
+2025-09-03 21:39:39,326 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.2
+2025-09-03 21:39:39,326 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-03 21:41:00,052 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 1
+2025-09-03 21:41:00,394 - websockets.server - INFO - connection open
+2025-09-03 21:41:00,395 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53897) on path: /
+2025-09-03 21:41:00,396 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 2
+2025-09-03 21:41:00,445 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 21:41:00,710 - websockets.server - INFO - connection open
+2025-09-03 21:41:00,711 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53901) on path: /
+2025-09-03 21:41:00,712 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 3
+2025-09-03 21:41:39,687 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 2
+2025-09-03 21:41:40,033 - websockets.server - INFO - connection open
+2025-09-03 21:41:40,034 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53972) on path: /
+2025-09-03 21:41:40,034 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 3
+2025-09-03 21:41:40,091 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 21:41:40,347 - websockets.server - INFO - connection open
+2025-09-03 21:41:40,347 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 53974) on path: /
+2025-09-03 21:41:40,347 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 4
+2025-09-03 21:51:51,781 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 3
+2025-09-03 21:51:52,152 - websockets.server - INFO - connection open
+2025-09-03 21:51:52,153 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 55246) on path: /
+2025-09-03 21:51:52,156 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 4
+2025-09-03 21:51:52,332 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 21:51:52,482 - websockets.server - INFO - connection open
+2025-09-03 21:51:52,482 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 55250) on path: /
+2025-09-03 21:51:52,485 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 5
+2025-09-03 21:54:59,241 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 4
+2025-09-03 21:54:59,595 - websockets.server - INFO - connection open
+2025-09-03 21:54:59,597 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 55504) on path: /
+2025-09-03 21:54:59,597 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 5
+2025-09-03 21:54:59,732 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-03 21:54:59,913 - websockets.server - INFO - connection open
+2025-09-03 21:54:59,914 - sentinelai.backend - INFO - New WebSocket connection from ('127.0.0.1', 55508) on path: /
+2025-09-03 21:54:59,916 - sentinelai.backend - INFO - New WebSocket connection. Total clients: 6
+2025-09-03 21:55:11,442 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 5
+2025-09-03 21:55:11,448 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 4
+2025-09-03 21:55:11,450 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 3
+2025-09-03 21:55:11,453 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 2
+2025-09-03 21:55:11,454 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 1
+2025-09-03 21:55:11,454 - sentinelai.backend - INFO - WebSocket disconnected. Remaining clients: 0
+2025-09-08 19:34:56,912 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 19:34:56,915 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 19:34:56,915 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 19:34:56,915 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 19:34:56,938 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 19:34:56,939 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 19:34:56,939 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 19:34:56,939 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 19:34:57,206 - websockets.server - INFO - connection open
+2025-09-08 19:34:57,207 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:61532 on path: /
+2025-09-08 19:34:57,207 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61532 connected. Total clients: 1
+2025-09-08 19:34:57,236 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:35:18,548 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:61532: code=1005, reason=
+2025-09-08 19:35:18,549 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61532 disconnected. Remaining clients: 0
+2025-09-08 19:35:18,860 - websockets.server - INFO - connection open
+2025-09-08 19:35:18,863 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:61565 on path: /
+2025-09-08 19:35:18,865 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61565 connected. Total clients: 1
+2025-09-08 19:35:18,935 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:35:19,186 - websockets.server - INFO - connection open
+2025-09-08 19:35:19,187 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:61568 on path: /
+2025-09-08 19:35:19,188 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61568 connected. Total clients: 2
+2025-09-08 19:36:31,959 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:61565: code=1005, reason=
+2025-09-08 19:36:31,960 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61565 disconnected. Remaining clients: 1
+2025-09-08 19:36:31,962 - sentinelai.backend - ERROR - Error broadcasting to client: received 1005 (no status received [internal]); then sent 1005 (no status received [internal])
+2025-09-08 19:36:31,962 - sentinelai.backend - ERROR - Error in periodic updates: <websockets.asyncio.server.ServerConnection object at 0x00000262D34C16A0>
+2025-09-08 19:36:32,278 - websockets.server - INFO - connection open
+2025-09-08 19:36:32,280 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:61709 on path: /
+2025-09-08 19:36:32,287 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61709 connected. Total clients: 2
+2025-09-08 19:36:32,434 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:36:32,607 - websockets.server - INFO - connection open
+2025-09-08 19:36:32,608 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:61711 on path: /
+2025-09-08 19:36:32,608 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61711 connected. Total clients: 3
+2025-09-08 19:44:54,762 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:61568: code=1001, reason=
+2025-09-08 19:44:54,762 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61568 disconnected. Remaining clients: 2
+2025-09-08 19:44:54,762 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:61709: code=1001, reason=
+2025-09-08 19:44:54,762 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61709 disconnected. Remaining clients: 1
+2025-09-08 19:44:54,764 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:61711: code=1001, reason=
+2025-09-08 19:44:54,764 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:61711 disconnected. Remaining clients: 0
+2025-09-08 19:44:56,238 - websockets.server - INFO - connection open
+2025-09-08 19:44:56,239 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:62675 on path: /
+2025-09-08 19:44:56,240 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62675 connected. Total clients: 1
+2025-09-08 19:44:57,260 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:62675: code=1001, reason=
+2025-09-08 19:44:57,261 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62675 disconnected. Remaining clients: 0
+2025-09-08 19:44:57,555 - websockets.server - INFO - connection open
+2025-09-08 19:44:57,555 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:62681 on path: /
+2025-09-08 19:44:57,556 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62681 connected. Total clients: 1
+2025-09-08 19:44:57,734 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:44:58,045 - websockets.server - INFO - connection open
+2025-09-08 19:44:58,046 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:62686 on path: /
+2025-09-08 19:44:58,046 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62686 connected. Total clients: 2
+2025-09-08 19:47:18,307 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:62686: code=1001, reason=
+2025-09-08 19:47:18,307 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62686 disconnected. Remaining clients: 1
+2025-09-08 19:47:18,308 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:62681: code=1001, reason=
+2025-09-08 19:47:18,308 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62681 disconnected. Remaining clients: 0
+2025-09-08 19:47:22,619 - websockets.server - INFO - connection open
+2025-09-08 19:47:22,619 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:62946 on path: /
+2025-09-08 19:47:22,619 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62946 connected. Total clients: 1
+2025-09-08 19:47:22,992 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:47:24,149 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:62946: code=1005, reason=
+2025-09-08 19:47:24,153 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62946 disconnected. Remaining clients: 0
+2025-09-08 19:47:24,463 - websockets.server - INFO - connection open
+2025-09-08 19:47:24,466 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:62956 on path: /
+2025-09-08 19:47:24,468 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62956 connected. Total clients: 1
+2025-09-08 19:47:24,635 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:47:24,784 - websockets.server - INFO - connection open
+2025-09-08 19:47:24,787 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:62959 on path: /
+2025-09-08 19:47:24,790 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62959 connected. Total clients: 2
+2025-09-08 19:49:42,230 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:62956: code=1001, reason=
+2025-09-08 19:49:42,232 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62956 disconnected. Remaining clients: 1
+2025-09-08 19:49:42,232 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:62959: code=1001, reason=
+2025-09-08 19:49:42,232 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:62959 disconnected. Remaining clients: 0
+2025-09-08 19:49:43,759 - websockets.server - INFO - connection open
+2025-09-08 19:49:43,760 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63266 on path: /
+2025-09-08 19:49:43,760 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63266 connected. Total clients: 1
+2025-09-08 19:49:44,843 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63266: code=1001, reason=
+2025-09-08 19:49:44,844 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63266 disconnected. Remaining clients: 0
+2025-09-08 19:49:45,135 - websockets.server - INFO - connection open
+2025-09-08 19:49:45,139 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63273 on path: /
+2025-09-08 19:49:45,142 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63273 connected. Total clients: 1
+2025-09-08 19:49:45,478 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:49:45,798 - websockets.server - INFO - connection open
+2025-09-08 19:49:45,799 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63278 on path: /
+2025-09-08 19:49:45,800 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63278 connected. Total clients: 2
+2025-09-08 19:50:19,836 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63273: code=1001, reason=
+2025-09-08 19:50:19,837 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63273 disconnected. Remaining clients: 1
+2025-09-08 19:50:19,837 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63278: code=1001, reason=
+2025-09-08 19:50:19,838 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63278 disconnected. Remaining clients: 0
+2025-09-08 19:50:21,864 - websockets.server - INFO - connection open
+2025-09-08 19:50:21,865 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63355 on path: /
+2025-09-08 19:50:21,865 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63355 connected. Total clients: 1
+2025-09-08 19:50:22,864 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63355: code=1001, reason=
+2025-09-08 19:50:22,865 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63355 disconnected. Remaining clients: 0
+2025-09-08 19:50:23,160 - websockets.server - INFO - connection open
+2025-09-08 19:50:23,162 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63359 on path: /
+2025-09-08 19:50:23,162 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63359 connected. Total clients: 1
+2025-09-08 19:50:23,353 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:50:23,666 - websockets.server - INFO - connection open
+2025-09-08 19:50:23,666 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63362 on path: /
+2025-09-08 19:50:23,666 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63362 connected. Total clients: 2
+2025-09-08 19:51:20,377 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63359: code=1001, reason=
+2025-09-08 19:51:20,378 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63359 disconnected. Remaining clients: 1
+2025-09-08 19:51:20,378 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63362: code=1001, reason=
+2025-09-08 19:51:20,379 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63362 disconnected. Remaining clients: 0
+2025-09-08 19:51:21,795 - websockets.server - INFO - connection open
+2025-09-08 19:51:21,800 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63487 on path: /
+2025-09-08 19:51:21,801 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63487 connected. Total clients: 1
+2025-09-08 19:51:22,983 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63487: code=1001, reason=
+2025-09-08 19:51:22,984 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63487 disconnected. Remaining clients: 0
+2025-09-08 19:51:23,270 - websockets.server - INFO - connection open
+2025-09-08 19:51:23,271 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63495 on path: /
+2025-09-08 19:51:23,272 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63495 connected. Total clients: 1
+2025-09-08 19:51:23,377 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:51:23,684 - websockets.server - INFO - connection open
+2025-09-08 19:51:23,685 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63499 on path: /
+2025-09-08 19:51:23,688 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63499 connected. Total clients: 2
+2025-09-08 19:51:39,323 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63495: code=1001, reason=
+2025-09-08 19:51:39,325 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63495 disconnected. Remaining clients: 1
+2025-09-08 19:51:39,326 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63499: code=1001, reason=
+2025-09-08 19:51:39,328 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63499 disconnected. Remaining clients: 0
+2025-09-08 19:51:41,235 - websockets.server - INFO - connection open
+2025-09-08 19:51:41,237 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63546 on path: /
+2025-09-08 19:51:41,238 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63546 connected. Total clients: 1
+2025-09-08 19:51:42,148 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:63546: code=1001, reason=
+2025-09-08 19:51:42,149 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63546 disconnected. Remaining clients: 0
+2025-09-08 19:51:42,429 - websockets.server - INFO - connection open
+2025-09-08 19:51:42,430 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63552 on path: /
+2025-09-08 19:51:42,430 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63552 connected. Total clients: 1
+2025-09-08 19:51:42,590 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:51:42,898 - websockets.server - INFO - connection open
+2025-09-08 19:51:42,903 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:63554 on path: /
+2025-09-08 19:51:42,905 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63554 connected. Total clients: 2
+2025-09-08 19:59:11,443 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 19:59:11,445 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63552 disconnected. Remaining clients: 1
+2025-09-08 19:59:11,447 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:63554 disconnected. Remaining clients: 0
+2025-09-08 19:59:11,449 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-08 19:59:11,451 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-08 19:59:11,453 - websockets.server - INFO - server closing
+2025-09-08 19:59:43,719 - websockets.server - INFO - server closed
+2025-09-08 19:59:43,719 - sentinelai.backend - INFO - Server stopped
+2025-09-08 19:59:51,619 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 19:59:51,620 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 19:59:51,620 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 19:59:51,621 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 19:59:51,653 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 19:59:51,655 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 19:59:51,655 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 19:59:51,655 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 19:59:51,794 - websockets.server - INFO - connection open
+2025-09-08 19:59:51,802 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:64449 on path: /
+2025-09-08 19:59:51,804 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64449 connected. Total clients: 1
+2025-09-08 19:59:51,863 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:59:54,177 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:64449: code=1001, reason=
+2025-09-08 19:59:54,177 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64449 disconnected. Remaining clients: 0
+2025-09-08 19:59:54,679 - websockets.server - INFO - connection open
+2025-09-08 19:59:54,681 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:64460 on path: /
+2025-09-08 19:59:54,681 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64460 connected. Total clients: 1
+2025-09-08 19:59:54,700 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 19:59:54,990 - websockets.server - INFO - connection open
+2025-09-08 19:59:54,993 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:64463 on path: /
+2025-09-08 19:59:54,995 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64463 connected. Total clients: 2
+2025-09-08 19:59:56,364 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:00:15,486 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:64460: code=1001, reason=
+2025-09-08 20:00:15,490 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64460 disconnected. Remaining clients: 1
+2025-09-08 20:00:15,493 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:64463: code=1001, reason=
+2025-09-08 20:00:15,496 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64463 disconnected. Remaining clients: 0
+2025-09-08 20:00:16,206 - websockets.server - ERROR - opening handshake failed
+Traceback (most recent call last):
+  File "C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\site-packages\websockets\asyncio\server.py", line 356, in conn_handler
+    await connection.handshake(
+  File "C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\site-packages\websockets\asyncio\server.py", line 142, in handshake
+    async with self.send_context(expected_state=CONNECTING):
+  File "C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\site-packages\websockets\asyncio\connection.py", line 957, in send_context
+    raise self.protocol.close_exc from original_exc
+websockets.exceptions.ConnectionClosedError: no close frame received or sent
+2025-09-08 20:00:16,513 - websockets.server - INFO - connection open
+2025-09-08 20:00:16,514 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:64510 on path: /
+2025-09-08 20:00:16,514 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64510 connected. Total clients: 1
+2025-09-08 20:00:16,573 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:00:16,821 - websockets.server - INFO - connection open
+2025-09-08 20:00:16,823 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:64513 on path: /
+2025-09-08 20:00:16,824 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64513 connected. Total clients: 2
+2025-09-08 20:00:20,515 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:00:30,780 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:02:32,924 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:05:16,939 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 20:05:16,943 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64513 disconnected. Remaining clients: 1
+2025-09-08 20:05:16,945 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:64510 disconnected. Remaining clients: 0
+2025-09-08 20:05:16,946 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-08 20:05:16,947 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-08 20:05:16,948 - websockets.server - INFO - server closing
+2025-09-08 20:05:19,866 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 20:05:19,908 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-22' coro=<Server._close() done, defined at C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\site-packages\websockets\asyncio\server.py:431> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2025-09-08 20:05:19,909 - asyncio - ERROR - Task was destroyed but it is pending!
+task: <Task cancelling name='Task-1' coro=<main() done, defined at C:\Users\Akshita\OneDrive - somaiya.edu\Akshita\Projects\SentinelAi\backend\server.py:507> wait_for=<Future pending cb=[shield.<locals>._outer_done_callback() at C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py:922, Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at C:\Users\Akshita\AppData\Local\Programs\Python\Python312\Lib\asyncio\tasks.py:767]>
+2025-09-08 20:05:27,429 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:05:27,430 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:05:27,430 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:05:27,431 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:05:27,456 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:05:27,456 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:05:27,457 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:05:27,457 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:05:30,214 - websockets.server - INFO - connection open
+2025-09-08 20:05:30,214 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:65105 on path: /
+2025-09-08 20:05:30,214 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:65105 connected. Total clients: 1
+2025-09-08 20:05:30,235 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:05:32,722 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:65105: code=1001, reason=
+2025-09-08 20:05:32,723 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:65105 disconnected. Remaining clients: 0
+2025-09-08 20:06:38,317 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 20:06:38,318 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-08 20:06:38,318 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-08 20:06:38,318 - websockets.server - INFO - server closing
+2025-09-08 20:06:38,318 - websockets.server - INFO - server closed
+2025-09-08 20:06:38,319 - sentinelai.backend - INFO - Server stopped
+2025-09-08 20:06:41,635 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:06:41,635 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:06:41,636 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:06:41,636 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:06:41,664 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:06:41,664 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:06:41,664 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:06:41,665 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:06:48,536 - websockets.server - INFO - connection open
+2025-09-08 20:06:48,538 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:65321 on path: /
+2025-09-08 20:06:48,538 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:65321 connected. Total clients: 1
+2025-09-08 20:06:59,375 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:07:29,887 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:65321: code=1005, reason=
+2025-09-08 20:07:29,888 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:65321 disconnected. Remaining clients: 0
+2025-09-08 20:07:30,194 - websockets.server - INFO - connection open
+2025-09-08 20:07:30,195 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:65380 on path: /
+2025-09-08 20:07:30,196 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:65380 connected. Total clients: 1
+2025-09-08 20:07:30,237 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:07:51,055 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:07:51,057 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:07:51,057 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:07:51,057 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:07:51,086 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:07:51,087 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:07:51,087 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:07:51,087 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:08:43,780 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:65380: code=1001, reason=
+2025-09-08 20:08:43,780 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:65380 disconnected. Remaining clients: 0
+2025-09-08 20:08:47,286 - websockets.server - INFO - connection open
+2025-09-08 20:08:47,286 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49189 on path: /
+2025-09-08 20:08:47,287 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49189 connected. Total clients: 1
+2025-09-08 20:08:47,879 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:09:00,072 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49189: code=1005, reason=
+2025-09-08 20:09:00,077 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49189 disconnected. Remaining clients: 0
+2025-09-08 20:09:00,383 - websockets.server - INFO - connection open
+2025-09-08 20:09:00,386 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49214 on path: /
+2025-09-08 20:09:00,387 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49214 connected. Total clients: 1
+2025-09-08 20:09:00,492 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:09:00,692 - websockets.server - INFO - connection open
+2025-09-08 20:09:00,693 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49216 on path: /
+2025-09-08 20:09:00,695 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49216 connected. Total clients: 2
+2025-09-08 20:09:04,295 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49214: code=1005, reason=
+2025-09-08 20:09:04,296 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49214 disconnected. Remaining clients: 1
+2025-09-08 20:09:04,618 - websockets.server - INFO - connection open
+2025-09-08 20:09:04,623 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49227 on path: /
+2025-09-08 20:09:04,629 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49227 connected. Total clients: 2
+2025-09-08 20:09:04,715 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:09:04,718 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49216: code=1005, reason=
+2025-09-08 20:09:04,719 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49216 disconnected. Remaining clients: 1
+2025-09-08 20:09:04,943 - websockets.server - INFO - connection open
+2025-09-08 20:09:04,945 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49230 on path: /
+2025-09-08 20:09:04,950 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49230 connected. Total clients: 2
+2025-09-08 20:09:05,539 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:09:49,992 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:09:49,992 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:09:49,992 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:09:49,993 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:09:50,019 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:09:50,019 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:09:50,019 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:09:50,020 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:09:56,221 - websockets.server - INFO - connection open
+2025-09-08 20:09:56,222 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49338 on path: /
+2025-09-08 20:09:56,222 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49338 connected. Total clients: 1
+2025-09-08 20:09:56,264 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:11:47,321 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49338: code=1001, reason=
+2025-09-08 20:11:47,322 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49338 disconnected. Remaining clients: 0
+2025-09-08 20:11:49,120 - websockets.server - INFO - connection open
+2025-09-08 20:11:49,121 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49833 on path: /
+2025-09-08 20:11:49,121 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49833 connected. Total clients: 1
+2025-09-08 20:11:49,828 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49833: code=1001, reason=
+2025-09-08 20:11:49,828 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49833 disconnected. Remaining clients: 0
+2025-09-08 20:11:50,119 - websockets.server - INFO - connection open
+2025-09-08 20:11:50,119 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49840 on path: /
+2025-09-08 20:11:50,119 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49840 connected. Total clients: 1
+2025-09-08 20:11:50,364 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:11:50,673 - websockets.server - INFO - connection open
+2025-09-08 20:11:50,676 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49846 on path: /
+2025-09-08 20:11:50,677 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49846 connected. Total clients: 2
+2025-09-08 20:12:33,728 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49840: code=1001, reason=
+2025-09-08 20:12:33,728 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49840 disconnected. Remaining clients: 1
+2025-09-08 20:12:33,728 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49846: code=1001, reason=
+2025-09-08 20:12:33,729 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49846 disconnected. Remaining clients: 0
+2025-09-08 20:12:34,874 - websockets.server - INFO - connection open
+2025-09-08 20:12:34,875 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49965 on path: /
+2025-09-08 20:12:34,875 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49965 connected. Total clients: 1
+2025-09-08 20:12:35,721 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:12:35,985 - websockets.server - INFO - connection open
+2025-09-08 20:12:35,986 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:49984 on path: /
+2025-09-08 20:12:35,986 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49984 connected. Total clients: 2
+2025-09-08 20:12:36,403 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:12:43,644 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49965: code=1001, reason=
+2025-09-08 20:12:43,645 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49965 disconnected. Remaining clients: 1
+2025-09-08 20:12:43,645 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:49984: code=1001, reason=
+2025-09-08 20:12:43,645 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:49984 disconnected. Remaining clients: 0
+2025-09-08 20:12:45,004 - websockets.server - INFO - connection open
+2025-09-08 20:12:45,005 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50079 on path: /
+2025-09-08 20:12:45,005 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50079 connected. Total clients: 1
+2025-09-08 20:12:46,040 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:12:46,292 - websockets.server - INFO - connection open
+2025-09-08 20:12:46,293 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50092 on path: /
+2025-09-08 20:12:46,293 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50092 connected. Total clients: 2
+2025-09-08 20:12:46,398 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:13:20,691 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50079: code=1001, reason=
+2025-09-08 20:13:20,691 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50079 disconnected. Remaining clients: 1
+2025-09-08 20:13:20,691 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50092: code=1001, reason=
+2025-09-08 20:13:20,691 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50092 disconnected. Remaining clients: 0
+2025-09-08 20:13:22,117 - websockets.server - INFO - connection open
+2025-09-08 20:13:22,117 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50211 on path: /
+2025-09-08 20:13:22,117 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50211 connected. Total clients: 1
+2025-09-08 20:13:23,056 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:13:23,289 - websockets.server - INFO - connection open
+2025-09-08 20:13:23,289 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50217 on path: /
+2025-09-08 20:13:23,290 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50217 connected. Total clients: 2
+2025-09-08 20:13:23,661 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:15:00,718 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50211: code=1001, reason=
+2025-09-08 20:15:00,718 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50211 disconnected. Remaining clients: 1
+2025-09-08 20:15:00,719 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50217: code=1001, reason=
+2025-09-08 20:15:00,719 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50217 disconnected. Remaining clients: 0
+2025-09-08 20:15:02,396 - websockets.server - INFO - connection open
+2025-09-08 20:15:02,396 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50474 on path: /
+2025-09-08 20:15:02,396 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50474 connected. Total clients: 1
+2025-09-08 20:15:03,256 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:15:03,494 - websockets.server - INFO - connection open
+2025-09-08 20:15:03,495 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50480 on path: /
+2025-09-08 20:15:03,495 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50480 connected. Total clients: 2
+2025-09-08 20:15:03,683 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:15:56,976 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50474: code=1001, reason=
+2025-09-08 20:15:56,977 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50474 disconnected. Remaining clients: 1
+2025-09-08 20:15:56,977 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50480: code=1001, reason=
+2025-09-08 20:15:56,977 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50480 disconnected. Remaining clients: 0
+2025-09-08 20:15:58,532 - websockets.server - INFO - connection open
+2025-09-08 20:15:58,533 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50598 on path: /
+2025-09-08 20:15:58,533 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50598 connected. Total clients: 1
+2025-09-08 20:15:59,290 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:15:59,526 - websockets.server - INFO - connection open
+2025-09-08 20:15:59,527 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50602 on path: /
+2025-09-08 20:15:59,527 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50602 connected. Total clients: 2
+2025-09-08 20:15:59,913 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:16:49,893 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50598: code=1001, reason=
+2025-09-08 20:16:49,893 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50598 disconnected. Remaining clients: 1
+2025-09-08 20:16:49,893 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50602: code=1001, reason=
+2025-09-08 20:16:49,893 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50602 disconnected. Remaining clients: 0
+2025-09-08 20:16:51,564 - websockets.server - INFO - connection open
+2025-09-08 20:16:51,564 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50704 on path: /
+2025-09-08 20:16:51,564 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50704 connected. Total clients: 1
+2025-09-08 20:16:52,314 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:16:52,560 - websockets.server - INFO - connection open
+2025-09-08 20:16:52,561 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50709 on path: /
+2025-09-08 20:16:52,561 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50709 connected. Total clients: 2
+2025-09-08 20:16:52,970 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:17:19,956 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50704: code=1001, reason=
+2025-09-08 20:17:19,957 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50704 disconnected. Remaining clients: 1
+2025-09-08 20:17:19,957 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50709: code=1001, reason=
+2025-09-08 20:17:19,957 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50709 disconnected. Remaining clients: 0
+2025-09-08 20:17:21,505 - websockets.server - INFO - connection open
+2025-09-08 20:17:21,505 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50772 on path: /
+2025-09-08 20:17:21,505 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50772 connected. Total clients: 1
+2025-09-08 20:17:22,238 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:17:22,505 - websockets.server - INFO - connection open
+2025-09-08 20:17:22,506 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:50776 on path: /
+2025-09-08 20:17:22,507 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50776 connected. Total clients: 2
+2025-09-08 20:17:22,615 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:26:53,709 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50772: code=1001, reason=
+2025-09-08 20:26:53,709 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50772 disconnected. Remaining clients: 1
+2025-09-08 20:26:53,712 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:50776: code=1001, reason=
+2025-09-08 20:26:53,712 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:50776 disconnected. Remaining clients: 0
+2025-09-08 20:26:55,222 - websockets.server - INFO - connection open
+2025-09-08 20:26:55,222 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:51832 on path: /
+2025-09-08 20:26:55,222 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:51832 connected. Total clients: 1
+2025-09-08 20:26:55,815 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:26:56,050 - websockets.server - INFO - connection open
+2025-09-08 20:26:56,051 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:51837 on path: /
+2025-09-08 20:26:56,051 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:51837 connected. Total clients: 2
+2025-09-08 20:26:56,127 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:30:43,730 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:30:43,731 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:30:43,732 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:30:43,733 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:30:43,757 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:30:43,757 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:30:43,757 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:30:43,757 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:31:03,473 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:51832: code=1001, reason=
+2025-09-08 20:31:03,473 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:51832 disconnected. Remaining clients: 1
+2025-09-08 20:31:03,475 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:51837: code=1001, reason=
+2025-09-08 20:31:03,475 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:51837 disconnected. Remaining clients: 0
+2025-09-08 20:31:04,072 - websockets.server - INFO - connection open
+2025-09-08 20:31:04,072 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:52295 on path: /
+2025-09-08 20:31:04,072 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52295 connected. Total clients: 1
+2025-09-08 20:31:04,111 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:31:04,389 - websockets.server - INFO - connection open
+2025-09-08 20:31:04,390 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:52299 on path: /
+2025-09-08 20:31:04,391 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52299 connected. Total clients: 2
+2025-09-08 20:31:04,432 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:32:19,860 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:32:29,147 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:33:57,083 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:52295: code=1001, reason=
+2025-09-08 20:33:57,084 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52295 disconnected. Remaining clients: 1
+2025-09-08 20:33:57,084 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:52299: code=1001, reason=
+2025-09-08 20:33:57,084 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52299 disconnected. Remaining clients: 0
+2025-09-08 20:33:59,112 - websockets.server - INFO - connection open
+2025-09-08 20:33:59,112 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:52632 on path: /
+2025-09-08 20:33:59,112 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52632 connected. Total clients: 1
+2025-09-08 20:33:59,984 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:34:00,223 - websockets.server - INFO - connection open
+2025-09-08 20:34:00,223 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:52640 on path: /
+2025-09-08 20:34:00,223 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52640 connected. Total clients: 2
+2025-09-08 20:34:00,639 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:36:15,117 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:52632: code=1001, reason=
+2025-09-08 20:36:15,118 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52632 disconnected. Remaining clients: 1
+2025-09-08 20:36:15,118 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:52640: code=1001, reason=
+2025-09-08 20:36:15,118 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:52640 disconnected. Remaining clients: 0
+2025-09-08 20:44:31,516 - websockets.server - INFO - connection open
+2025-09-08 20:44:31,517 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:53658 on path: /
+2025-09-08 20:44:31,517 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53658 connected. Total clients: 1
+2025-09-08 20:44:33,208 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:44:38,179 - websockets.server - INFO - connection open
+2025-09-08 20:44:38,181 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:53677 on path: /
+2025-09-08 20:44:38,184 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53677 connected. Total clients: 2
+2025-09-08 20:44:38,278 - sentinelai.backend - WARNING - Packet capture is already running
+2025-09-08 20:44:38,917 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:44:39,645 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:44:41,228 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:44:41,827 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:44:42,556 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:44:43,268 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:45:00,666 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:53658: code=1001, reason=
+2025-09-08 20:45:00,666 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53658 disconnected. Remaining clients: 1
+2025-09-08 20:45:00,666 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:53677: code=1001, reason=
+2025-09-08 20:45:00,667 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53677 disconnected. Remaining clients: 0
+2025-09-08 20:45:01,272 - websockets.server - INFO - connection open
+2025-09-08 20:45:01,272 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:53722 on path: /
+2025-09-08 20:45:01,273 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53722 connected. Total clients: 1
+2025-09-08 20:45:01,329 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:45:01,626 - websockets.server - INFO - connection open
+2025-09-08 20:45:01,628 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:53727 on path: /
+2025-09-08 20:45:01,628 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53727 connected. Total clients: 2
+2025-09-08 20:45:01,673 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:45:08,325 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:45:18,875 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 20:45:18,875 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-08 20:45:18,875 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-08 20:45:18,876 - websockets.server - INFO - server closing
+2025-09-08 20:45:18,876 - websockets.server - INFO - server closed
+2025-09-08 20:45:18,876 - sentinelai.backend - INFO - Server stopped
+2025-09-08 20:47:05,895 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:53722: code=1001, reason=
+2025-09-08 20:47:05,895 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53722 disconnected. Remaining clients: 1
+2025-09-08 20:47:05,896 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:53727: code=1001, reason=
+2025-09-08 20:47:05,896 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:53727 disconnected. Remaining clients: 0
+2025-09-08 20:47:11,484 - websockets.server - INFO - connection open
+2025-09-08 20:47:11,484 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54049 on path: /
+2025-09-08 20:47:11,484 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54049 connected. Total clients: 1
+2025-09-08 20:47:11,943 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:47:11,944 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:47:11,944 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:47:11,945 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:47:11,965 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:47:11,967 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:47:11,967 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:47:11,967 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:47:12,859 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:47:44,216 - websockets.server - INFO - connection open
+2025-09-08 20:47:44,217 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54114 on path: /
+2025-09-08 20:47:44,218 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54114 connected. Total clients: 2
+2025-09-08 20:47:45,682 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54049: code=1001, reason=
+2025-09-08 20:47:45,683 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54049 disconnected. Remaining clients: 1
+2025-09-08 20:47:46,094 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:47:51,789 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 20:47:51,790 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-08 20:47:51,790 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-08 20:47:51,790 - websockets.server - INFO - server closing
+2025-09-08 20:47:51,790 - websockets.server - INFO - server closed
+2025-09-08 20:47:51,790 - sentinelai.backend - INFO - Server stopped
+2025-09-08 20:47:54,349 - sentinelai.backend - INFO - Starting WebSocket server on 0.0.0.0:8080
+2025-09-08 20:47:54,350 - websockets.server - INFO - server listening on 0.0.0.0:8080
+2025-09-08 20:47:54,350 - sentinelai.backend - INFO - Serving on ('0.0.0.0', 8080)
+2025-09-08 20:47:54,351 - sentinelai.backend - INFO - Available network interfaces:
+2025-09-08 20:47:54,377 - sentinelai.backend - INFO -   - Radmin VPN: 26.102.201.28
+2025-09-08 20:47:54,377 - sentinelai.backend - INFO -   - Wi-Fi: 192.168.1.6
+2025-09-08 20:47:54,377 - sentinelai.backend - INFO -   - Teredo Tunneling Pseudo-Interface: 192.168.1.6
+2025-09-08 20:47:54,377 - sentinelai.backend - INFO -   - Loopback Pseudo-Interface 1: 127.0.0.1
+2025-09-08 20:47:58,224 - websockets.server - INFO - connection open
+2025-09-08 20:47:58,225 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54146 on path: /
+2025-09-08 20:47:58,225 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54146 connected. Total clients: 2
+2025-09-08 20:47:58,244 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:48:00,787 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:50:12,440 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54114: code=1001, reason=
+2025-09-08 20:50:12,440 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54114 disconnected. Remaining clients: 1
+2025-09-08 20:50:12,440 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54146: code=1001, reason=
+2025-09-08 20:50:12,441 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54146 disconnected. Remaining clients: 0
+2025-09-08 20:50:12,962 - websockets.server - INFO - connection open
+2025-09-08 20:50:12,962 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54372 on path: /
+2025-09-08 20:50:12,962 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54372 connected. Total clients: 1
+2025-09-08 20:50:13,007 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:50:13,288 - websockets.server - INFO - connection open
+2025-09-08 20:50:13,288 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54375 on path: /
+2025-09-08 20:50:13,288 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54375 connected. Total clients: 2
+2025-09-08 20:50:13,308 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:50:20,725 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:50:28,890 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54372: code=1001, reason=
+2025-09-08 20:50:28,891 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54372 disconnected. Remaining clients: 1
+2025-09-08 20:50:28,891 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54375: code=1001, reason=
+2025-09-08 20:50:28,891 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54375 disconnected. Remaining clients: 0
+2025-09-08 20:50:30,253 - websockets.server - INFO - connection open
+2025-09-08 20:50:30,253 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54415 on path: /
+2025-09-08 20:50:30,253 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54415 connected. Total clients: 1
+2025-09-08 20:50:31,314 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:50:31,600 - websockets.server - INFO - connection open
+2025-09-08 20:50:31,601 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54421 on path: /
+2025-09-08 20:50:31,601 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54421 connected. Total clients: 2
+2025-09-08 20:50:31,864 - sentinelai.backend - INFO - Starting packet capture on interface Wi-Fi
+2025-09-08 20:50:36,117 - sentinelai.backend - INFO - Packet capture stopped
+2025-09-08 20:52:38,198 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54415: code=1001, reason=
+2025-09-08 20:52:38,198 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54415 disconnected. Remaining clients: 1
+2025-09-08 20:52:38,198 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54421: code=1001, reason=
+2025-09-08 20:52:38,199 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54421 disconnected. Remaining clients: 0
+2025-09-08 20:52:39,776 - websockets.server - INFO - connection open
+2025-09-08 20:52:39,776 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:54714 on path: /
+2025-09-08 20:52:39,777 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54714 connected. Total clients: 1
+2025-09-08 20:52:40,590 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:55:33,344 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:54714: code=1001, reason=
+2025-09-08 20:55:33,344 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:54714 disconnected. Remaining clients: 0
+2025-09-08 20:55:35,371 - websockets.server - INFO - connection open
+2025-09-08 20:55:35,372 - sentinelai.backend - INFO - [WebSocket] New connection attempt from 127.0.0.1:55062 on path: /
+2025-09-08 20:55:35,372 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:55062 connected. Total clients: 1
+2025-09-08 20:55:36,201 - sentinelai.backend - WARNING - Unknown message type: init
+2025-09-08 20:56:59,020 - sentinelai.backend - INFO - [WebSocket] Connection closed by 127.0.0.1:55062: code=1001, reason=
+2025-09-08 20:56:59,021 - sentinelai.backend - INFO - [WebSocket] Client 127.0.0.1:55062 disconnected. Remaining clients: 0
+2025-09-08 20:57:24,136 - sentinelai.backend - INFO - Shutting down...
+2025-09-08 20:57:24,140 - sentinelai.backend - INFO - Server shutdown requested
+2025-09-08 20:57:24,140 - sentinelai.backend - INFO - Shutting down WebSocket server...
+2025-09-08 20:57:24,141 - websockets.server - INFO - server closing
+2025-09-08 20:57:24,142 - websockets.server - INFO - server closed
+2025-09-08 20:57:24,143 - sentinelai.backend - INFO - Server stopped

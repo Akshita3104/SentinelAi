@@ -1,53 +1,88 @@
 # SentinelAI Network Monitor Backend
 
-This is the backend service for the SentinelAI Network Monitor, responsible for capturing network traffic and providing real-time updates to the frontend via WebSockets.
+This is the backend service for the SentinelAI Network Monitor, built with Node.js, providing real-time network traffic analysis and DDoS detection capabilities.
 
 ## Features
 
-- Real-time network packet capture using Scapy
-- WebSocket server for real-time communication with the frontend
-- Packet filtering and statistics
-- Bandwidth monitoring
-- Support for multiple network interfaces
+- 🚀 Real-time packet capture using TShark (Wireshark CLI)
+- 🔌 WebSocket server for real-time communication
+- 📊 Advanced packet filtering and traffic statistics
+- 🌐 Support for multiple network interfaces
+- 🛡️ Built-in rate limiting and security features
+- 📈 Performance monitoring and logging
+- 🔍 API endpoints for network analysis
 
 ## Prerequisites
 
-- Python 3.8+
+- Node.js 16.0.0 or higher
+- npm or yarn package manager
+- TShark (Wireshark CLI) installed and in system PATH
 - Administrator/root privileges (for packet capture)
-- Windows: [Npcap](https://nmap.org/npcap/) (required for Scapy on Windows)
-- Linux: `libpcap` development files (usually `libpcap-dev`)
+
+### Installing TShark
+
+#### Windows
+1. Download and install Wireshark from [wireshark.org](https://www.wireshark.org/download.html)
+2. During installation, make sure to select "Install TShark"
+3. Add TShark to your system PATH
+
+#### Linux (Debian/Ubuntu)
+```bash
+sudo apt-get update
+sudo apt-get install tshark
+# Allow non-root users to capture packets
+sudo usermod -a -G wireshark $USER
+# Log out and log back in for the group changes to take effect
+```
+
+#### macOS (using Homebrew)
+```bash
+brew install wireshark
+# Add TShark to PATH if not already added
+```
 
 ## Installation
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/yourusername/sentinel-ai.git
    cd sentinel-ai/backend
    ```
 
-2. Create and activate a virtual environment:
+2. Install dependencies:
    ```bash
-   # Windows
-   python -m venv venv
-   .\venv\Scripts\activate
-   
-   # Linux/macOS
-   python3 -m venv venv
-   source venv/bin/activate
+   npm install
+   # or
+   yarn
    ```
 
-3. Install dependencies:
+3. Set up environment variables:
    ```bash
-   pip install -r requirements.txt
+   cp .env.example .env
+   # Edit the .env file with your configuration
    ```
 
 ## Configuration
 
-Edit the `.env` file to configure the server:
+Edit the `.env` file to configure the server. See `.env.example` for all available options.
+
+Key configuration options:
 
 ```ini
-# WebSocket server configuration
-WS_HOST=0.0.0.0
+# Server Configuration
+NODE_ENV=development
+PORT=8080
+HOST=0.0.0.0
+
+# WebSocket Configuration
+WEBSOCKET_PATH=/ws
+WEBSOCKET_PING_INTERVAL=30000
+
+# Packet Capture
+TSHARK_PATH=  # Auto-detect if empty
+CAPTURE_INTERFACE=eth0  # Default interface
+CAPTURE_FILTER=  # BPF filter
+CAPTURE_SNAPLEN=65535
 WS_PORT=8080
 
 # Network interface to capture from (use 'None' to auto-detect)

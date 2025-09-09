@@ -26,12 +26,12 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 
 # Custom model imports
-from .decision_tree_model import DecisionTreeModel
-from .random_forest_model import RandomForestModel
-from .svm_model import SVMModel
-from .knn_model import KNNModel
-from .naive_bayes_model import NaiveBayesModel
-from .logistic_regression_model import LogisticRegressionModel
+from decision_tree_model import DecisionTreeModel
+from random_forest_model import RandomForestModel
+from svm_model import SVMModel
+from knn_model import KNNModel
+from naive_bayes_model import NaiveBayesModel
+from logistic_regression_model import LogisticRegressionModel
 
 class ModelTrainer:
     """Handles training and evaluation of multiple ML models for DDoS detection."""

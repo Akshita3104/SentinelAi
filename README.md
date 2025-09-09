@@ -2,6 +2,14 @@
 
 An intelligent, real-time DDoS detection and mitigation system powered by machine learning and SDN (Software Defined Networking) for 5G network slices. This system provides autonomous threat detection, network slice management, and self-healing capabilities.
 
+## 🚀 New Features (v2.0)
+
+- **Real-time Model Integration**: Live model training and inference via WebSocket
+- **Interactive Dashboard**: Real-time visualization of model metrics and predictions
+- **Enhanced Detection**: Improved DDoS detection with confidence scoring
+- **Training UI**: Monitor model training progress in real-time
+- **WebSocket API**: Bidirectional communication for model updates and predictions
+
 ## Features
 
 - **Simulated Network Monitoring**: Realistic traffic simulation and analysis
@@ -22,25 +30,35 @@ This project is part of advanced research in cybersecurity, focusing on developi
 
 ## Project Architecture
 
-The system consists of three main components:
+The system consists of these main components:
 
 ```
 SentinelAi/
 │
-├── backend/                    # Node.js API Server (Port 3000)
+├── backend/                    # Node.js API & WebSocket Server (Port 8080)
 │   ├── controllers/            # API request handlers
 │   ├── routes/                 # API route definitions
 │   ├── services/               # External service integrations
+│   ├── websocket/              # WebSocket server implementations
+│   │   ├── packetCaptureSocket.js  # Packet capture WebSocket
+│   │   └── modelSocket.js      # Model WebSocket service
 │   ├── utils/                  # Utility functions
 │   ├── .env                    # Environment configuration
-│   ├── index.js                # Main server file
+│   ├── server.js               # Main server file
 │   └── package.json            # Node.js dependencies
 │
-├── frontend/                   # React Web Dashboard (Port 5173/5174)
+├── frontend/                   # React Web Dashboard (Port 3000)
 │   ├── src/
+│   │   ├── features/
+│   │   │   ├── model/          # Model integration components
+│   │   │   │   ├── ModelOutput.jsx  # Real-time model visualization
+│   │   │   │   ├── ModelService.jsx # WebSocket connection handler
+│   │   │   │   └── modelSlice.js    # Redux state management
+│   │   │   └── network/         # Network monitoring components
 │   │   ├── services/           # API communication
-│   │   ├── App.tsx             # Main React component
-│   │   └── main.tsx            # React entry point
+│   │   │   └── modelWebSocket.js # WebSocket client for model service
+│   │   ├── App.js              # Main React component
+│   │   └── main.jsx            # React entry point
 │   ├── index.html              # HTML template
 │   ├── package.json            # React dependencies
 │   └── vite.config.ts          # Vite build configuration
@@ -126,6 +144,59 @@ ABUSE_SCORE_THRESHOLD=25
 1. Sign up at [AbuseIPDB](https://abuseipdb.com/register)
 2. Get your API key from the dashboard
 3. Replace `your_abuseipdb_api_key_here` in `backend/.env`
+
+## 🚀 Quick Start
+
+### Development Mode
+
+1. Start both frontend and backend with a single command:
+   ```bash
+   node start-dev.js
+   ```
+
+2. Access the application:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8080/api/status
+   - Model WebSocket: ws://localhost:8080/model
+
+### Manual Setup
+
+#### Backend Setup
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+#### Frontend Setup
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## Model Integration
+
+The system now includes real-time model integration with the following features:
+
+- **Live Training**: Monitor model training progress in real-time
+- **Real-time Predictions**: Get instant DDoS detection results
+- **Performance Metrics**: Track model accuracy, precision, recall, and F1-score
+- **Confusion Matrix**: Visualize model performance
+- **Anomaly Detection**: Identify potential DDoS attacks with confidence scores
+
+### Model WebSocket API
+
+The model service exposes the following WebSocket endpoints:
+
+- `ws://localhost:8080/model` - Main model WebSocket endpoint
+- Message Types:
+  - `training_update` - Training progress updates
+  - `prediction` - Real-time prediction results
+  - `evaluation` - Model evaluation metrics
+  - `model_metadata` - Model configuration and metadata
 
 ## How to Run This Project
 

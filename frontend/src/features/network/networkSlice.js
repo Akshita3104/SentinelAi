@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { webSocketService } from '../../services/websocketService';
+import { toast } from 'react-toastify';
 
-// WebSocket server URL (should be moved to environment variables in production)
+// WebSocket server URLs from environment variables
 const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:8080/ws';
-const PACKET_CAPTURE_WS_URL = process.env.REACT_APP_PACKET_CAPTURE_WS_URL || 'ws://localhost:8080/ws/packets';
+const PACKET_CAPTURE_WS_URL = process.env.REACT_APP_PACKET_CAPTURE_WS_URL || 'ws://localhost:8080/ws';
 
 const initialState = {
   status: 'disconnected', // 'disconnected', 'connecting', 'connected', 'error'
@@ -40,110 +41,171 @@ const initialState = {
 };
 
 // Thunks for WebSocket operations
+
 export const connectToCapture = createAsyncThunk(
   'network/connectToCapture',
-  async (_, { dispatch, getState }) => {
+  async (_, { dispatch, getState, rejectWithValue }) => {
     try {
       const { activeInterface } = getState().network;
       if (!activeInterface) {
         throw new Error('No network interface selected');
       }
 
-      // Connect to WebSocket server
-      await webSocketService.connect(WS_URL);
+      console.log('[Network] Initializing WebSocket connection...');
       
-      // Set up packet capture WebSocket
-      const packetWs = new WebSocket(PACKET_CAPTURE_WS_URL);
+      // Configure WebSocket service with dispatch
+      webSocketService.setDispatch(dispatch);
       
-      packetWs.onopen = () => {
-        dispatch(setCaptureConnected(true));
-      };
-      
-      packetWs.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        if (message.type === 'packet') {
-          dispatch(addPacket(message.data));
-        } else if (message.type === 'status') {
-          dispatch(updateCaptureStatus(message.data));
-        }
-      };
-      
-      packetWs.onclose = () => {
-        dispatch(setCaptureConnected(false));
-      };
-      
-      // Store WebSocket instance in the state for later use
-      return { ws: packetWs };
+      // Initialize WebSocket connection using our service
+      await webSocketService.initializeConnection(WS_URL, {
+        autoReconnect: true,
+        maxReconnectAttempts: 5,
+        reconnectDelay: 1000
+      });
       
       // Set up message handler
-      webSocketService.addMessageHandler((message) => {
-        switch (message.type) {
-          case 'packet':
-            dispatch(addPacket(message.payload));
-            break;
-          case 'stats/update':
-            dispatch(updateStats(message.payload));
-            break;
-          case 'bandwidth/update':
-            dispatch(updateBandwidth(message.payload));
-            break;
-          case 'interfaces/update':
-            dispatch(updateInterfaces(message.payload));
-            break;
-          case 'error':
-            console.error('WebSocket Error:', message.payload);
-            break;
-          default:
-            console.log('Unhandled message type:', message.type);
+      webSocketService.onMessage((message) => {
+        try {
+          console.log('[Network] Received message:', message);
+          const data = typeof message === 'string' ? JSON.parse(message) : message;
+          
+          if (data.type === 'packet') {
+            console.log('[Network] Processing packet:', data.data);
+            dispatch(addPacket(data.data));
+          } else if (data.type === 'stats') {
+            console.log('[Network] Updating stats:', data.data);
+            dispatch(updateStats(data.data));
+          } else if (data.type === 'interfaces') {
+            console.log('[Network] Updating interfaces:', data.data);
+            dispatch(updateInterfaces(data.data));
+          } else if (data.type === 'error') {
+            console.error('[Network] Server error:', data.message);
+            toast.error(`Network error: ${data.message}`);
+          }
+        } catch (error) {
+          console.error('[Network] Error processing message:', error);
         }
       });
-
-      // Request initial data
-      webSocketService.sendMessage({ type: 'interfaces/list' });
       
-      return { status: 'connected' };
+      // Set up error handler
+      webSocketService.onError((error) => {
+        console.error('[Network] WebSocket error:', error);
+        dispatch(setCaptureConnected(false));
+        toast.error(`Connection error: ${error.message || 'Unknown error'}`);
+      });
+      
+      // Set up connection status handler
+      webSocketService.onConnectionStatusChange((status) => {
+        console.log('[Network] Connection status changed:', status);
+        dispatch(updateCaptureStatus({ status }));
+        
+        if (status === 'connected') {
+          dispatch(setCaptureConnected(true));
+          
+          // Send initialization message with interface selection
+          const initMsg = {
+            type: 'start_capture',
+            interface: activeInterface
+          };
+          webSocketService.send(JSON.stringify(initMsg));
+          
+        } else if (status === 'disconnected' || status === 'error') {
+          dispatch(setCaptureConnected(false));
+        }
+      });
+      
+      return { status: 'connecting' };
     } catch (error) {
-      console.error('WebSocket connection failed:', error);
-      return { error: error.message };
+      console.error('[Network] Error connecting to WebSocket:', error);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const startCapture = createAsyncThunk(
   'network/startCapture',
-  async (_, { getState }) => {
-    const { activeInterface } = getState().network;
-    if (!activeInterface) {
-      throw new Error('No network interface selected');
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    try {
+      const { activeInterface, isCaptureConnected } = getState().network;
+      
+      if (!activeInterface) {
+        throw new Error('No network interface selected');
+      }
+
+      if (!webSocketService.isConnected()) {
+        throw new Error('WebSocket connection not established');
+      }
+
+      const message = {
+        type: 'start_capture',
+        interface: activeInterface
+      };
+      
+      webSocketService.send(JSON.stringify(message));
+      return { status: 'capture_started' };
+    } catch (error) {
+      console.error('[Network] Error starting capture:', error);
+      return rejectWithValue(error.message);
     }
-    
-    const success = webSocketService.startCapture(activeInterface);
-    if (!success) {
-      throw new Error('Failed to send start capture command');
-    }
-    return { success: true };
   }
 );
 
 export const stopCapture = createAsyncThunk(
   'network/stopCapture',
-  async () => {
-    const success = webSocketService.stopCapture();
-    if (!success) {
-      throw new Error('Failed to send stop capture command');
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    try {
+      const { isCaptureConnected } = getState().network;
+      console.log('[Network] Stopping packet capture...');
+      
+      // Ensure we're connected to the WebSocket
+      if (!isCaptureConnected) {
+        throw new Error('Not connected to packet capture service');
+      }
+
+      if (!webSocketService.isConnected()) {
+        throw new Error('WebSocket connection not established');
+      }
+
+      const message = {
+        type: 'stop_capture'
+      };
+      
+      webSocketService.send(JSON.stringify(message));
+      return { status: 'capture_stopped' };
+    } catch (error) {
+      console.error('[Network] Error stopping capture:', error);
+      return rejectWithValue(error.message);
     }
-    return { success: true };
   }
 );
 
 export const updateCaptureFilter = createAsyncThunk(
   'network/updateCaptureFilter',
-  async (filter, { getState }) => {
-    const success = webSocketService.setFilter(filter);
-    if (!success) {
-      throw new Error('Failed to update capture filter');
+  async (filter, { getState, dispatch, rejectWithValue }) => {
+    try {
+      const { isCaptureConnected } = getState().network;
+      console.log('[Network] Updating capture filter:', filter);
+      
+      // Ensure we're connected to the WebSocket
+      if (!isCaptureConnected) {
+        throw new Error('Not connected to packet capture service');
+      }
+
+      if (!webSocketService.isConnected()) {
+        throw new Error('WebSocket connection not established');
+      }
+
+      const message = {
+        type: 'update_filter',
+        filter
+      };
+      
+      webSocketService.send(JSON.stringify(message));
+      return { success: true, message: 'Filter updated' };
+    } catch (error) {
+      console.error('[Network] Error updating capture filter:', error);
+      return rejectWithValue(error.message);
     }
-    return { filter };
   }
 );
 
@@ -158,74 +220,228 @@ const networkSlice = createSlice({
       state.isCaptureConnected = action.payload;
     },
     updateCaptureStatus(state, action) {
-      if (action.payload) {
-        state.isCapturing = action.payload.isCapturing ?? state.isCapturing;
-        state.activeInterface = action.payload.interface ?? state.activeInterface;
-        if (action.payload.status) {
-          state.status = action.payload.status;
-        }
+      const { payload } = action;
+      if (!payload) return;
+      
+      // Update isCapturing if provided (handle both snake_case and camelCase for backend compatibility)
+      if (payload.is_capturing !== undefined) {
+        state.isCapturing = payload.is_capturing;
+      } else if (payload.isCapturing !== undefined) {
+        state.isCapturing = payload.isCapturing;
       }
+      
+      // Update interface if provided (handle both snake_case and camelCase)
+      if (payload.interface) {
+        state.activeInterface = payload.interface;
+      } else if (payload.current_interface) {
+        state.activeInterface = payload.current_interface;
+      }
+      
+      // Update status if provided
+      if (payload.status) {
+        state.status = payload.status;
+      }
+      
+      // Update statistics if provided
+      if (payload.stats) {
+        state.stats = { ...state.stats, ...payload.stats };
+      } else if (payload.stats) {
+        // Handle case where stats might be in a different format from backend
+        state.stats = { ...state.stats, ...payload.stats };
+      }
+      
+      // Update bandwidth if provided
+      if (payload.bandwidth) {
+        state.bandwidth = { ...state.bandwidth, ...payload.bandwidth };
+      }
+      
+      // Update filter if provided
+      if (payload.filter) {
+        state.filters = { ...state.filters, ...payload.filter };
+      }
+      
+      // Log status update
+      console.log('[Network] Capture status updated:', {
+        isCapturing: state.isCapturing,
+        interface: state.activeInterface,
+        status: state.status,
+        stats: state.stats,
+        bandwidth: state.bandwidth
+      });
     },
     addPacket(state, action) {
       const packet = action.payload;
+      
+      // Ensure packet has required fields
+      if (!packet || typeof packet !== 'object') {
+        console.warn('Received invalid packet:', packet);
+        return;
+      }
+      
+      // Add timestamp if not present
+      if (!packet.timestamp) {
+        packet.timestamp = new Date().toISOString();
+      }
+      
+      // Add to packets array (limit to 1000 most recent packets)
       state.packets.unshift(packet);
+      if (state.packets.length > 1000) {
+        state.packets.pop();
+      }
+      
+      // Update statistics
       state.stats.total += 1;
+      
       // Update protocol stats
-      const protocol = packet.protocol?.toLowerCase() || 'other';
-      if (state.stats[protocol] !== undefined) {
+      const protocol = (packet.protocol || '').toLowerCase();
+      if (protocol && state.stats[protocol] !== undefined) {
         state.stats[protocol] += 1;
       } else {
         state.stats.other += 1;
       }
       
-      // Update bandwidth
-      const now = Date.now();
-      const length = packet.length || 0;
-      state.bandwidth.in += length;
-      
-      // Keep last 100 bandwidth updates
-      state.bandwidth.history.push({ time: now, value: length });
-      if (state.bandwidth.history.length > 100) {
-        state.bandwidth.history.shift();
+      // Update bandwidth stats (if available)
+      if (packet.length) {
+        const bytes = parseInt(packet.length, 10) || 0;
+        state.bandwidth.in += bytes;
+        
+        // Update bandwidth history (keep last 60 entries - 1 minute at 1s updates)
+        const now = Date.now();
+        const lastUpdate = state.bandwidth.lastUpdate || now;
+        
+        // If more than 1 second has passed, add a new entry
+        if (now - lastUpdate >= 1000) {
+          state.bandwidth.history.push({
+            timestamp: now,
+            bytes: state.bandwidth.in
+          });
+          
+          // Keep only the last 60 entries
+          if (state.bandwidth.history.length > 60) {
+            state.bandwidth.history.shift();
+          }
+          
+          state.bandwidth.lastUpdate = now;
+        }
       }
-      state.bandwidth.lastUpdate = now;
     },
     updateStats(state, action) {
-      state.stats = { ...state.stats, ...action.payload };
+      if (!action.payload) return;
+              
+      // Only update stats that exist in the initial state
+      Object.keys(action.payload).forEach(key => {
+        if (state.stats.hasOwnProperty(key)) {
+          state.stats[key] = action.payload[key];
+        }
+      });
+              
+      console.log('[Network] Stats updated:', state.stats);
     },
     updateBandwidth(state, action) {
+      if (!action.payload) return;
+              
+      const now = Date.now();
       const { in: inBytes, out: outBytes } = action.payload;
-      const now = new Date().toISOString();
-      
-      state.bandwidth.in = inBytes;
-      state.bandwidth.out = outBytes;
+              
+      // Update current bandwidth
+      if (inBytes !== undefined) state.bandwidth.in = inBytes;
+      if (outBytes !== undefined) state.bandwidth.out = outBytes || 0;
+              
+      // Calculate bytes per second
+      const lastUpdate = state.bandwidth.lastUpdate || now;
+      const timeDiff = Math.max(1, (now - lastUpdate) / 1000); // in seconds
+              
+      // Calculate bytes per second
+      const inBps = inBytes !== undefined ? (inBytes - (state.bandwidth.in || 0)) / timeDiff : 0;
+              
+      // Update history (keep last 60 entries - 1 minute at 1s updates)
       state.bandwidth.history.push({
         timestamp: now,
-        in: inBytes,
-        out: outBytes
+        in: inBps,
+        out: outBytes || 0,
+        total: inBps + (outBytes || 0)
       });
-      
-      // Keep only the last 60 data points (1 minute at 1s intervals)
+              
+      // Keep only the last 60 entries
       if (state.bandwidth.history.length > 60) {
         state.bandwidth.history.shift();
       }
-      
+              
+      // Update last update time
       state.bandwidth.lastUpdate = now;
+              
+      console.log('[Network] Bandwidth updated:', {
+        in: state.bandwidth.in,
+        out: state.bandwidth.out,
+        bps: inBps
+      });
     },
     updateInterfaces(state, action) {
-      state.interfaces = action.payload;
-      if (action.payload.length > 0 && !state.activeInterface) {
-        state.activeInterface = action.payload[0].name;
+      if (!Array.isArray(action?.payload)) {
+        console.warn('Invalid interfaces payload:', action.payload);
+        return;
       }
+      
+      state.interfaces = action.payload;
+      
+      // Set default active interface if none is selected or if current active interface is not in the list
+      if (action.payload.length > 0) {
+        const activeInterfaceExists = action.payload.some(
+          iface => iface.name === state.activeInterface
+        );
+        
+        if (!activeInterfaceExists) {
+          state.activeInterface = action.payload[0].name;
+          console.log(`[Network] Active interface set to: ${state.activeInterface}`);
+        }
+      } else {
+        state.activeInterface = null;
+      }
+      
+      console.log(`[Network] Updated interfaces:`, {
+        count: state.interfaces.length,
+        active: state.activeInterface
+      });
     },
     setFilter(state, action) {
-      state.filters = { ...state.filters, ...action.payload };
+      if (!action.payload || typeof action.payload !== 'object') {
+        console.warn('Invalid filter payload:', action.payload);
+        return;
+      }
+      
+      // Only update filters that exist in the initial state
+      const validFilters = {};
+      Object.keys(action.payload).forEach(key => {
+        if (state.filters.hasOwnProperty(key)) {
+          validFilters[key] = action.payload[key];
+        }
+      });
+      
+      if (Object.keys(validFilters).length > 0) {
+        state.filters = { ...state.filters, ...validFilters };
+        console.log('[Network] Filters updated:', state.filters);
+      }
     },
     selectPacket(state, action) {
-      state.selectedPacket = action.payload;
+      // Only update if the packet exists in the current packets array
+      if (action.payload === null || 
+          (typeof action.payload === 'object' && action.payload !== null)) {
+        state.selectedPacket = action.payload;
+        console.log('[Network] Selected packet:', 
+          action.payload ? 'Packet selected' : 'Selection cleared');
+      } else {
+        console.warn('Invalid packet selection:', action.payload);
+      }
     },
     clearPackets(state) {
+      const packetCount = state.packets.length;
       state.packets = [];
+      state.selectedPacket = null;
+      
+      // Log the clear action
+      console.log(`[Network] Cleared ${packetCount} packets`);
+      
+      // Reset all statistics
       state.stats = {
         total: 0,
         tcp: 0,
@@ -236,34 +452,83 @@ const networkSlice = createSlice({
         other: 0,
         dropped: 0,
       };
+      
+      // Reset bandwidth tracking
+      state.bandwidth = {
+        in: 0,
+        out: 0,
+        history: [],
+        lastUpdate: null
+      };
+      
+      console.log('[Network] All packets and statistics cleared');
     },
   },
   extraReducers: (builder) => {
+    // Handle connectToCapture thunk
     builder
       .addCase(connectToCapture.pending, (state) => {
+        console.log('[Network] Connecting to WebSocket...');
         state.status = 'connecting';
+        state.error = null;
       })
-      .addCase(connectToCapture.fulfilled, (state, action) => {
-        if (action.payload.error) {
-          state.status = 'error';
-          state.error = action.payload.error;
-        } else {
-          state.status = 'connected';
-        }
+      .addCase(connectToCapture.fulfilled, (state) => {
+        console.log('[Network] WebSocket connection established');
+        state.status = 'connected';
+        state.isCaptureConnected = true;
+        state.error = null;
       })
       .addCase(connectToCapture.rejected, (state, action) => {
+        const error = action.error?.message || 'Connection failed';
+        console.error('[Network] WebSocket connection failed:', error);
         state.status = 'error';
-        state.error = action.error.message;
+        state.isCaptureConnected = false;
+        state.error = error;
       })
+      
+      // Handle startCapture thunk
       .addCase(startCapture.pending, (state) => {
+        console.log('[Network] Starting packet capture...');
         state.isCapturing = true;
+        state.error = null;
       })
       .addCase(startCapture.fulfilled, (state) => {
+        console.log('[Network] Packet capture started');
         state.isCapturing = true;
       })
       .addCase(startCapture.rejected, (state, action) => {
+        const error = action.error?.message || 'Failed to start capture';
+        console.error('[Network] Start capture failed:', error);
         state.isCapturing = false;
-        state.error = action.error.message;
+        state.error = error;
+      })
+      
+      // Handle stopCapture thunk
+      .addCase(stopCapture.pending, (state) => {
+        console.log('[Network] Stopping packet capture...');
+        state.isCapturing = true; // Still capturing until confirmed stopped
+      })
+      .addCase(stopCapture.fulfilled, (state) => {
+        console.log('[Network] Packet capture stopped');
+        state.isCapturing = false;
+      })
+      .addCase(stopCapture.rejected, (state, action) => {
+        const error = action.error?.message || 'Failed to stop capture';
+        console.error('[Network] Stop capture failed:', error);
+        state.error = error;
+      })
+      
+      // Handle updateCaptureFilter thunk
+      .addCase(updateCaptureFilter.pending, (state) => {
+        console.log('[Network] Updating capture filter...');
+      })
+      .addCase(updateCaptureFilter.fulfilled, (state) => {
+        console.log('[Network] Capture filter updated');
+      })
+      .addCase(updateCaptureFilter.rejected, (state, action) => {
+        const error = action.error?.message || 'Failed to update filter';
+        console.error('[Network] Update filter failed:', error);
+        state.error = error;
       });
   },
 });

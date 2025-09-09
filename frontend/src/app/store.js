@@ -41,4 +41,5 @@ store.dispatch({
   payload: { url: wsUrl }
 });
 
-export default store;
+// Export the configured store
+export { store };

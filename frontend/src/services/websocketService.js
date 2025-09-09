@@ -20,6 +20,33 @@ class WebSocketService {
   setDispatch(dispatch) {
     this.dispatch = dispatch;
   }
+  
+  /**
+   * Initialize WebSocket connection with proper configuration
+   * @param {string} url - WebSocket server URL
+   * @param {Object} options - Connection options
+   * @param {boolean} [options.autoReconnect=true] - Enable/disable auto-reconnection
+   * @param {number} [options.maxReconnectAttempts=5] - Maximum reconnection attempts
+   * @param {number} [options.reconnectDelay=1000] - Initial reconnection delay in ms
+   */
+  initializeConnection(url, options = {}) {
+    const {
+      autoReconnect = true,
+      maxReconnectAttempts = 5,
+      reconnectDelay = 1000
+    } = options;
+    
+    this.url = url;
+    this.autoReconnect = autoReconnect;
+    this.maxReconnectAttempts = maxReconnectAttempts;
+    this.reconnectDelay = reconnectDelay;
+    
+    // Clear any existing connection
+    this.disconnect();
+    
+    // Set up connection
+    return this.connect(url);
+  }
 
   connect(url) {
     // Clean up any existing connection
@@ -29,7 +56,8 @@ class WebSocketService {
         this.socket.onmessage = null;
         this.socket.onerror = null;
         this.socket.onclose = null;
-        if (this.socket.readyState === WebSocket.OPEN) {
+        if (this.socket.readyState === WebSocket.OPEN || 
+            this.socket.readyState === WebSocket.CONNECTING) {
           this.socket.close();
         }
       } catch (e) {
@@ -41,17 +69,26 @@ class WebSocketService {
     console.log(`[WebSocket] Initializing connection to ${url}`);
     this.updateConnectionStatus('connecting');
 
-    return new Promise((resolve, reject) => {
-      try {
-        // Create new WebSocket instance
-        if (this.socket) {
-          console.log('[WebSocket] Closing existing connection...');
-          this.disconnect();
-        }
+    // Clear any existing reconnect timeout
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
 
+    return new Promise((resolve, reject) => {
+      // Clear any existing reconnect timeout
+      if (this.reconnectTimeout) {
+        clearTimeout(this.reconnectTimeout);
+        this.reconnectTimeout = null;
+      }
+
+      try {
         console.log(`[WebSocket] Creating new WebSocket instance to ${url}`);
         this.socket = new WebSocket(url);
         this.updateConnectionStatus('connecting');
+        
+        // Set binary type if needed
+        this.socket.binaryType = 'arraybuffer';
 
         // Notify Redux store about connection attempt
         if (this.dispatch) {
@@ -64,19 +101,23 @@ class WebSocketService {
             url: this.socket.url,
             protocol: this.socket.protocol,
             extensions: this.socket.extensions,
-            binaryType: this.socket.binaryType
+            binaryType: this.socket.binaryType,
+            readyState: this.socket.readyState
           });
 
+          // Reset reconnection attempts on successful connection
           this.reconnectAttempts = 0;
+          this.reconnectDelay = 1000; // Reset delay
           this.updateConnectionStatus('connected');
           this.notifyConnectionStatus('connected');
 
-          // Send initial handshake or subscription message if needed
+          // Send initial handshake message
           try {
             const initMessage = JSON.stringify({
               type: 'init',
               timestamp: new Date().toISOString(),
-              client: 'sentinel-ai-frontend'
+              client: 'sentinel-ai-frontend',
+              version: process.env.REACT_APP_VERSION || '1.0.0'
             });
             this.socket.send(initMessage);
             console.debug('[WebSocket] Sent init message');
@@ -88,24 +129,26 @@ class WebSocketService {
         };
 
         this.socket.onerror = (error) => {
-          const errorInfo = {
+          const errorDetails = {
             message: error.message || 'Unknown WebSocket error',
-            type: error.type || 'unknown',
-            readyState: this.socket ? this.socket.readyState : 'no-socket',
-            url: this.url,
+            type: error.type || 'error',
+            readyState: this.socket?.readyState,
             timestamp: new Date().toISOString()
           };
-
-          console.error('[WebSocket] Connection error:', errorInfo);
+          
+          console.error('[WebSocket] Connection error:', errorDetails);
           this.updateConnectionStatus('error');
-          this.notifyErrorHandlers(new Error(errorInfo.message));
-
+          this.notifyErrorHandlers(errorDetails);
+          
           // Only reject if this is the initial connection attempt
-          if (this.reconnectAttempts === 0) {
-            const wsError = new Error(`WebSocket error: ${errorInfo.message}`);
-            wsError.details = errorInfo;
-            console.error('[WebSocket] Rejecting connection promise', wsError);
-            reject(wsError);
+          if (!this.reconnectAttempts) {
+            reject(errorDetails);
+          }
+          
+          // Attempt to reconnect if we're not already trying to reconnect
+          if (!this.reconnectTimeout) {
+            console.log('[WebSocket] Attempting to reconnect...');
+            this.handleReconnect();
           }
         };
 
@@ -393,6 +436,59 @@ class WebSocketService {
         console.error('Error in error handler:', err);
       }
     });
+  }
+
+  handleReconnect() {
+    if (this.reconnectAttempts < this.maxReconnectAttempts) {
+      this.reconnectAttempts++;
+      
+      // Exponential backoff with jitter
+      const baseDelay = Math.min(
+        this.reconnectDelay * Math.pow(1.5, this.reconnectAttempts - 1),
+        this.maxReconnectDelay
+      );
+      const jitter = Math.random() * 1000; // Add up to 1s jitter
+      const delay = Math.min(baseDelay + jitter, this.maxReconnectDelay);
+      
+      const status = `Reconnecting (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`;
+      console.log(`[WebSocket] ${status} Next attempt in ${Math.round(delay)}ms`);
+      this.updateConnectionStatus(status);
+      
+      // Clear any existing timeout to prevent multiple reconnection attempts
+      if (this.reconnectTimeout) {
+        clearTimeout(this.reconnectTimeout);
+      }
+      
+      this.reconnectTimeout = setTimeout(() => {
+        console.log(`[WebSocket] Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+        
+        this.connect(this.url)
+          .then(() => {
+            console.log('[WebSocket] Reconnection successful');
+            this.reconnectAttempts = 0; // Reset attempt counter on successful reconnection
+            this.reconnectDelay = 1000; // Reset delay
+          })
+          .catch(error => {
+            console.warn(`[WebSocket] Reconnection attempt ${this.reconnectAttempts} failed:`, error.message || 'Unknown error');
+            if (this.reconnectAttempts < this.maxReconnectAttempts) {
+              this.handleReconnect(); // Continue reconnection attempts
+            } else {
+              this.handleMaxReconnectAttemptsReached();
+            }
+          });
+      }, delay);
+    } else {
+      this.handleMaxReconnectAttemptsReached();
+    }
+  }
+  
+  handleMaxReconnectAttemptsReached() {
+    const errorMsg = `Max reconnection attempts (${this.maxReconnectAttempts}) reached`;
+    console.error(`[WebSocket] ${errorMsg}`);
+    this.updateConnectionStatus('disconnected');
+    this.notifyErrorHandlers(new Error(errorMsg));
+    this.reconnectAttempts = 0; // Reset for future connection attempts
+    this.reconnectDelay = 1000; // Reset delay
   }
 
   attemptReconnect() {

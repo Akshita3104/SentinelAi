@@ -1,1 +1,41 @@
 node_modules
+.cache
+# Build output
+build/
+dist/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS/Editor files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Large files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.iso
+*.bin
+*.exe
+*.dll
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.webp
+*.tiff
+*.ico
+*.heic
+*.heif
