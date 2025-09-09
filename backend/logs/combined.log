@@ -1,3 +1,59 @@
 2025-09-09 10:29:49 [[32minfo[39m]: 	Shutting down server...
 2025-09-09 11:04:54 [[32minfo[39m]: 	Shutting down server...
 2025-09-09 11:11:30 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 12:48:36 [[32minfo[39m]: 	Server running on http://0.0.0.0:8080
+2025-09-09 12:48:36 [[32minfo[39m]: 	Environment: development
+2025-09-09 12:48:36 [[32minfo[39m]: 	Process ID: 16960
+2025-09-09 12:48:36 [[31merror[39m]: 	Unhandled Rejection at:
+2025-09-09 12:48:38 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: GLkYNtTHuw1AGP2rYNbcVA==)
+2025-09-09 12:48:49 [[32minfo[39m]: 	WebSocket client disconnected: GLkYNtTHuw1AGP2rYNbcVA==
+2025-09-09 12:49:03 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: PbrrlUjZZLbeulitEbJC9Q==)
+2025-09-09 12:49:06 [[32minfo[39m]: 	WebSocket client disconnected: PbrrlUjZZLbeulitEbJC9Q==
+2025-09-09 12:49:07 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: ETLxnvQT49XSSU8ZySa3MQ==)
+2025-09-09 12:49:08 [[32minfo[39m]: 	WebSocket client disconnected: ETLxnvQT49XSSU8ZySa3MQ==
+2025-09-09 12:49:09 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: Xfkm15crT5ZeqJIKz2aigA==)
+2025-09-09 12:59:26 [[32minfo[39m]: 	WebSocket client disconnected: Xfkm15crT5ZeqJIKz2aigA==
+2025-09-09 12:59:33 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: 97gNph3cymCtp5H++rFp9Q==)
+2025-09-09 12:59:36 [[32minfo[39m]: 	WebSocket client disconnected: 97gNph3cymCtp5H++rFp9Q==
+2025-09-09 12:59:36 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: QKyB+7FhUMI6STawhx2KKw==)
+2025-09-09 12:59:39 [[32minfo[39m]: 	WebSocket client disconnected: QKyB+7FhUMI6STawhx2KKw==
+2025-09-09 12:59:39 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: oRIQ5+CSi5zDTwMurHi4+g==)
+2025-09-09 13:00:07 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:12 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:12 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:13 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:13 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:13 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:14 [[32minfo[39m]: 	Shutting down server...
+2025-09-09 13:00:17 [[31merror[39m]: 	Could not close connections in time, forcefully shutting down
+2025-09-09 13:00:23 [[32minfo[39m]: 	Server running on http://0.0.0.0:8080
+2025-09-09 13:00:23 [[32minfo[39m]: 	Environment: development
+2025-09-09 13:00:23 [[32minfo[39m]: 	Process ID: 23032
+2025-09-09 13:00:23 [[31merror[39m]: 	Unhandled Rejection at:
+2025-09-09 13:00:27 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: fuKIHuXZ4CQOj8nVprDgeQ==)
+2025-09-09 13:00:39 [[32minfo[39m]: 	WebSocket client disconnected: fuKIHuXZ4CQOj8nVprDgeQ==
+2025-09-09 13:00:40 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: HBjNUIEy+8AvwW6gxhVOVQ==)
+2025-09-09 13:00:40 [[32minfo[39m]: 	WebSocket client disconnected: HBjNUIEy+8AvwW6gxhVOVQ==
+2025-09-09 13:00:40 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: RBsc6Yl5bS2AZTv5WqJ8FQ==)
+2025-09-09 13:00:42 [[32minfo[39m]: 	WebSocket client disconnected: RBsc6Yl5bS2AZTv5WqJ8FQ==
+2025-09-09 13:00:42 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: 6p2+21vo64bj9JKvlfSq7A==)
+2025-09-09 13:00:43 [[32minfo[39m]: 	WebSocket client disconnected: 6p2+21vo64bj9JKvlfSq7A==
+2025-09-09 13:00:43 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: NiiaKN64oDDI36VFqsF7qw==)
+2025-09-09 13:00:59 [[32minfo[39m]: 	WebSocket client disconnected: NiiaKN64oDDI36VFqsF7qw==
+2025-09-09 13:01:00 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: Cu+Qif8qK7+//Zi7Yamksw==)
+2025-09-09 13:01:00 [[32minfo[39m]: 	WebSocket client disconnected: Cu+Qif8qK7+//Zi7Yamksw==
+2025-09-09 13:01:00 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: Y2uSH8XIkevJdx2R6cLNqg==)
+2025-09-09 13:01:01 [[32minfo[39m]: 	WebSocket client disconnected: Y2uSH8XIkevJdx2R6cLNqg==
+2025-09-09 13:01:01 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: rPpsj19RVQPluW+hmFdxXw==)
+2025-09-09 13:01:02 [[32minfo[39m]: 	WebSocket client disconnected: rPpsj19RVQPluW+hmFdxXw==
+2025-09-09 13:01:02 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: pJDlvZG4v6Cq0WEGMMoLHg==)
+2025-09-09 13:01:03 [[32minfo[39m]: 	WebSocket client disconnected: pJDlvZG4v6Cq0WEGMMoLHg==
+2025-09-09 13:01:04 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: /OWogcV0C3jDqhdafWQ5Bg==)
+2025-09-09 13:01:04 [[32minfo[39m]: 	WebSocket client disconnected: /OWogcV0C3jDqhdafWQ5Bg==
+2025-09-09 13:01:04 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: Tm6q/qsJO1+vwh49EAJ2bQ==)
+2025-09-09 13:01:15 [[32minfo[39m]: 	WebSocket client disconnected: Tm6q/qsJO1+vwh49EAJ2bQ==
+2025-09-09 13:01:15 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: PQAXQuXEdvREQzxDZcUnFg==)
+2025-09-09 13:01:15 [[32minfo[39m]: 	WebSocket client disconnected: PQAXQuXEdvREQzxDZcUnFg==
+2025-09-09 13:01:16 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: hAmj/rRrXRSlu/2EhQjnoQ==)
+2025-09-09 13:01:17 [[32minfo[39m]: 	WebSocket client disconnected: hAmj/rRrXRSlu/2EhQjnoQ==
+2025-09-09 13:01:18 [[32minfo[39m]: 	New WebSocket connection from 127.0.0.1 (ID: Bd2NR2jXGvffubJipHdEBw==)

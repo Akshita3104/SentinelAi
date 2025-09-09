@@ -64,7 +64,7 @@ export const connectToCapture = createAsyncThunk(
       });
       
       // Set up message handler
-      webSocketService.onMessage((message) => {
+      webSocketService.addMessageHandler((message) => {
         try {
           console.log('[Network] Received message:', message);
           const data = typeof message === 'string' ? JSON.parse(message) : message;

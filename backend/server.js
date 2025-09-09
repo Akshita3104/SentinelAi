@@ -1,3 +1,4 @@
+console.log('DEBUG: server.js is executing');
 import express from 'express';
 import http from 'http';
 import { WebSocketServer } from 'ws';
@@ -29,7 +30,7 @@ const corsOptions = {
       'http://127.0.0.1:3000',
       process.env.CORS_ORIGIN
     ].filter(Boolean);
-    
+
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -126,7 +127,7 @@ app.get('/api/interfaces', (req, res) => {
 if (process.env.NODE_ENV === 'production') {
   const frontendBuild = path.join(__dirname, '../frontend/build');
   app.use(express.static(frontendBuild));
-  
+
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendBuild, 'index.html'));
@@ -149,7 +150,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const isProduction = process.env.NODE_ENV === 'production';
-  
+
   logger.error(`[${statusCode}] ${err.message}`, {
     stack: isProduction ? undefined : err.stack,
     url: req.originalUrl,
@@ -181,17 +182,17 @@ process.on('unhandledRejection', (reason, promise) => {
 // Graceful shutdown
 const shutdown = async () => {
   logger.info('Shutting down server...');
-  
+
   // Close the HTTP server
   server.close(async () => {
     logger.info('HTTP server closed');
-    
+
     // Close database connections, etc.
     // await database.close();
-    
+
     process.exit(0);
   });
-  
+
   // Force close after timeout
   setTimeout(() => {
     logger.error('Could not close connections in time, forcefully shutting down');
@@ -207,78 +208,100 @@ process.on('SIGINT', shutdown);
 const PORT = parseInt(process.env.PORT || '8080', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
-// Only start the server if this file is run directly (not when imported)
-if (import.meta.url === `file://${process.argv[1]}`) {
-  server.listen(PORT, HOST, () => {
-    logger.info(`Server running on http://${HOST}:${PORT}`);
-    logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
-    logger.info(`Process ID: ${process.pid}`);
-    
-    // Initialize WebSocket server after HTTP server is listening
-    const WebSocketServer = require('ws').Server;
-    const wss = new WebSocketServer({
-      server,
-      path: process.env.WS_PATH || '/ws',
-      clientTracking: true,
-      maxPayload: 10 * 1024 * 1024, // 10MB max payload
-      perMessageDeflate: {
-        zlibDeflateOptions: {
-          chunkSize: 1024,
-          memLevel: 7,
-          level: 3
-        },
-        zlibInflateOptions: {
-          chunkSize: 10 * 1024
-        },
-        clientNoContextTakeover: true,
-        serverNoContextTakeover: true,
-        serverMaxWindowBits: 10,
-        concurrencyLimit: 10,
-        threshold: 1024,
+// Always start the server
+server.listen(PORT, HOST, () => {
+  logger.info(`Server running on http://${HOST}:${PORT}`);
+  logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  logger.info(`Process ID: ${process.pid}`);
+
+  // Initialize WebSocket server after HTTP server is listening
+  // Use ESM import for WebSocketServer
+  // (move import { WebSocketServer } from 'ws'; to top if not already present)
+  const wss = new WebSocketServer({
+    server,
+    path: process.env.WS_PATH || '/ws',
+    clientTracking: true,
+    maxPayload: 10 * 1024 * 1024, // 10MB max payload
+    perMessageDeflate: {
+      zlibDeflateOptions: {
+        chunkSize: 1024,
+        memLevel: 7,
+        level: 3
+      },
+      zlibInflateOptions: {
+        chunkSize: 10 * 1024
+      },
+      clientNoContextTakeover: true,
+      serverNoContextTakeover: true,
+      serverMaxWindowBits: 10,
+      concurrencyLimit: 10,
+      threshold: 1024,
+    }
+  });
+
+  // Handle WebSocket server errors
+  wss.on('error', (error) => {
+    logger.error('WebSocket server error:', error);
+  });
+
+  // Handle new connections
+  wss.on('connection', (ws, request) => {
+    const clientIp = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
+    const clientId = request.headers['sec-websocket-key'] || Date.now().toString(36);
+
+    logger.info(`New WebSocket connection from ${clientIp} (ID: ${clientId})`);
+
+    // Handle client disconnection
+    ws.on('close', () => {
+      logger.info(`WebSocket client disconnected: ${clientId}`);
+    });
+
+    // Handle errors
+    ws.on('error', (error) => {
+      logger.error(`WebSocket error from ${clientId}:`, error);
+    });
+
+    // Handle frontend commands for capture
+    ws.on('message', async (data) => {
+      let msg;
+      try {
+        msg = JSON.parse(data);
+      } catch (e) {
+        logger.warn('Invalid JSON from WebSocket client:', data);
+        return;
+      }
+      if (msg.type === 'capture/start') {
+        try {
+          await networkService.startMonitoring(msg.interface || 'Wi-Fi');
+          ws.send(JSON.stringify({ type: 'status', data: { isCapturing: true, interface: msg.interface } }));
+        } catch (err) {
+          ws.send(JSON.stringify({ type: 'error', message: err.message }));
+        }
+      }
+      if (msg.type === 'capture/stop') {
+        await networkService.stopMonitoring();
+        ws.send(JSON.stringify({ type: 'status', data: { isCapturing: false } }));
       }
     });
 
-    // Handle WebSocket server errors
-    wss.on('error', (error) => {
-      logger.error('WebSocket server error:', error);
-    });
-
-    // Handle new connections
-    wss.on('connection', (ws, request) => {
-      const clientIp = request.headers['x-forwarded-for'] || request.socket.remoteAddress;
-      const clientId = request.headers['sec-websocket-key'] || Date.now().toString(36);
-      
-      logger.info(`New WebSocket connection from ${clientIp} (ID: ${clientId})`);
-      
-      // Handle client disconnection
-      ws.on('close', () => {
-        logger.info(`WebSocket client disconnected: ${clientId}`);
-      });
-      
-      // Handle errors
-      ws.on('error', (error) => {
-        logger.error(`WebSocket error from ${clientId}:`, error);
-      });
-      
-      // Send welcome message
-      ws.send(JSON.stringify({
-        type: 'connection/established',
-        clientId,
-        timestamp: new Date().toISOString()
-      }));
-    });
-    
-    // Log available interfaces in development
-    if (process.env.NODE_ENV !== 'production') {
-      import('./utils/wireshark.js').then(({ default: wireshark }) => {
-        wireshark.listInterfaces().then(interfaces => {
-          logger.info('Available network interfaces:', interfaces);
-        }).catch(err => {
-          logger.warn('Could not list network interfaces:', err.message);
-        });
-      });
-    }
+    // Send welcome message
+    ws.send(JSON.stringify({
+      type: 'connection/established',
+      clientId,
+      timestamp: new Date().toISOString()
+    }));
   });
-}
+
+  // Log available interfaces in development
+  if (process.env.NODE_ENV !== 'production') {
+    import('./utils/wireshark.js').then(({ default: wireshark }) => {
+      wireshark.listInterfaces().then(interfaces => {
+        logger.info('Available network interfaces:', interfaces);
+      }).catch(err => {
+        logger.warn('Could not list network interfaces:', err.message);
+      });
+    });
+  }
+});
 
 export default server;
