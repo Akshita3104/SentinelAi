@@ -204,8 +204,21 @@ def health_check():
         'status': 'healthy',
         'ml_engine': 'loaded',
         'timestamp': datetime.now().isoformat(),
-        'version': '2.0.0'
+        'version': '3.0.0'
     }), 200
+
+@app.route('/models', methods=['GET'])
+def get_model_info():
+    """Get information about loaded ML models"""
+    try:
+        model_info = ml_engine.get_model_info()
+        return jsonify({
+            'model_info': model_info,
+            'timestamp': datetime.now().isoformat()
+        }), 200
+    except Exception as e:
+        app.logger.error(f"Error getting model info: {e}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.logger.info("🚀 Starting AI-Driven DDoS Detection ML Model")

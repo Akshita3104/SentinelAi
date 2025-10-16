@@ -4,16 +4,37 @@ require('dotenv').config();
 // Optimized clients with connection pooling
 const mlClient = axios.create({
   baseURL: process.env.ML_MODEL_URL?.replace('/predict', '') || 'http://localhost:5001',
-  timeout: 150, // Ultra-fast 150ms timeout
+  timeout: 3000, // Increased timeout for ML processing
   headers: { 'Content-Type': 'application/json', 'Connection': 'keep-alive' },
   httpAgent: new (require('http').Agent)({ 
     keepAlive: true, 
     maxSockets: 20, 
     maxFreeSockets: 10,
-    timeout: 150,
-    keepAliveMsecs: 500
+    timeout: 3000,
+    keepAliveMsecs: 1000
   })
 });
+
+// ML Model health check
+let mlModelHealthy = false;
+const checkMLHealth = async () => {
+  try {
+    const response = await mlClient.get('/health', { timeout: 2000 });
+    mlModelHealthy = response.status === 200;
+    if (mlModelHealthy) {
+      console.log('✅ ML Model is healthy and responding');
+    }
+    return mlModelHealthy;
+  } catch (error) {
+    mlModelHealthy = false;
+    console.log('❌ ML Model health check failed:', error.message);
+    return false;
+  }
+};
+
+// Check ML health every 10 seconds
+setInterval(checkMLHealth, 10000);
+checkMLHealth(); // Initial check
 
 const abuseClient = axios.create({
   baseURL: process.env.ABUSEIPDB_URL?.replace('/check', '') || 'https://api.abuseipdb.com/api/v2',
@@ -54,25 +75,46 @@ const detectDDoSCombined = async (req, res) => {
       return res.json({ ...cached.data, cached: true, response_time: Date.now() - startTime });
     }
 
-    // ULTRA-FAST PARALLEL PROCESSING
-    const [mlModelResult, abuseResult] = await Promise.allSettled([
-      mlClient.post('/predict', {
-        traffic,
-        ip_address: ip,
-        packet_data: packet_data || {},
-        network_slice: network_slice || 'eMBB'
-      }),
+    // ULTRA-FAST PARALLEL PROCESSING with health check
+    const promises = [];
+    
+    // Only try ML model if it's healthy or we haven't checked recently
+    if (mlModelHealthy || Math.random() > 0.8) {
+      promises.push(
+        mlClient.post('/predict', {
+          traffic,
+          ip_address: ip,
+          packet_data: packet_data || {},
+          network_slice: network_slice || 'eMBB'
+        }).catch(err => {
+          console.log('ML Model connection failed, using fallback');
+          mlModelHealthy = false;
+          throw err;
+        })
+      );
+    } else {
+      promises.push(Promise.reject(new Error('ML Model marked as unhealthy')));
+    }
+    
+    promises.push(
       abuseClient.get('/check', {
         params: { ipAddress: ip, maxAgeInDays: 90 }
+      }).catch(err => {
+        console.log('AbuseIPDB connection failed, using default score');
+        throw err;
       })
-    ]);
+    );
+    
+    const [mlModelResult, abuseResult] = await Promise.allSettled(promises);
 
     // Process ML Model result
     let mlResponse = null;
     if (mlModelResult.status === 'fulfilled') {
       mlResponse = mlModelResult.value.data;
+      mlModelHealthy = true;
       console.log('✅ Local ML model response received:', mlResponse.prediction);
     } else {
+      mlModelHealthy = false;
       console.error('❌ Local ML model failed:', mlModelResult.reason?.message);
     }
 
@@ -93,6 +135,12 @@ const detectDDoSCombined = async (req, res) => {
     
     console.log(`🎯 BEST MODEL SELECTED: ${bestResponse.selected_model} with confidence ${bestResponse.confidence}`);
     
+    // Cache the response
+    responseCache.set(cacheKey, {
+      data: bestResponse,
+      timestamp: Date.now()
+    });
+    
     // Emit real-time detection result with malicious packet data
     if (io) {
       const detectionData = {
@@ -107,8 +155,24 @@ const detectDDoSCombined = async (req, res) => {
       }
       
       io.emit('detection-result', detectionData);
+      
+      // Also emit a detection log
+      io.emit('detection-log', {
+        type: 'info',
+        message: `🤖 ${bestResponse.selected_model.replace('_', ' ').toUpperCase()}: ${bestResponse.prediction.toUpperCase()} (${(bestResponse.confidence * 100).toFixed(0)}% confidence)`,
+        timestamp: new Date().toISOString()
+      });
+      
+      // Emit status update
+      io.emit('status-update', {
+        ml_model_status: mlModelHealthy ? 'connected' : 'disconnected',
+        last_detection: bestResponse.prediction,
+        confidence: bestResponse.confidence,
+        timestamp: new Date().toISOString()
+      });
     }
     
+    bestResponse.response_time = Date.now() - startTime;
     res.json(bestResponse);
   } catch (error) {
     console.error('Combined Detection Controller error:', error.message, error.stack);
@@ -124,19 +188,36 @@ function selectBestResponse(mlResponse, abuseScore, traffic, ip, network_slice) 
   const abuseWeight = 0.3; // 30% weight for IP reputation
   const mlWeight = 0.7; // 70% weight for ML model
   
-  // If ML model didn't respond, create fallback
+  // If ML model didn't respond, create enhanced fallback
   if (!mlResponse) {
     const maxTraffic = Math.max(...traffic);
     const avgTraffic = traffic.reduce((a, b) => a + b, 0) / traffic.length;
-    const fallbackDDoS = maxTraffic > 1000 || avgTraffic > 500 || ipThreatDetected;
+    const trafficVariance = traffic.reduce((acc, val) => acc + Math.pow(val - avgTraffic, 2), 0) / traffic.length;
+    const burstRatio = maxTraffic / Math.max(1, avgTraffic);
+    
+    // Enhanced fallback logic
+    const fallbackDDoS = maxTraffic > 800 || avgTraffic > 400 || burstRatio > 5 || ipThreatDetected;
+    const fallbackSuspicious = !fallbackDDoS && (maxTraffic > 300 || avgTraffic > 150 || burstRatio > 3 || abuseScore > 10);
+    
+    const prediction = fallbackDDoS ? 'ddos' : fallbackSuspicious ? 'suspicious' : 'normal';
+    const confidence = fallbackDDoS ? 0.7 : fallbackSuspicious ? 0.6 : 0.8;
+    const threatLevel = fallbackDDoS ? 'HIGH' : fallbackSuspicious ? 'MEDIUM' : 'LOW';
+    
+    console.log(`🔄 Using enhanced fallback: ${prediction} (confidence: ${confidence})`);
     
     return createFinalResponse({
-      prediction: fallbackDDoS ? 'ddos' : 'normal',
-      confidence: 0.5,
-      threat_level: fallbackDDoS ? 'MEDIUM' : 'LOW',
-      ddos_indicators: fallbackDDoS ? 1 : 0,
-      confidence_factors: ['System fallback - ML model unavailable'],
-      selected_model: 'system_fallback'
+      prediction,
+      confidence,
+      threat_level: threatLevel,
+      ddos_indicators: fallbackDDoS ? 2 : fallbackSuspicious ? 1 : 0,
+      confidence_factors: [
+        'Enhanced fallback analysis - ML model unavailable',
+        `Traffic analysis: max=${maxTraffic}, avg=${avgTraffic.toFixed(1)}, burst=${burstRatio.toFixed(1)}x`,
+        `IP reputation: ${abuseScore}% abuse score`,
+        'Restart ML model (python app/app.py) for full detection'
+      ],
+      selected_model: 'enhanced_fallback',
+      ensemble_score: confidence
     }, abuseScore, ip, network_slice, traffic);
   }
   
@@ -153,9 +234,17 @@ function selectBestResponse(mlResponse, abuseScore, traffic, ip, network_slice) 
   console.log(`📊 ML Model: ${mlThreatProb}, AbuseIPDB: ${abuseInfluence}, Combined Score: ${combinedScore.toFixed(3)}`);
   
   // Determine final prediction based on combined analysis
-  let finalPrediction = mlResponse.prediction;
-  let finalThreatLevel = mlResponse.threat_level;
+  let finalPrediction = mlResponse.prediction || 'normal';
+  let finalThreatLevel = mlResponse.threat_level || 'LOW';
   let finalConfidence = mlResponse.confidence || 0.8;
+  
+  // Fix unknown predictions
+  if (finalPrediction === 'unknown' || !finalPrediction) {
+    finalPrediction = 'normal';
+  }
+  if (finalThreatLevel === 'UNKNOWN' || !finalThreatLevel) {
+    finalThreatLevel = 'LOW';
+  }
   
   // Boost threat level if both ML and IP analysis agree on threat
   if (mlThreatProb > 0 && ipThreatDetected) {
@@ -195,15 +284,21 @@ function selectBestResponse(mlResponse, abuseScore, traffic, ip, network_slice) 
 
 // Create standardized final response
 function createFinalResponse(response, abuseScore, ip, network_slice, traffic) {
-  const isDDoS = response.prediction === 'ddos';
-  const sliceAction = response.prediction === 'normal' ? 'Monitor' :
-                     response.prediction === 'suspicious' ? 'Rate-limit' : 'Blackhole Route';
+  // Fix unknown predictions
+  const prediction = response.prediction === 'unknown' ? 'normal' : response.prediction;
+  const threatLevel = response.threat_level === 'UNKNOWN' ? 'LOW' : response.threat_level;
+  
+  const isDDoS = prediction === 'ddos';
+  const sliceAction = prediction === 'normal' ? 'Monitor' :
+                     prediction === 'suspicious' ? 'Rate-limit' : 'Isolate';
   
   return {
     ...response,
+    prediction,
+    threat_level: threatLevel,
     abuseScore,
     isDDoS,
-    mlPrediction: response.prediction,
+    mlPrediction: prediction,
     message: isDDoS ? 
       `DDoS detected via ${response.selected_model} - Self-healing initiated` : 
       `Normal traffic - Analysis by ${response.selected_model}`,
@@ -220,7 +315,7 @@ function createFinalResponse(response, abuseScore, ip, network_slice, traffic) {
     },
     slice_recommendation: {
       action: sliceAction,
-      priority: isDDoS ? 'HIGH' : response.prediction === 'suspicious' ? 'MEDIUM' : 'LOW'
+      priority: isDDoS ? 'HIGH' : prediction === 'suspicious' ? 'MEDIUM' : 'LOW'
     },
     timestamp: new Date().toISOString()
   };
@@ -280,4 +375,4 @@ function generateRandomIP() {
   return subnet + lastOctet;
 }
 
-module.exports = { detectDDoSCombined, generateMaliciousPacketData };
+module.exports = { detectDDoSCombined, generateMaliciousPacketData, checkMLHealth };

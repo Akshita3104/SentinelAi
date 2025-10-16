@@ -10129,3 +10129,641 @@ NameError: name 'ml_engine' is not defined
 2025-09-08 22:24:19,220 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: normal (0.94)
 2025-09-08 22:24:19,222 INFO: 127.0.0.1 - - [08/Sep/2025 22:24:19] "POST /predict HTTP/1.1" 200 -
 2025-09-08 22:24:58,515 INFO: Flask server has stopped
+2025-09-09 16:22:54,517 INFO: ML Engine initialized successfully
+2025-09-09 16:22:54,518 INFO: Starting Flask API server on port 5001
+2025-09-09 16:22:54,562 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-09-09 16:22:54,564 INFO: [33mPress CTRL+C to quit[0m
+2025-09-09 16:26:25,918 INFO: Received request at '/' route
+2025-09-09 16:26:25,920 INFO: 127.0.0.1 - - [09/Sep/2025 16:26:25] "GET / HTTP/1.1" 200 -
+2025-09-09 16:26:25,931 INFO: Initializing default models
+2025-09-09 16:26:26,107 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-09-09 16:26:26,111 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-09-09 16:26:26,112 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: unknown (0.00)
+2025-09-09 16:26:26,113 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: unknown (0.00)
+2025-09-09 16:26:26,115 INFO: 127.0.0.1 - - [09/Sep/2025 16:26:26] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:26:26,117 INFO: 127.0.0.1 - - [09/Sep/2025 16:26:26] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:26:26,241 INFO: Default models initialized with fitted scaler
+2025-09-09 16:26:26,252 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:26:26,253 INFO: 127.0.0.1 - - [09/Sep/2025 16:26:26] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:29:43,215 INFO: Received request at '/' route
+2025-09-09 16:29:43,216 INFO: 127.0.0.1 - - [09/Sep/2025 16:29:43] "GET / HTTP/1.1" 200 -
+2025-09-09 16:29:43,234 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:29:43,235 INFO: 127.0.0.1 - - [09/Sep/2025 16:29:43] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:29:43,255 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:29:43,256 INFO: 127.0.0.1 - - [09/Sep/2025 16:29:43] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:13,844 INFO: Received request at '/' route
+2025-09-09 16:36:13,845 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:13] "GET / HTTP/1.1" 200 -
+2025-09-09 16:36:13,862 INFO: Received request at '/' route
+2025-09-09 16:36:13,862 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:13] "GET / HTTP/1.1" 200 -
+2025-09-09 16:36:13,890 INFO: Enhanced ML Prediction - IP: 0.0.0.0, Result: normal (0.93)
+2025-09-09 16:36:13,892 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:13] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:13,918 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:13,919 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:13] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:14,157 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:14,158 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:14] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:14,370 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:14,370 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:14] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:14,583 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:14,583 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:14] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:14,808 INFO: Redirected 192.168.1.100 to honeypot 192.168.1.100
+2025-09-09 16:36:14,809 INFO: Flow rule installed on switch 1
+2025-09-09 16:36:14,809 INFO: Scheduled redirection removal for 192.168.1.100 at 2025-09-09 16:41:14.809358
+2025-09-09 16:36:14,809 INFO: Redirected IP to honeypot: 192.168.1.100
+2025-09-09 16:36:14,810 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: suspicious (0.63)
+2025-09-09 16:36:14,810 INFO: Mitigation applied: ['REDIRECTED_TO_HONEYPOT']
+2025-09-09 16:36:14,811 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:14] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,017 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,018 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,296 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "[31m[1mPOST /predict HTTP/1.1[0m" 400 -
+2025-09-09 16:36:15,556 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,563 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,601 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,605 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,630 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,636 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,652 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,656 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,657 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,657 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,772 INFO: Enhanced ML Prediction - IP: 0.0.0.0, Result: normal (0.93)
+2025-09-09 16:36:15,773 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:15,787 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:15,788 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:15] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,129 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,131 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,147 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,149 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,150 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,151 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,155 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,167 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,168 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,171 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,182 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,185 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,188 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,189 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,190 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,191 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,192 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,192 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,194 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,195 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,413 INFO: Received request at '/' route
+2025-09-09 16:36:16,414 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "GET / HTTP/1.1" 200 -
+2025-09-09 16:36:16,437 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,438 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:36:16,464 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-09 16:36:16,466 INFO: 127.0.0.1 - - [09/Sep/2025 16:36:16] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:38:09,889 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: suspicious (0.43)
+2025-09-09 16:38:09,889 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: suspicious (0.43)
+2025-09-09 16:38:09,889 INFO: 127.0.0.1 - - [09/Sep/2025 16:38:09] "POST /predict HTTP/1.1" 200 -
+2025-09-09 16:38:09,890 INFO: 127.0.0.1 - - [09/Sep/2025 16:38:09] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:16:22,771 WARNING: No SDN environment detected - using simulation mode
+2025-09-10 12:16:22,861 INFO: ML Engine initialized successfully
+2025-09-10 12:16:22,861 INFO: Starting Flask API server on port 5001
+2025-09-10 12:16:22,961 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-09-10 12:16:22,963 INFO: [33mPress CTRL+C to quit[0m
+2025-09-10 12:17:06,841 INFO: Initializing default models
+2025-09-10 12:17:06,847 INFO: Initializing default models
+2025-09-10 12:17:10,403 INFO: Default models initialized with fitted scaler
+2025-09-10 12:17:10,548 INFO: Default models initialized with fitted scaler
+2025-09-10 12:17:10,761 INFO: Enhanced ML Prediction - IP: 10.0.37.188, Result: normal (0.93)
+2025-09-10 12:17:10,778 INFO: 127.0.0.1 - - [10/Sep/2025 12:17:10] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:17:10,796 INFO: Enhanced ML Prediction - IP: 10.0.37.188, Result: normal (0.93)
+2025-09-10 12:17:10,837 INFO: 127.0.0.1 - - [10/Sep/2025 12:17:10] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:17:18,288 INFO: Enhanced ML Prediction - IP: 10.0.37.188, Result: normal (0.93)
+2025-09-10 12:17:18,331 INFO: 127.0.0.1 - - [10/Sep/2025 12:17:18] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:18:02,244 INFO: 127.0.0.1 - - [10/Sep/2025 12:18:02] "GET /sdn-status HTTP/1.1" 200 -
+2025-09-10 12:41:48,134 INFO: Enhanced ML Prediction - IP: 10.0.37.188, Result: normal (0.93)
+2025-09-10 12:41:48,136 INFO: 127.0.0.1 - - [10/Sep/2025 12:41:48] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:41:48,644 INFO: Enhanced ML Prediction - IP: 10.0.37.188, Result: normal (0.93)
+2025-09-10 12:41:48,645 INFO: 127.0.0.1 - - [10/Sep/2025 12:41:48] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:45:03,496 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-10 12:45:03,504 INFO: 127.0.0.1 - - [10/Sep/2025 12:45:03] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:45:03,511 INFO: Enhanced ML Prediction - IP: 192.168.1.100, Result: normal (0.93)
+2025-09-10 12:45:03,514 INFO: 127.0.0.1 - - [10/Sep/2025 12:45:03] "POST /predict HTTP/1.1" 200 -
+2025-09-10 12:46:45,615 INFO: Flask server has stopped
+2025-09-10 12:46:56,932 WARNING: No SDN environment detected - using simulation mode
+2025-09-10 12:46:56,947 INFO: ML Engine initialized successfully
+2025-09-10 12:46:56,948 INFO: Starting Flask API server on port 5001
+2025-09-10 12:46:57,016 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-09-10 12:46:57,018 INFO: [33mPress CTRL+C to quit[0m
+2025-10-16 20:25:02,725 WARNING: No SDN environment detected - using simulation mode
+2025-10-16 20:25:02,751 INFO: Loaded 17 feature columns
+2025-10-16 20:25:02,805 INFO: Enhanced scaler loaded
+2025-10-16 20:25:02,816 INFO: Label encoder loaded
+2025-10-16 20:25:02,858 INFO: Loaded random_forest model
+2025-10-16 20:25:02,878 WARNING: Failed to load gradient_boosting: No module named '_loss'
+2025-10-16 20:25:02,907 INFO: Loaded logistic_regression model
+2025-10-16 20:25:02,946 INFO: Loaded svm model
+2025-10-16 20:25:02,997 INFO: Loaded knn model
+2025-10-16 20:25:04,883 INFO: Loaded xgboost model
+2025-10-16 20:25:04,920 INFO: Loaded lightgbm model
+2025-10-16 20:25:04,945 WARNING: Failed to load lstm: persistent IDs in protocol 0 must be ASCII strings
+2025-10-16 20:25:04,946 INFO: Loaded 6 enhanced models
+2025-10-16 20:25:04,988 INFO: ML Engine initialized successfully
+2025-10-16 20:25:04,988 INFO: Starting Flask API server on port 5001
+2025-10-16 20:25:05,015 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-10-16 20:25:05,015 INFO: [33mPress CTRL+C to quit[0m
+2025-10-16 20:26:19,708 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:19,709 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:19,710 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:19,713 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:19] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:21,411 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:21,414 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:21,416 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:21,417 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:21] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:25,911 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:25,912 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:25,914 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:25,916 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:25] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:26,913 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:26,914 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:26,915 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:26,916 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:26] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:27,412 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:27,413 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:27,414 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:27,415 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:27] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:30,403 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:30,404 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:30,406 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:30,408 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:30] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:31,924 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:31,925 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:31,925 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:31,928 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:31] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:32,923 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:32,924 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:32,924 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:32,925 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:32] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:37,983 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:37,983 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:37,984 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:37,986 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:37] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:39,440 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:39,441 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:39,442 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:39,443 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:39] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:39,923 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:39,924 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:39,924 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:39,925 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:39] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:40,425 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:40,427 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:40,428 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:40,430 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:40] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:41,924 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:41,924 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:41,925 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:41,925 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:41] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:42,416 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:42,416 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:42,417 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:42,417 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:42] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:43,408 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:43,408 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:43,409 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:43,410 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:43] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:43,901 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:43,901 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:43,902 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:43,903 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:43] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:50,903 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:50,904 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:50,904 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:50,905 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:50] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:53,403 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:53,403 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:53,406 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:53,407 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:53] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:53,907 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:53,908 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:53,909 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:53,910 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:53] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:26:56,922 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:26:56,923 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:26:56,923 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:26:56,924 INFO: 127.0.0.1 - - [16/Oct/2025 20:26:56] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:27:03,418 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:27:03,419 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:27:03,420 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:27:03,420 INFO: 127.0.0.1 - - [16/Oct/2025 20:27:03] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:27:04,905 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:27:04,908 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:27:04,909 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:27:04,910 INFO: 127.0.0.1 - - [16/Oct/2025 20:27:04] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:27:05,459 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:27:05,462 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:27:05,463 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:27:05,464 INFO: 127.0.0.1 - - [16/Oct/2025 20:27:05] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:27:05,948 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:27:05,949 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:27:05,950 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:27:05,951 INFO: 127.0.0.1 - - [16/Oct/2025 20:27:05] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:27:29,606 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:27:29,606 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:27:29,607 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:27:29,608 INFO: 127.0.0.1 - - [16/Oct/2025 20:27:29] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:27:34,123 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:27:34,124 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:27:34,124 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:27:34,125 INFO: 127.0.0.1 - - [16/Oct/2025 20:27:34] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:14,943 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:14,945 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:14,948 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:14,950 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:14] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:15,826 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:15,828 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:15,829 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:15,830 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:15] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:18,414 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:18,415 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:18,417 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:18,419 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:18] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:21,826 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:21,827 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:21,828 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:21,829 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:21] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:23,336 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:23,336 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:23,336 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:23,337 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:23] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:23,850 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:23,851 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:23,851 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:23,852 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:23] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:26,318 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:26] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:39:27,368 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:27] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:39:27,824 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:27,824 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:27,825 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:27,826 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:27] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:29,115 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:29] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:39:29,420 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:29] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:39:29,946 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:29] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:39:30,342 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:30,342 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:30,343 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:30,344 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:30] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:31,404 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:31,405 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:31,406 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:31,408 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:31] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:32,827 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:32,828 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:32,828 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:32,829 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:32] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:34,852 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:34,853 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:34,854 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:34,856 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:34] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:39:35,322 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:39:35,322 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:39:35,323 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:39:35,324 INFO: 127.0.0.1 - - [16/Oct/2025 20:39:35] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:42:30,386 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:42:30,391 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:42:30,403 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:42:30,414 INFO: 127.0.0.1 - - [16/Oct/2025 20:42:30] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:42:34,544 INFO: 127.0.0.1 - - [16/Oct/2025 20:42:34] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:42:37,249 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:42:37,251 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:42:37,253 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:42:37,256 INFO: 127.0.0.1 - - [16/Oct/2025 20:42:37] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:42:39,238 INFO: 127.0.0.1 - - [16/Oct/2025 20:42:39] "[33mGET /traffic-sources HTTP/1.1[0m" 404 -
+2025-10-16 20:42:39,448 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:42:39,449 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:42:39,450 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:42:39,451 INFO: 127.0.0.1 - - [16/Oct/2025 20:42:39] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:43:02,140 INFO: Flask server has stopped
+2025-10-16 20:43:23,693 WARNING: No SDN environment detected - using simulation mode
+2025-10-16 20:43:23,696 INFO: Loaded 17 feature columns
+2025-10-16 20:43:23,708 INFO: Enhanced scaler loaded
+2025-10-16 20:43:23,713 INFO: Label encoder loaded
+2025-10-16 20:43:23,745 INFO: Loaded random_forest model
+2025-10-16 20:43:23,747 WARNING: Failed to load gradient_boosting: No module named '_loss'
+2025-10-16 20:43:23,748 INFO: Loaded logistic_regression model
+2025-10-16 20:43:23,754 INFO: Loaded svm model
+2025-10-16 20:43:23,770 INFO: Loaded knn model
+2025-10-16 20:43:25,495 INFO: Loaded xgboost model
+2025-10-16 20:43:25,515 INFO: Loaded lightgbm model
+2025-10-16 20:43:25,517 WARNING: Failed to load lstm: persistent IDs in protocol 0 must be ASCII strings
+2025-10-16 20:43:25,517 INFO: Loaded 6 enhanced models
+2025-10-16 20:43:25,526 INFO: ML Engine initialized successfully
+2025-10-16 20:43:25,526 INFO: Starting Flask API server on port 5001
+2025-10-16 20:43:25,563 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-10-16 20:43:25,564 INFO: [33mPress CTRL+C to quit[0m
+2025-10-16 20:45:34,182 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:45:34,184 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:45:34,186 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:45:34,191 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:34] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:45:34,599 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:34] "GET /traffic-sources HTTP/1.1" 200 -
+2025-10-16 20:45:38,366 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:45:38,374 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:45:38,385 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:45:38,431 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:38] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:45:39,276 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:39] "GET /traffic-sources HTTP/1.1" 200 -
+2025-10-16 20:45:40,146 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:45:40,147 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:45:40,149 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:45:40,150 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:40] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:45:44,596 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:44] "GET /traffic-sources HTTP/1.1" 200 -
+2025-10-16 20:45:49,275 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:49] "GET /traffic-sources HTTP/1.1" 200 -
+2025-10-16 20:45:53,176 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:45:53,177 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:45:53,179 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:45:53,187 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:53] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:45:54,586 INFO: 127.0.0.1 - - [16/Oct/2025 20:45:54] "GET /traffic-sources HTTP/1.1" 200 -
+2025-10-16 20:47:35,146 INFO: Flask server has stopped
+2025-10-16 20:49:06,688 WARNING: No SDN environment detected - using simulation mode
+2025-10-16 20:49:06,690 INFO: Loaded 17 feature columns
+2025-10-16 20:49:06,694 INFO: Enhanced scaler loaded
+2025-10-16 20:49:06,697 INFO: Label encoder loaded
+2025-10-16 20:49:06,724 INFO: Loaded random_forest model
+2025-10-16 20:49:06,725 WARNING: Failed to load gradient_boosting: No module named '_loss'
+2025-10-16 20:49:06,727 INFO: Loaded logistic_regression model
+2025-10-16 20:49:06,730 INFO: Loaded svm model
+2025-10-16 20:49:06,737 INFO: Loaded knn model
+2025-10-16 20:49:08,448 INFO: Loaded xgboost model
+2025-10-16 20:49:08,468 INFO: Loaded lightgbm model
+2025-10-16 20:49:08,470 WARNING: Failed to load lstm: persistent IDs in protocol 0 must be ASCII strings
+2025-10-16 20:49:08,470 INFO: Loaded 6 enhanced models
+2025-10-16 20:49:08,477 INFO: ML Engine initialized successfully
+2025-10-16 20:49:08,478 INFO: Starting Flask API server on port 5001
+2025-10-16 20:49:08,509 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-10-16 20:49:08,509 INFO: [33mPress CTRL+C to quit[0m
+2025-10-16 20:50:59,993 INFO: Flask server has stopped
+2025-10-16 20:51:22,144 WARNING: No SDN environment detected - using simulation mode
+2025-10-16 20:51:22,147 INFO: Loaded 17 feature columns
+2025-10-16 20:51:22,153 INFO: Enhanced scaler loaded
+2025-10-16 20:51:22,155 INFO: Label encoder loaded
+2025-10-16 20:51:22,206 INFO: Loaded random_forest model
+2025-10-16 20:51:22,207 WARNING: Failed to load gradient_boosting: No module named '_loss'
+2025-10-16 20:51:22,208 INFO: Loaded logistic_regression model
+2025-10-16 20:51:22,211 INFO: Loaded svm model
+2025-10-16 20:51:22,218 INFO: Loaded knn model
+2025-10-16 20:51:23,886 INFO: Loaded xgboost model
+2025-10-16 20:51:23,900 INFO: Loaded lightgbm model
+2025-10-16 20:51:23,901 WARNING: Failed to load lstm: persistent IDs in protocol 0 must be ASCII strings
+2025-10-16 20:51:23,902 INFO: Loaded 6 enhanced models
+2025-10-16 20:51:23,908 INFO: ML Engine initialized successfully
+2025-10-16 20:51:23,908 INFO: Starting Flask API server on port 5001
+2025-10-16 20:51:23,954 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-10-16 20:51:23,956 INFO: [33mPress CTRL+C to quit[0m
+2025-10-16 20:53:09,907 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:09,908 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:09,910 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:09,911 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:09,917 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:09] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:09,917 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:09,920 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:09,927 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:09] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:10,221 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:10,222 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:10,224 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:10,226 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:10] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:12,211 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:12,212 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:12,213 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:12,215 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:12] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:18,205 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:18,206 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:18,208 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:18,209 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:18] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:20,217 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:20,218 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:20,219 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:20,221 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:20] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:23,748 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:23,749 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:23,750 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:23,752 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:23] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:25,724 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:25,725 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:25,727 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:25,728 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:25] "POST /predict HTTP/1.1" 200 -
+2025-10-16 20:53:28,776 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 20:53:28,779 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 20:53:28,781 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 20:53:28,783 INFO: 127.0.0.1 - - [16/Oct/2025 20:53:28] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:27:50,093 INFO: Flask server has stopped
+2025-10-16 21:28:12,017 WARNING: No SDN environment detected - using simulation mode
+2025-10-16 21:28:12,019 INFO: Loaded 17 feature columns
+2025-10-16 21:28:12,021 INFO: Enhanced scaler loaded
+2025-10-16 21:28:12,024 INFO: Label encoder loaded
+2025-10-16 21:28:12,048 INFO: Loaded random_forest model
+2025-10-16 21:28:12,050 WARNING: Failed to load gradient_boosting: No module named '_loss'
+2025-10-16 21:28:12,052 INFO: Loaded logistic_regression model
+2025-10-16 21:28:12,056 INFO: Loaded svm model
+2025-10-16 21:28:12,063 INFO: Loaded knn model
+2025-10-16 21:28:13,771 INFO: Loaded xgboost model
+2025-10-16 21:28:13,786 INFO: Loaded lightgbm model
+2025-10-16 21:28:13,787 WARNING: Failed to load lstm: persistent IDs in protocol 0 must be ASCII strings
+2025-10-16 21:28:13,788 INFO: Loaded 6 enhanced models
+2025-10-16 21:28:13,792 INFO: ML Engine initialized successfully
+2025-10-16 21:28:13,793 INFO: Starting Flask API server on port 5001
+2025-10-16 21:28:13,812 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2025-10-16 21:28:13,812 INFO: [33mPress CTRL+C to quit[0m
+2025-10-16 21:28:22,847 INFO: 127.0.0.1 - - [16/Oct/2025 21:28:22] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:28:24,907 INFO: 127.0.0.1 - - [16/Oct/2025 21:28:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:28:32,871 INFO: 127.0.0.1 - - [16/Oct/2025 21:28:32] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:28:42,852 INFO: 127.0.0.1 - - [16/Oct/2025 21:28:42] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:28:50,692 INFO: 127.0.0.1 - - [16/Oct/2025 21:28:50] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:28:52,862 INFO: 127.0.0.1 - - [16/Oct/2025 21:28:52] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:02,117 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:02,119 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:02,121 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:02,122 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:02,128 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:02,129 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:02] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:02,131 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:02,141 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:02] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:02,780 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:02,784 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:02,785 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:02,787 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:02] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:02,890 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:02] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:03,497 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:03,498 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:03,499 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:03,502 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:03] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:03,677 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:03,678 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:03,679 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:03,680 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:03] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:09,513 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:09] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:12,879 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:12] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:14,158 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:14,158 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:14,159 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:14,162 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:14] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:22,882 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:22] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:24,511 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:25,175 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:25,176 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:25,177 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:25,178 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:25] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:32,886 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:32] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:36,168 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:36,169 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:36,170 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:36,172 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:36] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:39,511 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:42,884 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:42] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:46,758 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:46,760 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:46,761 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:46,764 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:46] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:29:52,892 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:52] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:54,510 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:29:57,150 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:29:57,150 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:29:57,151 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:29:57,153 INFO: 127.0.0.1 - - [16/Oct/2025 21:29:57] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:30:02,899 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:02] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:08,182 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:30:08,185 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:30:08,190 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:30:08,202 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:08] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:30:09,517 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:09] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:12,904 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:12] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:22,913 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:22] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:24,899 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:32,917 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:32] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:39,513 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:42,938 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:42] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:52,944 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:52] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:30:54,909 INFO: 127.0.0.1 - - [16/Oct/2025 21:30:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:02,947 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:02] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:10,024 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:10] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:12,956 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:12] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:22,961 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:22] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:24,902 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:32,965 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:32] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:39,905 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:42,964 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:42] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:31:52,963 INFO: 127.0.0.1 - - [16/Oct/2025 21:31:52] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:02,978 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:02] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:07,913 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:07] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:09,511 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:09] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:12,977 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:12] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:23,001 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:23] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:24,519 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:32,993 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:32] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:33,253 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:32:33,254 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:32:33,255 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:32:33,256 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:33] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:32:39,520 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:42,995 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:42] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:52,995 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:52] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:32:54,902 INFO: 127.0.0.1 - - [16/Oct/2025 21:32:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:03,009 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:03] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:09,896 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:09] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:13,014 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:13] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:23,019 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:23] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:24,902 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:33,031 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:33] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:39,904 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:43,040 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:43] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:53,042 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:53] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:33:54,903 INFO: 127.0.0.1 - - [16/Oct/2025 21:33:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:03,050 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:03] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:09,896 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:09] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:13,064 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:13] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:23,065 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:23] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:24,898 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:33,080 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:33] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:39,911 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:43,095 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:43] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:34:53,102 INFO: 127.0.0.1 - - [16/Oct/2025 21:34:53] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:03,116 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:03] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:07,902 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:07] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:13,131 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:13] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:23,146 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:23] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:33,146 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:33] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:35,468 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:35] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:39,538 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:39] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:43,160 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:43] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:53,166 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:53] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:35:54,894 INFO: 127.0.0.1 - - [16/Oct/2025 21:35:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:03,176 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:03] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:09,899 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:09] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:13,180 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:13] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:23,178 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:23] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:25,908 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:25] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:33,182 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:33] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:44,713 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:44] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:54,695 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:36:54,758 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:36:54,758 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:36:54,759 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:36:54,766 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:54] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:36:54,925 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:36:54,926 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:36:54,928 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:36:54,930 INFO: 127.0.0.1 - - [16/Oct/2025 21:36:54] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:37:04,700 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:04] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:05,351 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:05] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:05,362 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:37:05,363 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:37:05,364 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:37:05,364 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:05] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:37:14,702 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:14] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:15,852 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:37:15,854 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:37:15,854 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:37:15,854 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:15] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:37:20,344 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:20] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:24,720 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:29,396 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:37:29,396 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:37:29,397 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:37:29,400 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:29] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:37:34,732 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:34] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:35,340 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:35] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:38,551 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:37:38,553 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:37:38,553 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:37:38,554 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:38] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:37:44,741 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:44] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:49,556 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:37:49,556 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:37:49,557 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:37:49,559 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:49] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:37:50,343 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:50] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:37:54,736 INFO: 127.0.0.1 - - [16/Oct/2025 21:37:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:02,519 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:38:02,520 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:38:02,521 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:38:02,522 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:02] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:38:04,735 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:04] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:05,906 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:05] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:14,749 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:14] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:20,521 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:20] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:24,749 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:34,753 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:34] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:35,378 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:35] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:37,067 WARNING: Error with lightgbm: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+2025-10-16 21:38:37,068 ERROR: Error in DDoS detection: 'IsolationForest' object has no attribute 'estimators_'
+2025-10-16 21:38:37,069 INFO: Enhanced ML Prediction - IP: 192.168.43.231, Result: unknown (0.00)
+2025-10-16 21:38:37,070 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:37] "POST /predict HTTP/1.1" 200 -
+2025-10-16 21:38:44,765 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:44] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:50,339 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:50] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:38:54,777 INFO: 127.0.0.1 - - [16/Oct/2025 21:38:54] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:39:04,788 INFO: 127.0.0.1 - - [16/Oct/2025 21:39:04] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:39:05,341 INFO: 127.0.0.1 - - [16/Oct/2025 21:39:05] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:39:14,794 INFO: 127.0.0.1 - - [16/Oct/2025 21:39:14] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:39:20,342 INFO: 127.0.0.1 - - [16/Oct/2025 21:39:20] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:39:24,804 INFO: 127.0.0.1 - - [16/Oct/2025 21:39:24] "GET /health HTTP/1.1" 200 -
+2025-10-16 21:39:35,396 INFO: Flask server has stopped

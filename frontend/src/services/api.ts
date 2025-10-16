@@ -189,6 +189,21 @@ export const apiService = {
       return false;
     }
   },
+
+  // Get system status including ML model health
+  async getSystemStatus(): Promise<any> {
+    try {
+      const response = await apiClient.get('/system-status');
+      return response.data;
+    } catch (error) {
+      console.error('Failed to get system status:', error);
+      return {
+        backend_status: 'disconnected',
+        ml_model_status: 'unknown',
+        fallback_detection: 'available'
+      };
+    }
+  },
 };
 
 // Error handling utility

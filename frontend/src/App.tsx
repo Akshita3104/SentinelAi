@@ -168,7 +168,7 @@ function App() {
           }
           
           // Run ML detection periodically and generate attack simulation
-          if (Math.random() > 0.85) {
+          if (Math.random() > 0.7) {
             const detectionLog = `🤖 Running ML detection on traffic pattern`;
             setDetectionLogs(prev => [detectionLog, ...prev.slice(0, 9)]);
             await performDetection();
@@ -273,7 +273,14 @@ function App() {
         setMlPrediction(result.prediction === 'ddos' ? 'DDoS Detected' : 
                        result.prediction === 'suspicious' ? 'Suspicious' : 'Normal');
         setAbuseScore(result.abuseScore || 0);
-        setDdosRisk(Math.floor(result.confidence * 100));
+        setDdosRisk(Math.floor((result.ensemble_score || result.confidence) * 100));
+        
+        // Update real-time metrics
+        setRealTimeMetrics(prev => ({
+          ...prev,
+          threatScore: Math.floor((result.ensemble_score || result.confidence) * 100),
+          anomalyCount: result.ddos_indicators || 0
+        }));
         
         if (result.network_analysis) {
           setNetworkAnalysis(result.network_analysis);
@@ -333,9 +340,11 @@ function App() {
       
       socket.on('detection-log', (data) => {
         console.log('Detection log:', data.message);
-        // Add to detection logs
+        // Add to detection logs with timestamp
+        const timestamp = new Date().toLocaleTimeString();
+        const logMessage = `[${timestamp}] ${data.message}`;
         setDetectionLogs(prev => {
-          const newLogs = [data.message, ...prev.slice(0, 9)];
+          const newLogs = [logMessage, ...prev.slice(0, 9)];
           return newLogs;
         });
       });
@@ -367,11 +376,25 @@ function App() {
     loadLocalIPs();
     
     checkBackendHealth();
-    // Check every 10 seconds for faster connectivity detection
-    const interval = setInterval(checkBackendHealth, 10000);
+    // Check every 5 seconds for faster connectivity detection
+    const interval = setInterval(checkBackendHealth, 5000);
+    
+    // Also check system status periodically
+    const statusInterval = setInterval(async () => {
+      try {
+        const response = await apiService.getSystemStatus();
+        if (response.ml_model_status === 'disconnected' && !errorMessage.includes('fallback')) {
+          setErrorMessage('ℹ️ ML model offline - using enhanced fallback detection');
+          setTimeout(() => setErrorMessage(''), 4000);
+        }
+      } catch (error) {
+        // Ignore status check errors
+      }
+    }, 15000);
     
     return () => {
       clearInterval(interval);
+      clearInterval(statusInterval);
       stopAutoMonitoring();
       const currentSocket = getSocket();
       if (currentSocket) {
@@ -449,10 +472,13 @@ function App() {
         responseTime: Date.now() - startTime
       });
       
-      // Determine mitigation status
+      // Determine mitigation status based on action
+      const action = result.slice_recommendation?.action || 'Monitor';
       let mitigation = 'Idle';
-      if (result.isDDoS) {
-        mitigation = result.slice_recommendation?.action === 'ISOLATE' ? 'Blackhole Route' : 'Rate-limit Applied';
+      if (action === 'Isolate') {
+        mitigation = 'Blackhole Route';
+      } else if (action === 'Rate-limit') {
+        mitigation = 'Rate-limit Applied';
       }
       setMitigationStatus(mitigation);
 
@@ -919,7 +945,7 @@ function App() {
           <div className="mb-8">
             <div className="bg-gradient-to-br from-gray-800 to-gray-800/80 rounded-2xl p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
               <h3 className="text-lg font-semibold mb-6 flex items-center gap-2"><Eye className="w-5 h-5 text-green-400" />Detection Results & Malicious Analysis</h3>
-              {lastDetectionResult && (
+              {lastDetectionResult ? (
                 <div className="mb-4 p-3 bg-gray-700/50 rounded-lg">
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
@@ -949,7 +975,7 @@ function App() {
                     <div>
                       <span className="text-gray-400">Ensemble Score:</span>
                       <span className="ml-2 font-medium text-white">
-                        {((lastDetectionResult as any).ensemble_score * 100)?.toFixed(1) || 'N/A'}%
+                        {((lastDetectionResult as any).ensemble_score * 100)?.toFixed(1) || (lastDetectionResult.confidence * 100).toFixed(1)}%
                       </span>
                     </div>
                     <div>
@@ -966,6 +992,38 @@ function App() {
                       <strong>Analysis:</strong> {lastDetectionResult.confidence_factors.slice(-2).join(', ')}
                     </div>
                   )}
+                </div>
+              ) : (
+                <div className="mb-4 p-3 bg-gray-700/50 rounded-lg">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">Best Model:</span>
+                      <span className="ml-2 font-medium text-amber-400">WAITING FOR DETECTION</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Prediction:</span>
+                      <span className="ml-2 font-medium text-gray-400">PENDING</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Threat Level:</span>
+                      <span className="ml-2 font-medium text-gray-400">UNKNOWN</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Ensemble Score:</span>
+                      <span className="ml-2 font-medium text-gray-400">N/A</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Indicators:</span>
+                      <span className="ml-2 font-medium text-gray-400">0</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Action:</span>
+                      <span className="ml-2 font-medium text-gray-400">Monitor</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-xs text-gray-400">
+                    <strong>Status:</strong> Click "Run Detection" or start network monitoring to see results
+                  </div>
                 </div>
               )}
               <div className="overflow-x-auto">

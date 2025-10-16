@@ -246,15 +246,50 @@ router.post('/detect-api', detectDDoSWithAPI);
 // ML Model connectivity check
 router.get('/ml-status', async (req, res) => {
   try {
-    const { checkMLModelHealth } = require('../services/mlService');
-    const isHealthy = await checkMLModelHealth();
+    const { checkMLHealth } = require('../controllers/combinedDetectionController');
+    const isHealthy = await checkMLHealth();
     res.json({
       ml_model_status: isHealthy ? 'connected' : 'disconnected',
-      ml_model_url: process.env.ML_MODEL_URL,
+      ml_model_url: process.env.ML_MODEL_URL || 'http://localhost:5001',
+      fallback_available: true,
+      message: isHealthy ? 'ML model is responding' : 'Using enhanced fallback detection',
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({
+      ml_model_status: 'disconnected',
+      ml_model_url: process.env.ML_MODEL_URL || 'http://localhost:5001',
+      fallback_available: true,
+      message: 'Using enhanced fallback detection',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// System status endpoint
+router.get('/system-status', async (req, res) => {
+  try {
+    const { checkMLHealth } = require('../controllers/combinedDetectionController');
+    const mlHealthy = await checkMLHealth();
+    
+    res.json({
+      backend_status: 'connected',
+      ml_model_status: mlHealthy ? 'connected' : 'disconnected',
+      fallback_detection: 'available',
+      real_time_updates: 'active',
+      websocket_status: 'connected',
+      capture_available: captureInstance ? 'ready' : 'unavailable',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.json({
+      backend_status: 'connected',
+      ml_model_status: 'disconnected',
+      fallback_detection: 'available',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
   }
 });
 

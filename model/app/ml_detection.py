@@ -1,47 +1,95 @@
 """
 Machine Learning DDoS Detection Engine
-Advanced ML models for real-time DDoS detection
+Advanced ML models for real-time DDoS detection with multiple model support
 """
 
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier, IsolationForest
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier, IsolationForest, GradientBoostingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 import joblib
 import logging
 from datetime import datetime
 import os
+import json
+import pickle
+try:
+    import xgboost as xgb
+except ImportError:
+    xgb = None
+try:
+    import lightgbm as lgb
+except ImportError:
+    lgb = None
+try:
+    from tensorflow import keras
+except ImportError:
+    keras = None
 
 class MLDetectionEngine:
-    def __init__(self, model_path='models/'):
+    def __init__(self, model_path='../models/'):
         self.model_path = model_path
-        self.rf_model = None
+        self.models = {}
+        self.scaler = None
+        self.label_encoder = None
+        self.feature_columns = None
         self.isolation_forest = None
-        self.scaler = StandardScaler()
-        self.feature_columns = [
-            'duration', 'total_packets', 'total_bytes', 'packets_per_second',
-            'bytes_per_second', 'avg_packet_size', 'std_packet_size',
-            'min_packet_size', 'max_packet_size', 'avg_iat', 'std_iat',
-            'unique_src_ports', 'unique_dst_ports', 'unique_protocols',
-            'is_tcp', 'is_udp', 'is_icmp'
-        ]
         self.logger = logging.getLogger(__name__)
-        self.load_models()
+        self.load_enhanced_models()
     
-    def load_models(self):
-        """Load pre-trained models"""
+    def load_enhanced_models(self):
+        """Load all enhanced pre-trained models"""
         try:
-            rf_path = os.path.join(self.model_path, 'random_forest_model.pkl')
-            scaler_path = os.path.join(self.model_path, 'scaler.pkl')
+            # Load feature columns
+            feature_path = os.path.join(self.model_path, 'feature_columns.pkl')
+            if os.path.exists(feature_path):
+                with open(feature_path, 'rb') as f:
+                    self.feature_columns = pickle.load(f)
+                self.logger.info(f"Loaded {len(self.feature_columns)} feature columns")
             
-            if os.path.exists(rf_path):
-                self.rf_model = joblib.load(rf_path)
-                self.logger.info("Random Forest model loaded successfully")
-            
+            # Load scaler
+            scaler_path = os.path.join(self.model_path, 'scaler_enhanced.pkl')
             if os.path.exists(scaler_path):
                 self.scaler = joblib.load(scaler_path)
-                self.logger.info("Scaler loaded successfully")
+                self.logger.info("Enhanced scaler loaded")
+            
+            # Load label encoder
+            encoder_path = os.path.join(self.model_path, 'label_encoder_enhanced.pkl')
+            if os.path.exists(encoder_path):
+                self.label_encoder = joblib.load(encoder_path)
+                self.logger.info("Label encoder loaded")
+            
+            # Load all enhanced models
+            model_files = {
+                'random_forest': 'randomforest_enhanced.pkl',
+                'gradient_boosting': 'gradient_boosting_enhanced.pkl',
+                'logistic_regression': 'logistic_regression_enhanced.pkl',
+                'svm': 'svm_enhanced.pkl',
+                'knn': 'knn_enhanced.pkl',
+                'xgboost': 'xgboost_enhanced.json',
+                'lightgbm': 'lightgbm_enhanced.txt',
+                'lstm': 'lstm_model_enhanced.keras'
+            }
+            
+            for model_name, filename in model_files.items():
+                model_path = os.path.join(self.model_path, filename)
+                if os.path.exists(model_path):
+                    try:
+                        if model_name == 'xgboost' and xgb:
+                            self.models[model_name] = xgb.XGBClassifier()
+                            self.models[model_name].load_model(model_path)
+                        elif model_name == 'lightgbm' and lgb:
+                            self.models[model_name] = lgb.Booster(model_file=model_path)
+                        elif model_name == 'lstm' and keras:
+                            self.models[model_name] = keras.models.load_model(model_path)
+                        else:
+                            self.models[model_name] = joblib.load(model_path)
+                        self.logger.info(f"Loaded {model_name} model")
+                    except Exception as e:
+                        self.logger.warning(f"Failed to load {model_name}: {e}")
             
             # Initialize Isolation Forest for anomaly detection
             self.isolation_forest = IsolationForest(
@@ -50,13 +98,24 @@ class MLDetectionEngine:
                 n_estimators=100
             )
             
+            self.logger.info(f"Loaded {len(self.models)} enhanced models")
+            
         except Exception as e:
-            self.logger.error(f"Error loading models: {e}")
-            self.initialize_default_models()
+            self.logger.error(f"Error loading enhanced models: {e}")
+            self.initialize_fallback_models()
     
-    def initialize_default_models(self):
-        """Initialize default models if pre-trained models not available"""
-        self.logger.info("Initializing default models")
+    def initialize_fallback_models(self):
+        """Initialize fallback models if enhanced models not available"""
+        self.logger.info("Initializing fallback models")
+        
+        # Default feature columns
+        self.feature_columns = [
+            'duration', 'total_packets', 'total_bytes', 'packets_per_second',
+            'bytes_per_second', 'avg_packet_size', 'std_packet_size',
+            'min_packet_size', 'max_packet_size', 'avg_iat', 'std_iat',
+            'unique_src_ports', 'unique_dst_ports', 'unique_protocols',
+            'is_tcp', 'is_udp', 'is_icmp'
+        ]
         
         # Create synthetic training data
         np.random.seed(42)
@@ -82,18 +141,20 @@ class MLDetectionEngine:
         y = np.hstack([normal_labels, attack_labels])
         
         # Fit scaler and transform data
+        self.scaler = StandardScaler()
         self.scaler.fit(X)
         X_scaled = self.scaler.transform(X)
         
-        # Train Random Forest
-        self.rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-        self.rf_model.fit(X_scaled, y)
+        # Train fallback Random Forest
+        self.models['random_forest'] = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.models['random_forest'].fit(X_scaled, y)
         
         # Train Isolation Forest
         normal_indices = y == 0
+        self.isolation_forest = IsolationForest(contamination=0.1, random_state=42, n_estimators=100)
         self.isolation_forest.fit(X_scaled[normal_indices])
         
-        self.logger.info("Default models initialized with fitted scaler")
+        self.logger.info("Fallback models initialized")
     
     def preprocess_features(self, flow_features):
         """Preprocess flow features for ML prediction"""
@@ -103,6 +164,16 @@ class MLDetectionEngine:
                 df = pd.DataFrame([flow_features])
             else:
                 df = pd.DataFrame(flow_features)
+            
+            # Use loaded feature columns or fallback
+            if self.feature_columns is None:
+                self.feature_columns = [
+                    'duration', 'total_packets', 'total_bytes', 'packets_per_second',
+                    'bytes_per_second', 'avg_packet_size', 'std_packet_size',
+                    'min_packet_size', 'max_packet_size', 'avg_iat', 'std_iat',
+                    'unique_src_ports', 'unique_dst_ports', 'unique_protocols',
+                    'is_tcp', 'is_udp', 'is_icmp'
+                ]
             
             # Ensure all required columns exist with defaults
             defaults = {
@@ -124,7 +195,8 @@ class MLDetectionEngine:
             # Convert boolean columns to int
             bool_cols = ['is_tcp', 'is_udp', 'is_icmp']
             for col in bool_cols:
-                df[col] = df[col].astype(int)
+                if col in df.columns:
+                    df[col] = df[col].astype(int)
             
             return df.values
             
@@ -133,60 +205,89 @@ class MLDetectionEngine:
             return None
     
     def detect_ddos(self, flow_features):
-        """Detect DDoS attacks using ensemble of ML models"""
+        """Detect DDoS attacks using ensemble of enhanced ML models"""
         try:
             # Ensure models are initialized
-            if self.rf_model is None:
-                self.initialize_default_models()
+            if not self.models:
+                self.initialize_fallback_models()
             
             # Preprocess features
             X = self.preprocess_features(flow_features)
             if X is None:
                 return self.create_default_response("preprocessing_error")
             
-            # Scale features (with fallback)
+            # Scale features
             try:
-                X_scaled = self.scaler.transform(X)
+                if self.scaler:
+                    X_scaled = self.scaler.transform(X)
+                else:
+                    X_scaled = X
             except Exception:
-                # If scaler not fitted, reinitialize models
-                self.initialize_default_models()
+                self.initialize_fallback_models()
                 X_scaled = self.scaler.transform(X)
             
-            # Random Forest prediction
-            rf_prediction = None
-            rf_confidence = 0.5
-            if self.rf_model:
-                rf_pred = self.rf_model.predict(X_scaled)[0]
-                rf_proba = self.rf_model.predict_proba(X_scaled)[0]
-                rf_prediction = 'ddos' if rf_pred == 1 else 'normal'
-                rf_confidence = max(rf_proba)
+            # Get predictions from all available models
+            model_predictions = {}
+            prediction_scores = []
+            
+            for model_name, model in self.models.items():
+                try:
+                    if model_name == 'lightgbm' and lgb:
+                        pred_proba = model.predict(X_scaled)
+                        pred = 1 if pred_proba[0] > 0.5 else 0
+                        confidence = abs(pred_proba[0] - 0.5) * 2
+                    elif model_name == 'lstm' and keras:
+                        pred_proba = model.predict(X_scaled, verbose=0)[0][0]
+                        pred = 1 if pred_proba > 0.5 else 0
+                        confidence = abs(pred_proba - 0.5) * 2
+                    else:
+                        pred = model.predict(X_scaled)[0]
+                        if hasattr(model, 'predict_proba'):
+                            proba = model.predict_proba(X_scaled)[0]
+                            confidence = max(proba)
+                        else:
+                            confidence = 0.7  # Default confidence for models without probability
+                    
+                    prediction = 'ddos' if pred == 1 else 'normal'
+                    model_predictions[model_name] = {
+                        'prediction': prediction,
+                        'confidence': float(confidence)
+                    }
+                    
+                    # Weight predictions for ensemble
+                    weight = self.get_model_weight(model_name)
+                    if prediction == 'ddos':
+                        prediction_scores.append(confidence * weight)
+                    else:
+                        prediction_scores.append((1 - confidence) * weight * -1)
+                        
+                except Exception as e:
+                    self.logger.warning(f"Error with {model_name}: {e}")
             
             # Isolation Forest anomaly detection
             if_prediction = None
             if_score = 0
             if self.isolation_forest:
-                if_pred = self.isolation_forest.predict(X_scaled)[0]
-                if_score = self.isolation_forest.decision_function(X_scaled)[0]
-                if_prediction = 'anomaly' if if_pred == -1 else 'normal'
+                try:
+                    if_pred = self.isolation_forest.predict(X_scaled)[0]
+                    if_score = self.isolation_forest.decision_function(X_scaled)[0]
+                    if_prediction = 'anomaly' if if_pred == -1 else 'normal'
+                    model_predictions['isolation_forest'] = {
+                        'prediction': if_prediction,
+                        'anomaly_score': float(if_score)
+                    }
+                except Exception as e:
+                    self.logger.warning(f"Isolation Forest error: {e}")
             
-            # Ensemble decision
-            final_prediction, confidence, threat_level = self.ensemble_decision(
-                rf_prediction, rf_confidence, if_prediction, if_score, flow_features
+            # Enhanced ensemble decision
+            final_prediction, confidence, threat_level = self.enhanced_ensemble_decision(
+                model_predictions, prediction_scores, flow_features
             )
             
             # Generate confidence factors
-            confidence_factors = []
-            if rf_prediction == 'ddos':
-                confidence_factors.append(f"Random Forest detected DDoS with {rf_confidence:.2f} confidence")
-            if if_prediction == 'anomaly':
-                confidence_factors.append(f"Isolation Forest detected anomaly (score: {if_score:.3f})")
-            
-            # Add flow-based indicators
-            if isinstance(flow_features, dict):
-                if flow_features.get('packets_per_second', 0) > 1000:
-                    confidence_factors.append("High packet rate detected")
-                if flow_features.get('bytes_per_second', 0) > 1000000:
-                    confidence_factors.append("High bandwidth utilization detected")
+            confidence_factors = self.generate_confidence_factors(
+                model_predictions, flow_features
+            )
             
             # Create detailed response
             response = {
@@ -194,19 +295,12 @@ class MLDetectionEngine:
                 'confidence': confidence,
                 'threat_level': threat_level,
                 'confidence_factors': confidence_factors,
-                'model_predictions': {
-                    'random_forest': {
-                        'prediction': rf_prediction,
-                        'confidence': rf_confidence
-                    },
-                    'isolation_forest': {
-                        'prediction': if_prediction,
-                        'anomaly_score': if_score
-                    }
-                },
+                'model_predictions': model_predictions,
+                'ensemble_score': float(np.mean(prediction_scores)) if prediction_scores else 0.0,
+                'models_used': list(self.models.keys()),
                 'flow_analysis': self.analyze_flow_characteristics(flow_features),
                 'timestamp': datetime.now().isoformat(),
-                'model_version': '2.0.0'
+                'model_version': '3.0.0'
             }
             
             return response
@@ -215,41 +309,84 @@ class MLDetectionEngine:
             self.logger.error(f"Error in DDoS detection: {e}")
             return self.create_default_response("detection_error")
     
-    def ensemble_decision(self, rf_pred, rf_conf, if_pred, if_score, flow_features):
-        """Make ensemble decision from multiple models"""
+    def get_model_weight(self, model_name):
+        """Get weight for each model in ensemble"""
+        weights = {
+            'random_forest': 0.2,
+            'gradient_boosting': 0.18,
+            'xgboost': 0.17,
+            'lightgbm': 0.15,
+            'svm': 0.12,
+            'logistic_regression': 0.1,
+            'knn': 0.05,
+            'lstm': 0.03
+        }
+        return weights.get(model_name, 0.1)
+    
+    def enhanced_ensemble_decision(self, model_predictions, prediction_scores, flow_features):
+        """Enhanced ensemble decision from multiple models"""
         
-        # Calculate threat indicators
-        threat_score = 0
+        # Calculate weighted ensemble score
+        if prediction_scores:
+            ensemble_score = np.mean(prediction_scores)
+        else:
+            ensemble_score = 0
         
-        # Random Forest contribution
-        if rf_pred == 'ddos':
-            threat_score += rf_conf * 0.6
-        
-        # Isolation Forest contribution
-        if if_pred == 'anomaly':
-            threat_score += abs(if_score) * 0.4
+        # Count DDoS predictions
+        ddos_count = sum(1 for pred in model_predictions.values() 
+                        if pred.get('prediction') == 'ddos')
+        total_models = len(model_predictions)
         
         # Flow-based heuristics
+        flow_threat_score = 0
         if isinstance(flow_features, dict):
-            # High packet rate indicator
             if flow_features.get('packets_per_second', 0) > 1000:
-                threat_score += 0.2
-            
-            # High byte rate indicator
-            if flow_features.get('bytes_per_second', 0) > 1000000:  # 1MB/s
-                threat_score += 0.2
-            
-            # Unusual packet size patterns
+                flow_threat_score += 0.3
+            if flow_features.get('bytes_per_second', 0) > 1000000:
+                flow_threat_score += 0.3
             if flow_features.get('std_packet_size', 0) > 500:
-                threat_score += 0.1
+                flow_threat_score += 0.2
+            if flow_features.get('unique_dst_ports', 0) > 10:
+                flow_threat_score += 0.2
         
-        # Determine final prediction
-        if threat_score > 0.7:
-            return 'ddos', min(0.95, threat_score), 'HIGH'
-        elif threat_score > 0.4:
-            return 'suspicious', threat_score, 'MEDIUM'
+        # Combine scores
+        final_score = (ensemble_score + flow_threat_score) / 2
+        consensus_ratio = ddos_count / total_models if total_models > 0 else 0
+        
+        # Decision logic
+        if final_score > 0.7 or consensus_ratio > 0.6:
+            confidence = min(0.95, max(final_score, consensus_ratio))
+            return 'ddos', confidence, 'HIGH'
+        elif final_score > 0.4 or consensus_ratio > 0.3:
+            confidence = max(final_score, consensus_ratio)
+            return 'suspicious', confidence, 'MEDIUM'
         else:
-            return 'normal', 1 - threat_score, 'LOW'
+            confidence = 1 - max(final_score, consensus_ratio)
+            return 'normal', confidence, 'LOW'
+    
+    def generate_confidence_factors(self, model_predictions, flow_features):
+        """Generate detailed confidence factors"""
+        factors = []
+        
+        # Model-based factors
+        for model_name, pred in model_predictions.items():
+            if pred.get('prediction') == 'ddos':
+                conf = pred.get('confidence', 0)
+                factors.append(f"{model_name.replace('_', ' ').title()} detected DDoS with {conf:.2f} confidence")
+            elif pred.get('prediction') == 'anomaly':
+                score = pred.get('anomaly_score', 0)
+                factors.append(f"Anomaly detected by Isolation Forest (score: {score:.3f})")
+        
+        # Flow-based factors
+        if isinstance(flow_features, dict):
+            if flow_features.get('packets_per_second', 0) > 1000:
+                factors.append(f"High packet rate: {flow_features['packets_per_second']:.1f} pps")
+            if flow_features.get('bytes_per_second', 0) > 1000000:
+                factors.append(f"High bandwidth: {flow_features['bytes_per_second']/1000000:.1f} MB/s")
+            if flow_features.get('unique_dst_ports', 0) > 10:
+                factors.append(f"Port scanning detected: {flow_features['unique_dst_ports']} unique ports")
+        
+        return factors
     
     def analyze_flow_characteristics(self, flow_features):
         """Analyze flow characteristics for detailed insights"""
@@ -276,21 +413,17 @@ class MLDetectionEngine:
             'confidence': 0.0,
             'threat_level': 'UNKNOWN',
             'error': error_type,
+            'models_used': list(self.models.keys()) if self.models else [],
             'timestamp': datetime.now().isoformat(),
-            'model_version': '2.0.0'
+            'model_version': '3.0.0'
         }
     
-    def save_models(self):
-        """Save trained models"""
-        try:
-            os.makedirs(self.model_path, exist_ok=True)
-            
-            if self.rf_model:
-                joblib.dump(self.rf_model, os.path.join(self.model_path, 'random_forest_model.pkl'))
-            
-            joblib.dump(self.scaler, os.path.join(self.model_path, 'scaler.pkl'))
-            
-            self.logger.info("Models saved successfully")
-            
-        except Exception as e:
-            self.logger.error(f"Error saving models: {e}")
+    def get_model_info(self):
+        """Get information about loaded models"""
+        return {
+            'total_models': len(self.models),
+            'available_models': list(self.models.keys()),
+            'feature_count': len(self.feature_columns) if self.feature_columns else 0,
+            'scaler_loaded': self.scaler is not None,
+            'isolation_forest_loaded': self.isolation_forest is not None
+        }
